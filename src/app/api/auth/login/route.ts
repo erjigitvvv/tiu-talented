@@ -4,17 +4,27 @@ import { comparePassword, signToken, COOKIE_NAME } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { login, password, email } = await request.json();
+    const identifier = (login || email || "").trim();
 
-    if (!email || !password) {
+    if (!identifier || !password) {
       return NextResponse.json(
-        { error: "Email va parolni kiriting" },
+        { error: "Login (email, telefon yoki ID) va parolni kiriting" },
         { status: 400 }
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
+    const cleanIdentifier = identifier.toLowerCase();
+
+    // Qidiruv: email, telefon yoki studentId bo'yicha
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: cleanIdentifier },
+          { phone: identifier },
+          { studentId: identifier.toUpperCase() },
+        ],
+      },
       include: { profile: true },
     });
 
@@ -36,6 +46,7 @@ export async function POST(request: Request) {
     const token = signToken({
       userId: user.id,
       email: user.email,
+      phone: user.phone,
       role: user.role as any,
       studentId: user.studentId,
     });
@@ -45,6 +56,7 @@ export async function POST(request: Request) {
       user: {
         id: user.id,
         email: user.email,
+        phone: user.phone,
         role: user.role,
         studentId: user.studentId,
         fullName: user.profile?.fullName,
@@ -57,7 +69,7 @@ export async function POST(request: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 kun
+      maxAge: 60 * 60 * 24 * 7,
       sameSite: "lax",
     });
 

@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Award, BookOpen, Calendar, ChevronRight, LogOut, Menu, Sparkles, Trophy, User, Users, X } from "lucide-react";
+import { Sparkles, LogOut, Menu, X, ArrowRight } from "lucide-react";
 
 interface CurrentUser {
   id: string;
-  email: string;
+  email?: string;
+  phone?: string;
   role: "STUDENT" | "DEPT_ADMIN" | "SUPER_ADMIN";
   profile?: {
     fullName: string;
@@ -40,13 +41,12 @@ export default function Navbar() {
     router.refresh();
   };
 
+  // Faqat so'ralgan 4 ta bo'lim: Asosiy, Jamoalar, Iqtidorlilar, Tanlovlar va Grantlar
   const navLinks = [
     { name: "Asosiy", href: "/" },
-    { name: "Iqtidorlar", href: "/talents" },
     { name: "Jamoalar", href: "/teams" },
-    { name: "Tanlovlar & Grantlar", href: "/opportunities" },
-    { name: "Tadbirdan lavhalar", href: "/events" },
-    { name: "Reyting", href: "/leaderboard" },
+    { name: "Iqtidorlilar", href: "/talents" },
+    { name: "Tanlovlar va Grantlar", href: "/opportunities" },
   ];
 
   const getDashboardHref = () => {
@@ -85,7 +85,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                  className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${
                     isActive
                       ? "text-tiu-700 bg-tiu-50/80"
                       : "text-slate-600 hover:text-tiu-900 hover:bg-slate-50"
@@ -115,7 +115,7 @@ export default function Navbar() {
                     )}
                   </div>
                   <span className="text-xs font-semibold max-w-[120px] truncate">
-                    {user.profile?.fullName || user.email}
+                    {user.profile?.fullName || user.phone || user.email}
                   </span>
                   <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-tiu-100 text-tiu-800">
                     {user.role === "STUDENT" ? "Talaba" : "Bo'lim"}
@@ -133,15 +133,9 @@ export default function Navbar() {
               <div className="flex items-center space-x-2">
                 <Link
                   href="/login"
-                  className="px-4 py-2 text-sm font-semibold text-tiu-900 hover:text-tiu-700 hover:bg-slate-100 rounded-lg transition-colors"
+                  className="px-5 py-2 text-sm font-bold text-white bg-tiu-800 hover:bg-tiu-950 rounded-xl shadow-sm transition-all"
                 >
                   Kirish
-                </Link>
-                <Link
-                  href="/register"
-                  className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-tiu-700 to-tiu-900 hover:from-tiu-800 hover:to-tiu-950 rounded-lg shadow-sm shadow-tiu-900/20 hover:shadow transition-all"
-                >
-                  Ro&apos;yxatdan o&apos;tish
                 </Link>
               </div>
             )}
@@ -193,22 +187,13 @@ export default function Navbar() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-center px-4 py-2 rounded-lg border border-slate-200 text-tiu-900 font-semibold text-sm"
-                >
-                  Kirish
-                </Link>
-                <Link
-                  href="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-center px-4 py-2 rounded-lg bg-tiu-800 text-white font-semibold text-sm"
-                >
-                  Ro&apos;yxatdan o&apos;tish
-                </Link>
-              </div>
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-center px-4 py-2 rounded-xl bg-tiu-800 text-white font-bold text-sm"
+              >
+                Kirish
+              </Link>
             )}
           </div>
         </div>

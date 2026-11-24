@@ -15,7 +15,7 @@ export default function Footer() {
               <span className="font-extrabold text-xl text-white tracking-tight">TIU TALENTED</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Toshkent Xalqaro Universiteti (TIU) iqtidorli talabalarini aniqlash, qo&apos;llab-quvvatlash va ularning yutuqlarini keng jamoatchilikka namoyon etish milliy ekotizimi.
+              Toshkent Xalqaro Universiteti (TIU) iqtidorli talabalarini aniqlash, qo&apos;llab-quvvatlash va loyiha jamoalarini shakllantirish platformasi.
             </p>
           </div>
 
@@ -26,23 +26,23 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
+                <Link href="/" className="hover:text-white transition-colors">
+                  Asosiy sahifa
+                </Link>
+              </li>
+              <li>
+                <Link href="/teams" className="hover:text-white transition-colors">
+                  Jamoalar Katalogi
+                </Link>
+              </li>
+              <li>
                 <Link href="/talents" className="hover:text-white transition-colors">
-                  Iqtidorlar Katalogi
+                  Iqtidorlilar
                 </Link>
               </li>
               <li>
                 <Link href="/opportunities" className="hover:text-white transition-colors">
-                  Tanlovlar & Grantlar
-                </Link>
-              </li>
-              <li>
-                <Link href="/leaderboard" className="hover:text-white transition-colors">
-                  Talabalar Reytingi
-                </Link>
-              </li>
-              <li>
-                <Link href="/events" className="hover:text-white transition-colors">
-                  Tadbirdan lavhalar
+                  Tanlovlar va Grantlar
                 </Link>
               </li>
             </ul>
@@ -54,7 +54,7 @@ export default function Footer() {
               Mas&apos;ul Bo&apos;lim
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed mb-3">
-              Iqtidorli talabalar bilan ishlash bo&apos;limi talabalar yutuqlarini rasmiy tasdiqlaydi va stipendiya/grant tanlovlarini o&apos;tkazadi.
+              Iqtidorli talabalar bilan ishlash bo&apos;limi talabalar yutuqlarini rasmiy tasdiqlaydi, jamoalarni muvofiqlashtiradi va grant tanlovlarini o&apos;tkazadi.
             </p>
             <div className="text-xs text-amber-400 font-medium">
               TIU Bosh binosi, 3-qavat, 305-xona

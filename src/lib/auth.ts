@@ -8,7 +8,8 @@ export const COOKIE_NAME = "tiu_auth_token";
 
 export interface TokenPayload {
   userId: string;
-  email: string;
+  email?: string | null;
+  phone?: string | null;
   role: "STUDENT" | "DEPT_ADMIN" | "SUPER_ADMIN";
   studentId?: string | null;
 }
@@ -54,6 +55,7 @@ export async function getCurrentUser() {
     return {
       id: user.id,
       email: user.email,
+      phone: user.phone,
       studentId: user.studentId,
       role: user.role,
       profile: user.profile,

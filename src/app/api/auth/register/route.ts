@@ -4,29 +4,32 @@ import { hashPassword, signToken, COOKIE_NAME } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const { email, password, fullName, studentId, faculty, groupName, courseYear, phone } = await request.json();
+    const { firstName, lastName, phone, groupName, courseYear, faculty, email, password } = await request.json();
 
-    if (!email || !password || !fullName || !faculty || !groupName) {
+    if (!firstName || !lastName || !phone || !groupName || !password) {
       return NextResponse.json(
-        { error: "Barcha majburiy maydonlarni to'ldiring" },
+        { error: "Ism, familiya, telefon raqam, guruh va parolni to'ldirish shart" },
         { status: 400 }
       );
     }
 
-    const cleanEmail = email.toLowerCase().trim();
+    const cleanPhone = phone.trim();
+    const cleanEmail = email ? email.toLowerCase().trim() : null;
+    const fullName = `${firstName.trim()} ${lastName.trim()}`;
 
+    // Tekshirish: telefon yoki email oldin ro'yxatdan o'tganmi?
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
-          { email: cleanEmail },
-          ...(studentId ? [{ studentId: studentId.trim() }] : []),
+          { phone: cleanPhone },
+          ...(cleanEmail ? [{ email: cleanEmail }] : []),
         ],
       },
     });
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "Ushbu email yoki Talaba ID bilan ro'yxatdan o'tilgan" },
+        { error: "Ushbu telefon raqam yoki email allaqachon ro'yxatdan o'tgan" },
         { status: 400 }
       );
     }
@@ -35,17 +38,19 @@ export async function POST(request: Request) {
 
     const user = await prisma.user.create({
       data: {
+        phone: cleanPhone,
         email: cleanEmail,
-        studentId: studentId ? studentId.trim() : null,
         passwordHash,
         role: "STUDENT",
         profile: {
           create: {
-            fullName: fullName.trim(),
-            faculty,
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            fullName,
+            phone: cleanPhone,
+            faculty: faculty || "Axborot Texnologiyalari",
             groupName: groupName.trim(),
             courseYear: parseInt(courseYear, 10) || 1,
-            phone: phone || null,
             totalPoints: 0,
           },
         },
@@ -56,6 +61,7 @@ export async function POST(request: Request) {
     const token = signToken({
       userId: user.id,
       email: user.email,
+      phone: user.phone,
       role: user.role as any,
       studentId: user.studentId,
     });
@@ -64,6 +70,7 @@ export async function POST(request: Request) {
       success: true,
       user: {
         id: user.id,
+        phone: user.phone,
         email: user.email,
         role: user.role,
         fullName: user.profile?.fullName,
