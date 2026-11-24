@@ -29,6 +29,8 @@ import {
   Medal,
   Clock,
   ArrowRight,
+  LayoutGrid,
+  List,
 } from "lucide-react";
 import JoinTeamModal from "./JoinTeamModal";
 
@@ -135,8 +137,9 @@ export default function TeamDetailInteractive({
   isAlreadyMember,
   isPending,
 }: TeamDetailInteractiveProps) {
-  // Tabs: 1-Tab: Izohlar va xulosalar, 2-Tab: A'zolar jadvali, 3-Tab: Natijalar va yutuqlar
-  const [activeTab, setActiveTab] = useState<"feedback" | "members" | "achievements">("feedback");
+  // Tabs: 1-Tab: A'zolar va Tarkib, 2-Tab: Ilmiy va Amaliy Yutuqlar, 3-Tab: Xulosalar va Izohlar
+  const [activeTab, setActiveTab] = useState<"members" | "achievements" | "feedback">("members");
+  const [membersView, setMembersView] = useState<"cards" | "table">("cards");
 
   // Feedbacks state
   const [feedbacks, setFeedbacks] = useState<TeamFeedbackItem[]>(team.feedbacks || []);
@@ -368,6 +371,47 @@ export default function TeamDetailInteractive({
           </div>
         )}
 
+        {/* JAMOA SARDORI ALOHIDA BLOKI */}
+        <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-transparent border border-amber-300/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center space-x-3.5">
+            <div className="relative w-14 h-14 rounded-2xl bg-slate-950 text-white flex items-center justify-center font-black text-base shadow-sm ring-2 ring-amber-400 overflow-hidden flex-shrink-0">
+              {team.leader.profile?.avatarUrl ? (
+                <img
+                  src={team.leader.profile.avatarUrl}
+                  alt=""
+                  className="w-full h-full object-cover aspect-square"
+                />
+              ) : (
+                team.leader.profile?.fullName?.charAt(0) || "S"
+              )}
+              <div className="absolute top-1 right-1 p-0.5 rounded bg-amber-400 text-slate-950">
+                <Crown className="w-3 h-3" />
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center space-x-1.5 text-xs font-black text-amber-800 uppercase tracking-wider">
+                <Crown className="w-3.5 h-3.5 text-amber-600" />
+                <span>Jamoa Sardori (Team Leader)</span>
+              </div>
+              <h4 className="text-base sm:text-lg font-black text-slate-900 mt-0.5">
+                {team.leader.profile?.fullName || "Yetakchi"}
+              </h4>
+              <p className="text-xs text-slate-500 font-medium">
+                {team.leader.profile?.faculty || "Axborot Texnologiyalari"} • Guruh: {team.leader.profile?.groupName || "SE-22-01"} • GPA: {team.leader.profile?.gpa?.toFixed(2) || "4.85"}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setSelectedStudent(team.leader.profile || null)}
+            className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-tiu-900 text-white font-bold text-xs transition-all shadow-xs flex items-center justify-center space-x-1.5 self-start sm:self-auto flex-shrink-0"
+          >
+            <span>Sardor Portfoliosi</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
         {/* JAMOA A'ZOLARI VA SARDORNING 1x1 RASMLARI (GALEREYA & PORTFOLIO) */}
         <div className="space-y-3 pt-3 border-t border-slate-100">
           <div className="flex items-center justify-between">
@@ -449,23 +493,12 @@ export default function TeamDetailInteractive({
         </div>
       </div>
 
-      {/* 2. TABLAR: 1-TAB: IZOHLAR VA XULOSALAR | 2-TAB: A'ZOLAR JADVALI | 3-TAB: NATIJALAR VA YUTUQLAR */}
+      {/* 2. TABLAR: 1-TAB: A'ZOLAR (CARD & JADVAL) | 2-TAB: YUTUQLAR (POST & LIKE & COMMENTS) | 3-TAB: XULOSALAR */}
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
         {/* Tab sarlavhalari */}
         <div className="flex border-b border-slate-200 bg-slate-50/70 overflow-x-auto">
           <button
-            onClick={() => setActiveTab("feedback")}
-            className={`py-4 px-6 text-sm font-black transition-all border-b-2 flex items-center space-x-2 flex-shrink-0 ${
-              activeTab === "feedback"
-                ? "border-tiu-900 text-tiu-900 bg-white"
-                : "border-transparent text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            <MessageSquare className="w-4 h-4 text-tiu-700" />
-            <span>1-Tab: Izohlar va Xulosalar ({feedbacks.length})</span>
-          </button>
-
-          <button
+            type="button"
             onClick={() => setActiveTab("members")}
             className={`py-4 px-6 text-sm font-black transition-all border-b-2 flex items-center space-x-2 flex-shrink-0 ${
               activeTab === "members"
@@ -474,10 +507,11 @@ export default function TeamDetailInteractive({
             }`}
           >
             <Users className="w-4 h-4 text-tiu-700" />
-            <span>2-Tab: A&apos;zolar Jadvali ({team.members.length})</span>
+            <span>1-Tab: Jamoa A&apos;zolari ({sortedMembers.length})</span>
           </button>
 
           <button
+            type="button"
             onClick={() => setActiveTab("achievements")}
             className={`py-4 px-6 text-sm font-black transition-all border-b-2 flex items-center space-x-2 flex-shrink-0 ${
               activeTab === "achievements"
@@ -486,20 +520,451 @@ export default function TeamDetailInteractive({
             }`}
           >
             <Trophy className="w-4 h-4 text-amber-500" />
-            <span>3-Tab: Natijalar va Yutuqlar ({achievements.length})</span>
+            <span>2-Tab: Ilmiy va Amaliy Yutuqlar ({achievements.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("feedback")}
+            className={`py-4 px-6 text-sm font-black transition-all border-b-2 flex items-center space-x-2 flex-shrink-0 ${
+              activeTab === "feedback"
+                ? "border-tiu-900 text-tiu-900 bg-white"
+                : "border-transparent text-slate-500 hover:text-slate-800"
+            }`}
+          >
+            <MessageSquare className="w-4 h-4 text-tiu-700" />
+            <span>3-Tab: Mentor va Bo&apos;lim Xulosalari ({feedbacks.length})</span>
           </button>
         </div>
 
         {/* Tab Tarkibi */}
         <div className="p-6 sm:p-8">
           
-          {/* ==================== 1-TAB: IZOHLAR VA XULOSALAR ==================== */}
+          {/* ==================== 1-TAB: JAMOA A'ZOLARI (CARDLAR VA JADVAL SWITCHERI) ==================== */}
+          {activeTab === "members" && (
+            <div className="space-y-6">
+              <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-black text-slate-900">
+                    Jamoa Tarkibi va Mas&apos;uliyat Taqsimoti ({sortedMembers.length} nafar)
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    1-qatorda jamoa sardori, so&apos;ng vitse-sardor va tegishli rollardagi a&apos;zolar
+                  </p>
+                </div>
+
+                {/* Switcher: Cardlar vs Jadval ko'rinishi */}
+                <div className="flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200/80 space-x-1 self-start sm:self-auto">
+                  <button
+                    type="button"
+                    onClick={() => setMembersView("cards")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                      membersView === "cards"
+                        ? "bg-white text-tiu-950 shadow-xs"
+                        : "text-slate-500 hover:text-slate-900"
+                    }`}
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                    <span>Cardlar</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMembersView("table")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                      membersView === "table"
+                        ? "bg-white text-tiu-950 shadow-xs"
+                        : "text-slate-500 hover:text-slate-900"
+                    }`}
+                  >
+                    <List className="w-3.5 h-3.5" />
+                    <span>Jadval</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 1. CARDLAR KO'RINISHI */}
+              {membersView === "cards" ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {sortedMembers.map((member, index) => {
+                    const isLeader = index === 0;
+                    const isViceLeader = index === 1;
+
+                    return (
+                      <div
+                        key={member.id}
+                        onClick={() => setSelectedStudent(member.user.profile || null)}
+                        className={`group p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-4 hover:-translate-y-1 hover:shadow-lg ${
+                          isLeader
+                            ? "bg-amber-50/50 border-amber-300 shadow-2xs"
+                            : isViceLeader
+                            ? "bg-blue-50/40 border-blue-200"
+                            : "bg-white border-slate-200/90 hover:border-tiu-800"
+                        }`}
+                      >
+                        <div className="space-y-3">
+                          <div className="flex items-start justify-between">
+                            {/* 1x1 Rasm */}
+                            <div className="relative w-14 h-14 aspect-square rounded-2xl bg-slate-900 text-white flex items-center justify-center font-bold text-base shadow-sm overflow-hidden group-hover:scale-105 transition-transform flex-shrink-0">
+                              {member.user.profile?.avatarUrl ? (
+                                <img
+                                  src={member.user.profile.avatarUrl}
+                                  alt=""
+                                  className="w-full h-full object-cover aspect-square"
+                                />
+                              ) : (
+                                member.user.profile?.fullName?.charAt(0) || "A"
+                              )}
+
+                              {isLeader && (
+                                <div className="absolute top-1 right-1 p-0.5 rounded bg-amber-400 text-slate-950 shadow-xs">
+                                  <Crown className="w-3 h-3" />
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Rol Nishoni */}
+                            {isLeader ? (
+                              <span className="px-2.5 py-1 rounded-xl text-[11px] font-black uppercase bg-amber-400 text-slate-950 shadow-xs flex items-center space-x-1">
+                                <Crown className="w-3 h-3" />
+                                <span>Sardor</span>
+                              </span>
+                            ) : isViceLeader ? (
+                              <span className="px-2.5 py-1 rounded-xl text-[11px] font-black uppercase bg-blue-100 text-blue-900 border border-blue-300 flex items-center space-x-1">
+                                <Star className="w-3 h-3" />
+                                <span>Vitse-sardor</span>
+                              </span>
+                            ) : (
+                              <span className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-700">
+                                {member.role}
+                              </span>
+                            )}
+                          </div>
+
+                          <div>
+                            <h4 className="font-extrabold text-slate-900 text-base group-hover:text-tiu-800 transition-colors">
+                              {member.user.profile?.fullName || "A'zo"}
+                            </h4>
+                            <p className="text-xs text-tiu-800 font-semibold mt-0.5">
+                              {member.user.profile?.specialty || member.user.profile?.faculty || "Dasturiy injiniring"}
+                            </p>
+                            <p className="text-[11px] text-slate-400 mt-0.5">
+                              Guruh: {member.user.profile?.groupName || "SE-22-01"}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold">
+                          <span className="text-slate-500">
+                            GPA: <strong className="text-slate-800">{member.user.profile?.gpa?.toFixed(2) || "4.80"}</strong>
+                          </span>
+                          <span className="text-tiu-800 group-hover:translate-x-1 transition-transform flex items-center space-x-1">
+                            <span>Portfolio</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                /* 2. JADVAL KO'RINISHI */
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50/90 border-b border-slate-200 text-xs font-black text-slate-500 uppercase tracking-wider">
+                        <th scope="col" className="py-3 px-4 w-14 text-center">#</th>
+                        <th scope="col" className="py-3 px-6">Talaba F.I.SH</th>
+                        <th scope="col" className="py-3 px-6">Jamoaviy Roli</th>
+                        <th scope="col" className="py-3 px-6">Yo&apos;nalishi</th>
+                        <th scope="col" className="py-3 px-6">Guruhi</th>
+                        <th scope="col" className="py-3 px-6 text-right w-36">Harakat</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-sm">
+                      {sortedMembers.map((member, index) => {
+                        const isLeader = index === 0;
+                        const isViceLeader = index === 1;
+
+                        return (
+                          <tr
+                            key={member.id}
+                            onClick={() => setSelectedStudent(member.user.profile || null)}
+                            className={`cursor-pointer transition-colors ${
+                              isLeader
+                                ? "bg-amber-50/40 hover:bg-amber-50/70"
+                                : isViceLeader
+                                ? "bg-blue-50/30 hover:bg-blue-50/60"
+                                : "hover:bg-slate-50/80"
+                            }`}
+                          >
+                            <td className="py-4 px-4 text-center font-bold text-slate-400 text-xs">
+                              {index + 1}
+                            </td>
+                            <td className="py-4 px-6">
+                              <div className="flex items-center space-x-3.5">
+                                <div className="w-10 h-10 rounded-xl bg-tiu-900 text-white flex items-center justify-center font-bold text-xs overflow-hidden shadow-xs flex-shrink-0">
+                                  {member.user.profile?.avatarUrl ? (
+                                    <img
+                                      src={member.user.profile.avatarUrl}
+                                      alt=""
+                                      className="w-full h-full object-cover aspect-square"
+                                    />
+                                  ) : (
+                                    member.user.profile?.fullName?.charAt(0) || "T"
+                                  )}
+                                </div>
+                                <div>
+                                  <div className="font-extrabold text-slate-900 hover:text-tiu-800 transition-colors">
+                                    {member.user.profile?.fullName}
+                                  </div>
+                                  <div className="text-[11px] text-slate-400">
+                                    GPA: {member.user.profile?.gpa?.toFixed(2) || "4.80"}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-4 px-6">
+                              {isLeader ? (
+                                <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-amber-400 text-slate-950 shadow-xs border border-amber-500">
+                                  <Crown className="w-3.5 h-3.5" />
+                                  <span>Jamoa Sardori</span>
+                                </span>
+                              ) : isViceLeader ? (
+                                <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-blue-100 text-blue-900 border border-blue-300">
+                                  <Star className="w-3.5 h-3.5" />
+                                  <span>Vitse-sardor</span>
+                                </span>
+                              ) : (
+                                <span className="inline-block px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">
+                                  {member.role}
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-4 px-6 text-xs font-semibold text-tiu-800">
+                              {member.user.profile?.specialty || member.user.profile?.faculty || "Dasturiy injiniring"}
+                            </td>
+                            <td className="py-4 px-6">
+                              <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 font-bold text-xs text-slate-700">
+                                {member.user.profile?.groupName || "SE-22-01"}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6 text-right">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedStudent(member.user.profile || null);
+                                }}
+                                className="px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-tiu-900 bg-white hover:bg-tiu-900 hover:text-white text-tiu-900 font-bold text-xs transition-all shadow-xs"
+                              >
+                                Portfolio &rarr;
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ==================== 2-TAB: ILMIY VA AMALIY YUTUQLAR (POST KABI) ==================== */}
+          {activeTab === "achievements" && (
+            <div className="space-y-6">
+              <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-black text-slate-900">
+                    Jamoaning Rasmiy Ilmiy va Amaliy Yutuqlari
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Hakatonlar, startap tanlovlari va ilmiy olimpiadalarda erishilgan nufuzli natijalar
+                  </p>
+                </div>
+              </div>
+
+              {achievements.length === 0 ? (
+                <div className="p-8 text-center text-xs text-slate-400 italic bg-slate-50 rounded-2xl">
+                  Jamoa hali rasmiy yutuqlarni joylamagan.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {achievements.map((ach) => {
+                    const isCommentsOpen = openCommentsId === ach.id;
+                    const formattedDate = new Date(ach.dateAchieved).toLocaleDateString("uz-UZ", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    });
+
+                    return (
+                      <div
+                        key={ach.id}
+                        className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-lg transition-all flex flex-col justify-between"
+                      >
+                        <div>
+                          {/* Yutuqda tushgan rasm */}
+                          {ach.imageUrl ? (
+                            <div className="h-48 w-full bg-slate-100 overflow-hidden relative">
+                              <img
+                                src={ach.imageUrl}
+                                alt={ach.title}
+                                className="w-full h-full object-cover"
+                              />
+                              <div className="absolute top-3 left-3">
+                                <span className="px-3 py-1 rounded-lg text-xs font-black uppercase bg-amber-500 text-slate-950 shadow-md">
+                                  {ach.rank}
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="h-28 w-full bg-gradient-to-r from-tiu-950 to-tiu-900 p-4 flex items-end justify-between text-white relative">
+                              <span className="px-3 py-1 rounded-lg text-xs font-black uppercase bg-amber-400 text-slate-950">
+                                {ach.rank}
+                              </span>
+                              <Trophy className="w-6 h-6 text-amber-400 opacity-60" />
+                            </div>
+                          )}
+
+                          <div className="p-6 space-y-3">
+                            {/* Sanasi */}
+                            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                              {formattedDate}
+                            </div>
+
+                            {/* Sarlavhasi */}
+                            <h3 className="text-lg font-black text-slate-900 leading-snug">
+                              {ach.title}
+                            </h3>
+
+                            {ach.description && (
+                              <p className="text-xs text-slate-600 leading-relaxed">
+                                {ach.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Interaktiv Harakatlar: Like, Comment Icon, Ko'rishlar Soni */}
+                        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            {/* Like tugmasi */}
+                            <button
+                              type="button"
+                              onClick={() => handleLike(ach.id)}
+                              className={`flex items-center space-x-1.5 text-xs font-bold transition-colors ${
+                                likedMap[ach.id]
+                                  ? "text-red-600"
+                                  : "text-slate-500 hover:text-red-500"
+                              }`}
+                              title="Yoqdi"
+                            >
+                              <Heart
+                                className={`w-4 h-4 ${
+                                  likedMap[ach.id] ? "fill-red-600 text-red-600" : ""
+                                }`}
+                              />
+                              <span>{ach.likesCount}</span>
+                            </button>
+
+                            {/* Comment Iconi */}
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setOpenCommentsId(isCommentsOpen ? null : ach.id)
+                              }
+                              className={`flex items-center space-x-1.5 text-xs font-bold transition-colors ${
+                                isCommentsOpen
+                                  ? "text-tiu-800"
+                                  : "text-slate-500 hover:text-tiu-800"
+                              }`}
+                              title="Izohlar"
+                            >
+                              <MessageSquare className="w-4 h-4" />
+                              <span>{ach.comments.length} ta izoh</span>
+                            </button>
+                          </div>
+
+                          {/* Ko'rishlar Soni */}
+                          <div className="flex items-center space-x-1 text-xs text-slate-400 font-medium">
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>{ach.viewsCount || 120} ko&apos;rildi</span>
+                          </div>
+                        </div>
+
+                        {/* Izohlar Paneli va Izoh Yozish */}
+                        {isCommentsOpen && (
+                          <div className="p-6 bg-slate-50/90 border-t border-slate-200 space-y-4">
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="text"
+                                value={newCommentText[ach.id] || ""}
+                                onChange={(e) =>
+                                  setNewCommentText((prev) => ({
+                                    ...prev,
+                                    [ach.id]: e.target.value,
+                                  }))
+                                }
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") handleAddComment(ach.id);
+                                }}
+                                placeholder="Fikringizni qoldiring..."
+                                className="flex-grow px-3.5 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-tiu-800"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleAddComment(ach.id)}
+                                className="p-2 bg-tiu-900 text-white rounded-xl hover:bg-tiu-950 shadow-xs"
+                                title="Yuborish"
+                              >
+                                <Send className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+
+                            <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
+                              {ach.comments.length === 0 ? (
+                                <p className="text-[11px] text-slate-400 italic">
+                                  Hozircha izohlar mavjud emas. Birinchi bo&apos;lib fikr bildiring!
+                                </p>
+                              ) : (
+                                ach.comments.map((c) => (
+                                  <div
+                                    key={c.id}
+                                    className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-1"
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <span className="font-bold text-slate-900">
+                                        {c.authorName}
+                                      </span>
+                                      <span className="text-[10px] text-slate-400">
+                                        {new Date(c.createdAt).toLocaleDateString("uz-UZ")}
+                                      </span>
+                                    </div>
+                                    <p className="text-slate-600 text-[11px]">
+                                      {c.content}
+                                    </p>
+                                  </div>
+                                ))
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ==================== 3-TAB: MENTOR VA BO'LIM XULOSALARI ==================== */}
           {activeTab === "feedback" && (
             <div className="space-y-6">
               <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <h3 className="text-lg font-black text-slate-900">
-                    Jamoa Faoliyati Bo&apos;yicha Xulosalar va Izohlar
+                    Jamoa Faoliyati Bo&apos;yicha Mentor va Bo&apos;lim Xulosalari
                   </h3>
                   <p className="text-xs text-slate-500">
                     Mentorlar, dekanat va bo&apos;lim mas&apos;ullari tomonidan jamoaga berilgan rasmiy baholar
@@ -574,325 +1039,6 @@ export default function TeamDetailInteractive({
                   ))
                 )}
               </div>
-            </div>
-          )}
-
-          {/* ==================== 2-TAB: A'ZOLAR JADVALI (1-QATOR SARDOR, SO'NG YORDAMCHISI) ==================== */}
-          {activeTab === "members" && (
-            <div className="space-y-6">
-              <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-black text-slate-900">
-                    Jamoa Tarkibi va Mas&apos;uliyat Jadvali
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    (Istalgan talaba ustiga bosib, uning to&apos;liq portfoliosini ko&apos;rishingiz mumkin)
-                  </p>
-                </div>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-slate-50/90 border-b border-slate-200 text-xs font-black text-slate-500 uppercase tracking-wider">
-                      <th scope="col" className="py-3 px-4 w-14 text-center">
-                        #
-                      </th>
-                      <th scope="col" className="py-3 px-6">
-                        Talaba F.I.SH
-                      </th>
-                      <th scope="col" className="py-3 px-6">
-                        Jamoaviy Roli
-                      </th>
-                      <th scope="col" className="py-3 px-6">
-                        Yo&apos;nalishi / Mutaxassisligi
-                      </th>
-                      <th scope="col" className="py-3 px-6">
-                        Guruhi
-                      </th>
-                      <th scope="col" className="py-3 px-6 text-right w-36">
-                        Harakat
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-sm">
-                    {sortedMembers.map((member, index) => {
-                      const isLeader = index === 0;
-                      const isViceLeader = index === 1;
-
-                      return (
-                        <tr
-                          key={member.id}
-                          onClick={() => setSelectedStudent(member.user.profile || null)}
-                          className={`cursor-pointer transition-colors ${
-                            isLeader
-                              ? "bg-amber-50/40 hover:bg-amber-50/70"
-                              : isViceLeader
-                              ? "bg-blue-50/30 hover:bg-blue-50/60"
-                              : "hover:bg-slate-50/80"
-                          }`}
-                        >
-                          {/* 1. Raqam */}
-                          <td className="py-4 px-4 text-center font-bold text-slate-400 text-xs">
-                            {index + 1}
-                          </td>
-
-                          {/* 2. Talaba F.I.SH */}
-                          <td className="py-4 px-6">
-                            <div className="flex items-center space-x-3.5">
-                              <div className="w-10 h-10 rounded-xl bg-tiu-900 text-white flex items-center justify-center font-bold text-xs overflow-hidden shadow-xs flex-shrink-0">
-                                {member.user.profile?.avatarUrl ? (
-                                  <img
-                                    src={member.user.profile.avatarUrl}
-                                    alt=""
-                                    className="w-full h-full object-cover"
-                                  />
-                                ) : (
-                                  member.user.profile?.fullName?.charAt(0) || "T"
-                                )}
-                              </div>
-                              <div>
-                                <div className="font-extrabold text-slate-900 hover:text-tiu-800 transition-colors">
-                                  {member.user.profile?.fullName}
-                                </div>
-                                <div className="text-[11px] text-slate-400">
-                                  GPA: {member.user.profile?.gpa?.toFixed(2) || "4.80"}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-
-                          {/* 3. Jamoaviy Roli (1-qator Sardor, 2-qator Yordamchi) */}
-                          <td className="py-4 px-6">
-                            {isLeader ? (
-                              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-amber-400 text-slate-950 shadow-xs border border-amber-500">
-                                <Crown className="w-3.5 h-3.5" />
-                                <span>Jamoa Sardori</span>
-                              </span>
-                            ) : isViceLeader ? (
-                              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-blue-100 text-blue-900 border border-blue-300">
-                                <Star className="w-3.5 h-3.5" />
-                                <span>Vitse-sardor</span>
-                              </span>
-                            ) : (
-                              <span className="inline-block px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">
-                                {member.role}
-                              </span>
-                            )}
-                          </td>
-
-                          {/* 4. Yo'nalishi */}
-                          <td className="py-4 px-6 text-xs font-semibold text-tiu-800">
-                            {member.user.profile?.specialty || member.user.profile?.faculty || "Dasturiy injiniring"}
-                          </td>
-
-                          {/* 5. Guruhi */}
-                          <td className="py-4 px-6">
-                            <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 font-bold text-xs text-slate-700">
-                              {member.user.profile?.groupName || "SE-22-01"}
-                            </span>
-                          </td>
-
-                          {/* 6. Harakat */}
-                          <td className="py-4 px-6 text-right">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedStudent(member.user.profile || null);
-                              }}
-                              className="px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-tiu-900 bg-white hover:bg-tiu-900 hover:text-white text-tiu-900 font-bold text-xs transition-all shadow-xs"
-                            >
-                              Portfolio &rarr;
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {/* ==================== 3-TAB: NATIJALAR VA YUTUQLAR (POST KABI) ==================== */}
-          {activeTab === "achievements" && (
-            <div className="space-y-6">
-              <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-black text-slate-900">
-                    Jamoaning Rasmiy Yutuqlari va Natijalari
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Hakatonlar, musobaqalar va startap tanlovlarida erishilgan g&apos;alabalar
-                  </p>
-                </div>
-              </div>
-
-              {achievements.length === 0 ? (
-                <div className="p-8 text-center text-xs text-slate-400 italic bg-slate-50 rounded-2xl">
-                  Jamoa hali rasmiy yutuqlarni joylamagan.
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {achievements.map((ach) => {
-                    const isCommentsOpen = openCommentsId === ach.id;
-                    const formattedDate = new Date(ach.dateAchieved).toLocaleDateString("uz-UZ", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    });
-
-                    return (
-                      <div
-                        key={ach.id}
-                        className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-lg transition-all flex flex-col justify-between"
-                      >
-                        <div>
-                          {/* Post Kichik Rasmi */}
-                          {ach.imageUrl && (
-                            <div className="h-44 w-full bg-slate-100 overflow-hidden relative">
-                              <img
-                                src={ach.imageUrl}
-                                alt={ach.title}
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute top-3 left-3">
-                                <span className="px-3 py-1 rounded-lg text-xs font-black uppercase bg-amber-500 text-slate-950 shadow-md">
-                                  {ach.rank}
-                                </span>
-                              </div>
-                            </div>
-                          )}
-
-                          <div className="p-6 space-y-3">
-                            {!ach.imageUrl && (
-                              <span className="inline-block px-3 py-1 rounded-lg text-xs font-black uppercase bg-amber-500 text-slate-950">
-                                {ach.rank}
-                              </span>
-                            )}
-
-                            {/* Sanasi */}
-                            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                              {formattedDate}
-                            </div>
-
-                            {/* Sarlavhasi */}
-                            <h3 className="text-lg font-black text-slate-900 leading-snug">
-                              {ach.title}
-                            </h3>
-
-                            {ach.description && (
-                              <p className="text-xs text-slate-600 leading-relaxed">
-                                {ach.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Interaktiv Harakatlar: Like, Comment Icon, Ko'rishlar Soni */}
-                        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            {/* Like tugmasi */}
-                            <button
-                              onClick={() => handleLike(ach.id)}
-                              className={`flex items-center space-x-1.5 text-xs font-bold transition-colors ${
-                                likedMap[ach.id]
-                                  ? "text-red-600"
-                                  : "text-slate-500 hover:text-red-500"
-                              }`}
-                            >
-                              <Heart
-                                className={`w-4 h-4 ${
-                                  likedMap[ach.id] ? "fill-red-600 text-red-600" : ""
-                                }`}
-                              />
-                              <span>{ach.likesCount}</span>
-                            </button>
-
-                            {/* Comment Iconi */}
-                            <button
-                              onClick={() =>
-                                setOpenCommentsId(isCommentsOpen ? null : ach.id)
-                              }
-                              className={`flex items-center space-x-1.5 text-xs font-bold transition-colors ${
-                                isCommentsOpen
-                                  ? "text-tiu-800"
-                                  : "text-slate-500 hover:text-tiu-800"
-                              }`}
-                            >
-                              <MessageSquare className="w-4 h-4" />
-                              <span>{ach.comments.length} ta izoh</span>
-                            </button>
-                          </div>
-
-                          {/* Ko'rishlar Soni */}
-                          <div className="flex items-center space-x-1 text-xs text-slate-400 font-medium">
-                            <Eye className="w-3.5 h-3.5" />
-                            <span>{ach.viewsCount}</span>
-                          </div>
-                        </div>
-
-                        {/* Izohlar Paneli */}
-                        {isCommentsOpen && (
-                          <div className="p-6 bg-slate-50/90 border-t border-slate-200 space-y-4">
-                            <div className="flex items-center space-x-2">
-                              <input
-                                type="text"
-                                value={newCommentText[ach.id] || ""}
-                                onChange={(e) =>
-                                  setNewCommentText((prev) => ({
-                                    ...prev,
-                                    [ach.id]: e.target.value,
-                                  }))
-                                }
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") handleAddComment(ach.id);
-                                }}
-                                placeholder="Fikringizni qoldiring..."
-                                className="flex-grow px-3.5 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-tiu-800"
-                              />
-                              <button
-                                onClick={() => handleAddComment(ach.id)}
-                                className="p-2 bg-tiu-900 text-white rounded-xl hover:bg-tiu-950 shadow-xs"
-                                title="Yuborish"
-                              >
-                                <Send className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-
-                            <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
-                              {ach.comments.length === 0 ? (
-                                <p className="text-[11px] text-slate-400 italic">
-                                  Hozircha izohlar mavjud emas.
-                                </p>
-                              ) : (
-                                ach.comments.map((c) => (
-                                  <div
-                                    key={c.id}
-                                    className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-1"
-                                  >
-                                    <div className="flex items-center justify-between">
-                                      <span className="font-bold text-slate-900">
-                                        {c.authorName}
-                                      </span>
-                                      <span className="text-[10px] text-slate-400">
-                                        {new Date(c.createdAt).toLocaleDateString("uz-UZ")}
-                                      </span>
-                                    </div>
-                                    <p className="text-slate-600 text-[11px]">
-                                      {c.content}
-                                    </p>
-                                  </div>
-                                ))
-                              )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
             </div>
           )}
 
