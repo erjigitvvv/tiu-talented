@@ -220,12 +220,82 @@ export default function TeamDetailInteractive({
     }
   };
 
-  // Sort members: 1st row: Leader, 2nd row: Vice Leader, then rest
-  const sortedMembers = [...team.members].sort((a, b) => {
-    if (a.role.toLowerCase().includes("sardor") && !a.role.toLowerCase().includes("vitse") && !a.role.toLowerCase().includes("yordamchi")) return -1;
-    if (b.role.toLowerCase().includes("sardor") && !b.role.toLowerCase().includes("vitse") && !b.role.toLowerCase().includes("yordamchi")) return 1;
-    if (a.role.toLowerCase().includes("vitse") || a.role.toLowerCase().includes("yordamchi")) return -1;
-    if (b.role.toLowerCase().includes("vitse") || b.role.toLowerCase().includes("yordamchi")) return 1;
+  // Ensure leader is always included and sorted at index 0, then vice-leader, then lead member, then others
+  const allMembers = [...team.members];
+  const hasLeader = allMembers.some(
+    (m) =>
+      m.user.id === team.leader.id ||
+      (m.role &&
+        m.role.toLowerCase().includes("sardor") &&
+        !m.role.toLowerCase().includes("vitse") &&
+        !m.role.toLowerCase().includes("yordamchi"))
+  );
+  if (!hasLeader && team.leader) {
+    allMembers.unshift({
+      id: `leader-${team.leader.id}`,
+      role: "Jamoa Sardori",
+      orderIndex: 0,
+      joinedAt: team.createdAt || new Date(),
+      user: {
+        id: team.leader.id,
+        email: team.leader.email,
+        profile: team.leader.profile,
+      },
+    });
+  }
+
+  // Sort members:
+  // 1-qatorda: Jamoa Sardori
+  // 2-qatorda: Vitse-sardor / Keyingi sardor
+  // 3-qatorda: Bosh a'zo / Yetakchi mutaxassis
+  // Keyingi qatorlarda: Oddiy a'zolar
+  const sortedMembers = [...allMembers].sort((a, b) => {
+    if (a.user.id === team.leader.id) return -1;
+    if (b.user.id === team.leader.id) return 1;
+
+    const aRole = (a.role || "").toLowerCase();
+    const bRole = (b.role || "").toLowerCase();
+
+    // 1. Sardor
+    const aIsLeader =
+      aRole.includes("sardor") &&
+      !aRole.includes("vitse") &&
+      !aRole.includes("yordamchi");
+    const bIsLeader =
+      bRole.includes("sardor") &&
+      !bRole.includes("vitse") &&
+      !bRole.includes("yordamchi");
+    if (aIsLeader && !bIsLeader) return -1;
+    if (!aIsLeader && bIsLeader) return 1;
+
+    // 2. Vitse-sardor / Yordamchi sardor
+    const aIsVice =
+      aRole.includes("vitse") ||
+      aRole.includes("yordamchi") ||
+      aRole.includes("ikkinchi");
+    const bIsVice =
+      bRole.includes("vitse") ||
+      bRole.includes("yordamchi") ||
+      bRole.includes("ikkinchi");
+    if (aIsVice && !bIsVice) return -1;
+    if (!aIsVice && bIsVice) return 1;
+
+    // 3. Bosh a'zo / Yetakchi / Lead
+    const aIsLead =
+      aRole.includes("bosh") ||
+      aRole.includes("yetakchi") ||
+      aRole.includes("lead") ||
+      aRole.includes("muhandis") ||
+      aRole.includes("dasturchi");
+    const bIsLead =
+      bRole.includes("bosh") ||
+      bRole.includes("yetakchi") ||
+      bRole.includes("lead") ||
+      bRole.includes("muhandis") ||
+      bRole.includes("dasturchi");
+    if (aIsLead && !bIsLead) return -1;
+    if (!aIsLead && bIsLead) return 1;
+
     return (a.orderIndex || 99) - (b.orderIndex || 99);
   });
 
@@ -240,17 +310,17 @@ export default function TeamDetailInteractive({
 
   return (
     <div className="space-y-8">
-      {/* 1. JAMOA ASOSIY BLOKI: 16x9 BANNER, NOMI, TASHKILIY SANA, YO'NALISHLAR VA 1x1 AZOLAR RASMLARI */}
+      {/* 1. JAMOA ASOSIY BLOKI: 16x9 FORMAT BANNER (JAMOA A'ZOLARI UMUMIY RASMI), SARDOR PILL, TASHKILIY SANA VA YO'NALISHLAR */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
         
-        {/* 16x9 Widescreen Banner va Jamoa Sarlavhasi */}
-        <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden bg-slate-950 shadow-md">
+        {/* 16x9 Widescreen Banner (Jamoa a'zolarining umumiy rasmi) */}
+        <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden bg-slate-950 shadow-md">
           <img
             src={
               team.avatarUrl ||
-              "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80"
+              "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&auto=format&fit=crop&q=80"
             }
-            alt={team.name}
+            alt="Jamoa a'zolarining umumiy rasmi"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-transparent" />
@@ -285,14 +355,39 @@ export default function TeamDetailInteractive({
               </div>
             </div>
 
-            <div className="flex-shrink-0">
-              <JoinTeamModal
-                teamId={team.id}
-                isLoggedIn={!!currentUser}
-                isStudent={currentUser?.role === "STUDENT"}
-                isAlreadyMember={isAlreadyMember}
-                isPending={isPending}
-              />
+            {/* Sardor: Yumaloq profil rasmi va F.I.SH pill & Qo'shilish tugmasi */}
+            <div className="flex flex-wrap items-center gap-3">
+              <div
+                onClick={() => setSelectedStudent(team.leader.profile || null)}
+                className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-amber-400/80 shadow-md cursor-pointer hover:bg-slate-900 transition-all hover:scale-105"
+                title="Sardor portfoliosini ko'rish"
+              >
+                <span className="text-[11px] font-black uppercase tracking-wider text-amber-300">Sardor:</span>
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center ring-2 ring-amber-400 flex-shrink-0">
+                  {team.leader.profile?.avatarUrl ? (
+                    <img
+                      src={team.leader.profile.avatarUrl}
+                      alt=""
+                      className="w-full h-full object-cover aspect-square"
+                    />
+                  ) : (
+                    team.leader.profile?.fullName?.charAt(0) || "S"
+                  )}
+                </div>
+                <span className="text-xs sm:text-sm font-extrabold text-white">
+                  {team.leader.profile?.fullName || "Jamoa Sardori"}
+                </span>
+              </div>
+
+              <div className="flex-shrink-0">
+                <JoinTeamModal
+                  teamId={team.id}
+                  isLoggedIn={!!currentUser}
+                  isStudent={currentUser?.role === "STUDENT"}
+                  isAlreadyMember={isAlreadyMember}
+                  isPending={isPending}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -371,10 +466,18 @@ export default function TeamDetailInteractive({
           </div>
         )}
 
-        {/* JAMOA SARDORI ALOHIDA BLOKI */}
-        <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-transparent border border-amber-300/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* CARD BLOK ICHIDA SARDOR: VA SARDOR YUMALOQ PROFIL RASMI VA FIO */}
+        <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-50/90 via-amber-100/30 to-white border-2 border-amber-300/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
           <div className="flex items-center space-x-3.5">
-            <div className="relative w-14 h-14 rounded-2xl bg-slate-950 text-white flex items-center justify-center font-black text-base shadow-sm ring-2 ring-amber-400 overflow-hidden flex-shrink-0">
+            <span className="text-xs sm:text-sm font-black text-amber-900 uppercase tracking-wider">
+              Sardor:
+            </span>
+            {/* Yumaloq Profil Rasmi */}
+            <div
+              onClick={() => setSelectedStudent(team.leader.profile || null)}
+              className="relative w-12 h-12 rounded-full bg-slate-950 text-white flex items-center justify-center font-bold text-sm shadow-md ring-2 ring-amber-400 overflow-hidden flex-shrink-0 cursor-pointer hover:scale-105 transition-transform"
+              title="Sardor portfoliosini ochish"
+            >
               {team.leader.profile?.avatarUrl ? (
                 <img
                   src={team.leader.profile.avatarUrl}
@@ -384,17 +487,17 @@ export default function TeamDetailInteractive({
               ) : (
                 team.leader.profile?.fullName?.charAt(0) || "S"
               )}
-              <div className="absolute top-1 right-1 p-0.5 rounded bg-amber-400 text-slate-950">
-                <Crown className="w-3 h-3" />
+              <div className="absolute bottom-0 right-0 p-0.5 rounded-full bg-amber-400 text-slate-950 ring-1 ring-white">
+                <Crown className="w-2.5 h-2.5" />
               </div>
             </div>
+
             <div>
-              <div className="flex items-center space-x-1.5 text-xs font-black text-amber-800 uppercase tracking-wider">
-                <Crown className="w-3.5 h-3.5 text-amber-600" />
-                <span>Jamoa Sardori (Team Leader)</span>
-              </div>
-              <h4 className="text-base sm:text-lg font-black text-slate-900 mt-0.5">
-                {team.leader.profile?.fullName || "Yetakchi"}
+              <h4
+                onClick={() => setSelectedStudent(team.leader.profile || null)}
+                className="text-base sm:text-lg font-black text-slate-900 hover:text-tiu-800 cursor-pointer transition-colors"
+              >
+                {team.leader.profile?.fullName || "Jamoa Sardori"}
               </h4>
               <p className="text-xs text-slate-500 font-medium">
                 {team.leader.profile?.faculty || "Axborot Texnologiyalari"} • Guruh: {team.leader.profile?.groupName || "SE-22-01"} • GPA: {team.leader.profile?.gpa?.toFixed(2) || "4.85"}
@@ -410,86 +513,6 @@ export default function TeamDetailInteractive({
             <span>Sardor Portfoliosi</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
-        </div>
-
-        {/* JAMOA A'ZOLARI VA SARDORNING 1x1 RASMLARI (GALEREYA & PORTFOLIO) */}
-        <div className="space-y-3 pt-3 border-t border-slate-100">
-          <div className="flex items-center justify-between">
-            <h4 className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center space-x-2">
-              <Users className="w-4 h-4 text-tiu-800" />
-              <span>Jamoa Tarkibi va A&apos;zolari (1x1 Formatda):</span>
-            </h4>
-            <span className="text-xs text-slate-400 font-semibold">
-              {sortedMembers.length} nafar a&apos;zo
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {sortedMembers.map((member, idx) => {
-              const isLeader =
-                member.role.toLowerCase().includes("sardor") &&
-                !member.role.toLowerCase().includes("vitse") &&
-                !member.role.toLowerCase().includes("yordamchi");
-              const isVice =
-                member.role.toLowerCase().includes("vitse") ||
-                member.role.toLowerCase().includes("yordamchi");
-
-              return (
-                <div
-                  key={member.id || idx}
-                  onClick={() => setSelectedStudent(member.user.profile || null)}
-                  className={`group p-3 rounded-2xl border transition-all cursor-pointer flex flex-col items-center text-center space-y-2 hover:-translate-y-1 hover:shadow-md ${
-                    isLeader
-                      ? "bg-amber-50/70 border-amber-300 shadow-2xs"
-                      : isVice
-                      ? "bg-blue-50/60 border-blue-200/80"
-                      : "bg-white border-slate-200/80 hover:border-tiu-800"
-                  }`}
-                  title={`${member.user.profile?.fullName || "A'zo"} - Portfoliosini ko'rish`}
-                >
-                  {/* 1x1 Formatdagi Rasm */}
-                  <div className="relative w-16 h-16 sm:w-18 sm:h-18 aspect-square rounded-2xl overflow-hidden bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
-                    {member.user.profile?.avatarUrl ? (
-                      <img
-                        src={member.user.profile.avatarUrl}
-                        alt=""
-                        className="w-full h-full object-cover aspect-square"
-                      />
-                    ) : (
-                      member.user.profile?.fullName?.charAt(0) || "A"
-                    )}
-
-                    {isLeader && (
-                      <div className="absolute top-1 right-1 p-1 rounded-md bg-amber-400 text-slate-950 shadow-xs">
-                        <Crown className="w-3 h-3" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="w-full">
-                    <div className="text-xs font-black text-slate-900 group-hover:text-tiu-800 transition-colors truncate">
-                      {member.user.profile?.fullName || "A'zo"}
-                    </div>
-                    <div className="text-[10px] font-bold text-slate-500 uppercase mt-0.5 truncate flex items-center justify-center space-x-1">
-                      {isLeader ? (
-                        <span className="text-amber-800 font-extrabold flex items-center space-x-0.5">
-                          <Crown className="w-2.5 h-2.5 inline" />
-                          <span>Sardor</span>
-                        </span>
-                      ) : isVice ? (
-                        <span className="text-blue-800 font-extrabold flex items-center space-x-0.5">
-                          <Star className="w-2.5 h-2.5 inline" />
-                          <span>Vitse-sardor</span>
-                        </span>
-                      ) : (
-                        <span>{member.role}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
 
@@ -582,84 +605,110 @@ export default function TeamDetailInteractive({
                 </div>
               </div>
 
-              {/* 1. CARDLAR KO'RINISHI */}
+              {/* 1. CARDLAR KO'RINISHI (3 USTUNLI KATALOG, 1x1 FORMATDAGI ZOOM BO'LUVCHI RASM, 3 XIL RANG IERARXIYASI) */}
               {membersView === "cards" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {sortedMembers.map((member, index) => {
                     const isLeader = index === 0;
                     const isViceLeader = index === 1;
+                    const isLeadMember = index === 2;
+                    const isRegular = index >= 3;
 
                     return (
                       <div
                         key={member.id}
                         onClick={() => setSelectedStudent(member.user.profile || null)}
-                        className={`group p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-4 hover:-translate-y-1 hover:shadow-lg ${
+                        className={`group relative rounded-3xl p-5 border transition-all duration-300 ease-out cursor-pointer hover:scale-[1.02] hover:-translate-y-2 hover:shadow-2xl flex flex-col justify-between ${
                           isLeader
-                            ? "bg-amber-50/50 border-amber-300 shadow-2xs"
+                            ? "bg-gradient-to-b from-amber-50/90 via-amber-100/40 to-white border-2 border-amber-400 shadow-md shadow-amber-500/10 ring-2 ring-amber-300/40"
                             : isViceLeader
-                            ? "bg-blue-50/40 border-blue-200"
-                            : "bg-white border-slate-200/90 hover:border-tiu-800"
+                            ? "bg-gradient-to-b from-blue-50/90 via-indigo-50/40 to-white border-2 border-blue-400 shadow-md shadow-blue-500/10 ring-2 ring-blue-300/40"
+                            : isLeadMember
+                            ? "bg-gradient-to-b from-purple-50/90 via-purple-100/30 to-white border-2 border-purple-400 shadow-md shadow-purple-500/10 ring-2 ring-purple-300/40"
+                            : "bg-white border border-slate-200/90 shadow-xs hover:border-tiu-800 hover:shadow-xl"
                         }`}
                       >
-                        <div className="space-y-3">
-                          <div className="flex items-start justify-between">
-                            {/* 1x1 Rasm */}
-                            <div className="relative w-14 h-14 aspect-square rounded-2xl bg-slate-900 text-white flex items-center justify-center font-bold text-base shadow-sm overflow-hidden group-hover:scale-105 transition-transform flex-shrink-0">
-                              {member.user.profile?.avatarUrl ? (
-                                <img
-                                  src={member.user.profile.avatarUrl}
-                                  alt=""
-                                  className="w-full h-full object-cover aspect-square"
-                                />
-                              ) : (
-                                member.user.profile?.fullName?.charAt(0) || "A"
-                              )}
-
-                              {isLeader && (
-                                <div className="absolute top-1 right-1 p-0.5 rounded bg-amber-400 text-slate-950 shadow-xs">
-                                  <Crown className="w-3 h-3" />
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Rol Nishoni */}
-                            {isLeader ? (
-                              <span className="px-2.5 py-1 rounded-xl text-[11px] font-black uppercase bg-amber-400 text-slate-950 shadow-xs flex items-center space-x-1">
-                                <Crown className="w-3 h-3" />
-                                <span>Sardor</span>
-                              </span>
-                            ) : isViceLeader ? (
-                              <span className="px-2.5 py-1 rounded-xl text-[11px] font-black uppercase bg-blue-100 text-blue-900 border border-blue-300 flex items-center space-x-1">
-                                <Star className="w-3 h-3" />
-                                <span>Vitse-sardor</span>
-                              </span>
+                        <div className="space-y-4">
+                          {/* 1x1 Formatdagi Rasm (Cursor qo'yilganda rasm va card ishib rasm kattaroq ko'rinadi) */}
+                          <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-slate-900 shadow-md flex items-center justify-center">
+                            {member.user.profile?.avatarUrl ? (
+                              <img
+                                src={member.user.profile.avatarUrl}
+                                alt={member.user.profile?.fullName || "A'zo"}
+                                className="w-full h-full object-cover aspect-square transition-transform duration-500 ease-out group-hover:scale-110"
+                              />
                             ) : (
-                              <span className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-700">
-                                {member.role}
-                              </span>
+                              <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 text-white font-black text-4xl transition-transform duration-500 ease-out group-hover:scale-110">
+                                <span>{member.user.profile?.fullName?.charAt(0) || "A"}</span>
+                              </div>
                             )}
+
+                            {/* Nishonlar (Badges) */}
+                            {isLeader && (
+                              <div className="absolute top-3 right-3 px-3 py-1 rounded-xl bg-amber-400 text-slate-950 font-black text-xs shadow-md flex items-center space-x-1.5 border border-amber-300">
+                                <Crown className="w-3.5 h-3.5 fill-slate-950" />
+                                <span>Jamoa Sardori</span>
+                              </div>
+                            )}
+
+                            {isViceLeader && (
+                              <div className="absolute top-3 right-3 px-3 py-1 rounded-xl bg-blue-600 text-white font-black text-xs shadow-md flex items-center space-x-1.5 border border-blue-500">
+                                <Star className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+                                <span>Vitse-sardor</span>
+                              </div>
+                            )}
+
+                            {isLeadMember && (
+                              <div className="absolute top-3 right-3 px-3 py-1 rounded-xl bg-purple-600 text-white font-black text-xs shadow-md flex items-center space-x-1.5 border border-purple-500">
+                                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                                <span>Bosh A&apos;zo</span>
+                              </div>
+                            )}
+
+                            {isRegular && (
+                              <div className="absolute top-3 right-3 px-2.5 py-1 rounded-xl bg-slate-950/75 backdrop-blur-md text-white font-bold text-[11px] shadow-xs">
+                                {member.role || "A'zo"}
+                              </div>
+                            )}
+
+                            {/* Tartib raqami */}
+                            <div
+                              className={`absolute top-3 left-3 px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider ${
+                                isLeader
+                                  ? "bg-amber-400/95 text-slate-950"
+                                  : isViceLeader
+                                  ? "bg-blue-600/95 text-white"
+                                  : isLeadMember
+                                  ? "bg-purple-600/95 text-white"
+                                  : "bg-slate-900/70 text-slate-200"
+                              }`}
+                            >
+                              #{index + 1}
+                            </div>
                           </div>
 
+                          {/* Pastida Familiya Ismi va Yo'nalish */}
                           <div>
-                            <h4 className="font-extrabold text-slate-900 text-base group-hover:text-tiu-800 transition-colors">
+                            <h4 className="font-black text-slate-900 text-lg leading-snug group-hover:text-tiu-800 transition-colors">
                               {member.user.profile?.fullName || "A'zo"}
                             </h4>
-                            <p className="text-xs text-tiu-800 font-semibold mt-0.5">
-                              {member.user.profile?.specialty || member.user.profile?.faculty || "Dasturiy injiniring"}
+                            <p className="text-xs font-bold text-tiu-800 mt-1">
+                              {member.user.profile?.specialty || member.user.profile?.faculty || "Axborot Texnologiyalari"}
                             </p>
-                            <p className="text-[11px] text-slate-400 mt-0.5">
-                              Guruh: {member.user.profile?.groupName || "SE-22-01"}
+                            <p className="text-xs text-slate-500 mt-0.5">
+                              Guruh: <strong className="text-slate-700">{member.user.profile?.groupName || "SE-22-01"}</strong>
                             </p>
                           </div>
                         </div>
 
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold">
+                        {/* GPA & To'liq CV ochish tugmasi */}
+                        <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold">
                           <span className="text-slate-500">
-                            GPA: <strong className="text-slate-800">{member.user.profile?.gpa?.toFixed(2) || "4.80"}</strong>
+                            GPA: <strong className="text-slate-900">{member.user.profile?.gpa?.toFixed(2) || "4.80"}</strong>
                           </span>
                           <span className="text-tiu-800 group-hover:translate-x-1 transition-transform flex items-center space-x-1">
-                            <span>Portfolio</span>
-                            <ArrowRight className="w-3 h-3" />
+                            <span>To&apos;liq CV</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
                           </span>
                         </div>
                       </div>
@@ -667,7 +716,7 @@ export default function TeamDetailInteractive({
                   })}
                 </div>
               ) : (
-                /* 2. JADVAL KO'RINISHI */
+                /* 2. JADVAL KO'RINISHI (Rollar va ranglar mos holda) */
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
@@ -684,6 +733,7 @@ export default function TeamDetailInteractive({
                       {sortedMembers.map((member, index) => {
                         const isLeader = index === 0;
                         const isViceLeader = index === 1;
+                        const isLeadMember = index === 2;
 
                         return (
                           <tr
@@ -691,9 +741,11 @@ export default function TeamDetailInteractive({
                             onClick={() => setSelectedStudent(member.user.profile || null)}
                             className={`cursor-pointer transition-colors ${
                               isLeader
-                                ? "bg-amber-50/40 hover:bg-amber-50/70"
+                                ? "bg-amber-50/50 hover:bg-amber-50/80 font-bold"
                                 : isViceLeader
-                                ? "bg-blue-50/30 hover:bg-blue-50/60"
+                                ? "bg-blue-50/40 hover:bg-blue-50/70"
+                                : isLeadMember
+                                ? "bg-purple-50/30 hover:bg-purple-50/60"
                                 : "hover:bg-slate-50/80"
                             }`}
                           >
@@ -702,7 +754,7 @@ export default function TeamDetailInteractive({
                             </td>
                             <td className="py-4 px-6">
                               <div className="flex items-center space-x-3.5">
-                                <div className="w-10 h-10 rounded-xl bg-tiu-900 text-white flex items-center justify-center font-bold text-xs overflow-hidden shadow-xs flex-shrink-0">
+                                <div className="w-10 h-10 aspect-square rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-xs overflow-hidden shadow-xs flex-shrink-0">
                                   {member.user.profile?.avatarUrl ? (
                                     <img
                                       src={member.user.profile.avatarUrl}
@@ -730,18 +782,23 @@ export default function TeamDetailInteractive({
                                   <span>Jamoa Sardori</span>
                                 </span>
                               ) : isViceLeader ? (
-                                <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-blue-100 text-blue-900 border border-blue-300">
-                                  <Star className="w-3.5 h-3.5" />
+                                <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-blue-600 text-white shadow-xs border border-blue-500">
+                                  <Star className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
                                   <span>Vitse-sardor</span>
+                                </span>
+                              ) : isLeadMember ? (
+                                <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-purple-600 text-white shadow-xs border border-purple-500">
+                                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                                  <span>Bosh A&apos;zo</span>
                                 </span>
                               ) : (
                                 <span className="inline-block px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">
-                                  {member.role}
+                                  {member.role || "A'zo"}
                                 </span>
                               )}
                             </td>
                             <td className="py-4 px-6 text-xs font-semibold text-tiu-800">
-                              {member.user.profile?.specialty || member.user.profile?.faculty || "Dasturiy injiniring"}
+                              {member.user.profile?.specialty || member.user.profile?.faculty || "Axborot Texnologiyalari"}
                             </td>
                             <td className="py-4 px-6">
                               <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 font-bold text-xs text-slate-700">
