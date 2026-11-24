@@ -4,11 +4,11 @@ import { hashPassword, signToken, COOKIE_NAME } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const { firstName, lastName, phone, groupName, courseYear, faculty, email, password } = await request.json();
+    const { firstName, lastName, phone, password, email } = await request.json();
 
-    if (!firstName || !lastName || !phone || !groupName || !password) {
+    if (!firstName || !lastName || !phone || !password) {
       return NextResponse.json(
-        { error: "Ism, familiya, telefon raqam, guruh va parolni to'ldirish shart" },
+        { error: "Ism, familiya, telefon raqam va parolni kiritish majburiy" },
         { status: 400 }
       );
     }
@@ -48,9 +48,11 @@ export async function POST(request: Request) {
             lastName: lastName.trim(),
             fullName,
             phone: cleanPhone,
-            faculty: faculty || "Axborot Texnologiyalari",
-            groupName: groupName.trim(),
-            courseYear: parseInt(courseYear, 10) || 1,
+            dekanat: "Axborot Texnologiyalari Dekanati",
+            faculty: "Axborot Texnologiyalari Dekanati",
+            specialty: "Yo'nalish tanlanmagan",
+            groupName: "Biriktirilmagan",
+            courseYear: 1,
             totalPoints: 0,
           },
         },

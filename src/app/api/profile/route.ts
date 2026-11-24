@@ -10,13 +10,34 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    const { fullName, faculty, groupName, courseYear, gpa, phone, bio, avatarUrl, skills } = body;
+    const {
+      firstName,
+      lastName,
+      fullName,
+      dekanat,
+      faculty,
+      specialty,
+      groupName,
+      courseYear,
+      gpa,
+      phone,
+      bio,
+      avatarUrl,
+      skills,
+    } = body;
+
+    const computedFullName =
+      fullName || (firstName && lastName ? `${firstName.trim()} ${lastName.trim()}` : undefined);
 
     const updatedProfile = await prisma.profile.update({
       where: { userId: user.id },
       data: {
-        ...(fullName ? { fullName: fullName.trim() } : {}),
-        ...(faculty ? { faculty } : {}),
+        ...(firstName ? { firstName: firstName.trim() } : {}),
+        ...(lastName ? { lastName: lastName.trim() } : {}),
+        ...(computedFullName ? { fullName: computedFullName.trim() } : {}),
+        ...(dekanat ? { dekanat: dekanat.trim(), faculty: dekanat.trim() } : {}),
+        ...(faculty && !dekanat ? { faculty: faculty.trim(), dekanat: faculty.trim() } : {}),
+        ...(specialty ? { specialty: specialty.trim() } : {}),
         ...(groupName ? { groupName: groupName.trim() } : {}),
         ...(courseYear ? { courseYear: parseInt(courseYear, 10) } : {}),
         ...(gpa !== undefined ? { gpa: parseFloat(gpa) || 0.0 } : {}),

@@ -33,8 +33,10 @@ model Profile {
   firstName   String?
   lastName    String?
   fullName    String
-  faculty     String   // Masalan: "Axborot Texnologiyalari", "Xalqaro Iqtisodiyot", "Biznes va Boshqaruv"
-  groupName   String   // Masalan: "IT-21-04"
+  dekanat     String?  // Masalan: "Axborot Texnologiyalari Dekanati", "Iqtisodiyot Dekanati"
+  faculty     String   @default("Axborot Texnologiyalari") // Dekanat/Fakultet
+  specialty   String?  // Yo'nalish: Masalan: "Dasturiy injiniring", "Sun'iy intellekt", "Xalqaro moliya"
+  groupName   String   @default("Biriktirilmagan") // Masalan: "IT-21-04"
   courseYear  Int      @default(1)
   gpa         Float    @default(0.0)
   phone       String?
