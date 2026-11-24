@@ -1,43 +1,398 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles, Users, Trophy } from "lucide-react";
-import HomeIntroTabs from "./HomeIntroTabs";
+import { prisma } from "@/lib/prisma";
+import {
+  Sparkles,
+  Users,
+  Trophy,
+  Award,
+  ArrowRight,
+  ArrowDown,
+  GraduationCap,
+  Star,
+  Clock,
+  CheckCircle2,
+  ChevronRight,
+} from "lucide-react";
+import TalentsCarousel, { CarouselTalent } from "@/components/teams/TalentsCarousel";
 
 export const dynamic = "force-dynamic";
 
-export default function HomePage() {
+export default async function HomePage() {
+  // 1. Ma'lumotlarni parallel yuklash
+  const [students, opportunities, totalStudents, totalTeams, totalGrants] = await Promise.all([
+    prisma.user.findMany({
+      where: { role: "STUDENT" },
+      include: {
+        profile: true,
+        achievements: {
+          where: { status: "APPROVED" },
+        },
+      },
+      orderBy: {
+        profile: {
+          totalPoints: "desc",
+        },
+      },
+    }),
+    prisma.opportunity.findMany({
+      where: { status: "OPEN" },
+      orderBy: { deadline: "asc" },
+      take: 3,
+    }),
+    prisma.user.count({ where: { role: "STUDENT" } }),
+    prisma.team.count(),
+    prisma.opportunity.count({ where: { status: "OPEN" } }),
+  ]);
+
+  // 2. TOP GURUHLARNI hisoblash (Group by groupName)
+  const groupMap = new Map<
+    string,
+    {
+      groupName: string;
+      faculty: string;
+      students: typeof students;
+      totalGpa: number;
+      totalPoints: number;
+    }
+  >();
+
+  students.forEach((s) => {
+    const groupName = s.profile?.groupName || "Biriktirilmagan";
+    if (groupName === "Biriktirilmagan" || groupName === "Rahbariyat") return;
+
+    const faculty = s.profile?.dekanat || s.profile?.faculty || "Axborot Texnologiyalari";
+    const gpa = s.profile?.gpa || 4.5;
+    const points = s.profile?.totalPoints || 0;
+
+    if (!groupMap.has(groupName)) {
+      groupMap.set(groupName, {
+        groupName,
+        faculty,
+        students: [s],
+        totalGpa: gpa,
+        totalPoints: points,
+      });
+    } else {
+      const g = groupMap.get(groupName)!;
+      g.students.push(s);
+      g.totalGpa += gpa;
+      g.totalPoints += points;
+    }
+  });
+
+  const topGroups = Array.from(groupMap.values())
+    .map((g) => ({
+      groupName: g.groupName,
+      faculty: g.faculty,
+      studentCount: g.students.length,
+      avgGpa: g.totalGpa / g.students.length,
+      totalPoints: g.totalPoints,
+      talentsCount: g.students.filter((st) => (st.profile?.totalPoints || 0) > 0).length,
+      topStudent: g.students[0]?.profile?.fullName || "Yetakchi talaba",
+    }))
+    .sort((a, b) => b.avgGpa - a.avgGpa)
+    .slice(0, 4);
+
+  // 3. TOP IQTIDORLILAR (Carousel uchun)
+  const carouselTalents: CarouselTalent[] = students.slice(0, 9).map((user, index) => ({
+    id: user.id,
+    fullName: user.profile?.fullName || "Iqtidorli Talaba",
+    avatarUrl: user.profile?.avatarUrl,
+    faculty: user.profile?.faculty,
+    specialty: user.profile?.specialty,
+    groupName: user.profile?.groupName,
+    gpa: user.profile?.gpa || 4.5,
+    totalPoints: user.profile?.totalPoints || 0,
+    rank: index + 1,
+  }));
+
   return (
-    <div className="relative min-h-[calc(100vh-80px)] flex items-center justify-center overflow-hidden py-16">
-      {/* 1. Universitet Binosi Rasmi (Background) */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 transform transition-transform duration-1000"
-        style={{ backgroundImage: `url('/images/tiu-campus.jpg')` }}
-      />
+    <div className="space-y-24 pb-20">
+      
+      {/* ========================================================================= */}
+      {/* 1-SAHIFA: BOSH SAHIFA HERO (TO'LIQ MINIMALISTIC VA GLASSMORPHISMDA)      */}
+      {/* ========================================================================= */}
+      <section className="relative min-h-[calc(100vh-80px)] flex items-center justify-center overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
+        {/* Universitet Binosi Rasmi (Background) */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 transform transition-transform duration-1000"
+          style={{ backgroundImage: `url('/images/tiu-campus.jpg')` }}
+        />
 
-      {/* 2. Minimalistik Toza va Qorong'i Filtrlangan Qatlam (Overlay) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-tiu-950/70 backdrop-blur-[2px]" />
+        {/* Qoraytirilgan va xiralashtirilgan fon qatlami */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-tiu-950/65 backdrop-blur-[2px]" />
 
-      {/* 3. Faqat Sarlavha va Tanishtirish (Title & Introduction — 3-4 sahifali) */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white space-y-8">
-        
-        {/* Universitet kichik nishoni */}
-        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-lg">
-          <Sparkles className="w-4 h-4 text-amber-400" />
-          <span className="text-xs sm:text-sm font-semibold tracking-wide text-slate-100">
-            Toshkent Xalqaro Universiteti • Iqtidorli Talabalar Portali
-          </span>
+        {/* Glassmorphism Asosiy Hero Kartochkasi */}
+        <div className="relative z-10 max-w-4xl mx-auto w-full text-center space-y-8 animate-in fade-in duration-500">
+          
+          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/10 border border-white/25 backdrop-blur-xl shadow-lg">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span className="text-xs sm:text-sm font-bold tracking-wide text-white">
+              Toshkent Xalqaro Universiteti • Iqtidorlar Portali
+            </span>
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1] drop-shadow-md">
+            Kelajak Liderlari va{" "}
+            <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent">
+              Iqtidorlar Ekotizimi
+            </span>
+          </h1>
+
+          {/* Tanishtirish Matni (Minimalistic Glass Banner) */}
+          <div className="bg-white/10 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-white/20 shadow-2xl max-w-3xl mx-auto text-slate-100 text-sm sm:text-base leading-relaxed font-normal">
+            Toshkent Xalqaro Universiteti (TIU) iqtidorli talabalarini aniqlash, jamoalarga birlashtirish,
+            xalqaro olimpiada va hakatonlarda qatnashishlarini qo&apos;llab-quvvatlash hamda rektorat grantlari
+            bilan taqdirlash uchun maxsus raqamli platforma.
+          </div>
+
+          {/* Tugmalar */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+            <a
+              href="#top-groups"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-xl shadow-amber-500/25 hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center space-x-2"
+            >
+              <span>Top Guruhlarni ko&apos;rish</span>
+              <ArrowDown className="w-4 h-4" />
+            </a>
+
+            <Link
+              href="/teams"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-xs sm:text-sm bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-xl shadow-lg hover:scale-105 transition-all flex items-center justify-center space-x-2"
+            >
+              <Users className="w-4 h-4" />
+              <span>Jamoalar Katalogi</span>
+            </Link>
+
+            <Link
+              href="/talents"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-xs sm:text-sm bg-white/10 hover:bg-white/20 text-white border border-white/25 backdrop-blur-xl shadow-lg hover:scale-105 transition-all flex items-center justify-center space-x-2"
+            >
+              <Trophy className="w-4 h-4 text-amber-400" />
+              <span>Iqtidorlilar</span>
+            </Link>
+          </div>
+
+          {/* Pastga scroll ko'rsatkichi */}
+          <div className="pt-10 flex flex-col items-center justify-center space-y-2 opacity-80 animate-bounce">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-300">
+              Pastga aylantiring
+            </span>
+            <ArrowDown className="w-4 h-4 text-amber-400" />
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 2-SAHIFA (SCROLL 1): TOP GURUHLAR (TOP ACADEMIC GROUPS)                    */}
+      {/* ========================================================================= */}
+      <section id="top-groups" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-5">
+          <div>
+            <div className="inline-flex items-center space-x-2 text-xs font-black text-blue-700 uppercase tracking-wider mb-1.5">
+              <GraduationCap className="w-4 h-4 text-blue-600" />
+              <span>Akademik Yetakchilik</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              Universitetning Top Akademik Guruhlari
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
+              O&apos;rtacha akademik GPA ko&apos;rsatkichi, iqtidorli talabalar soni va to&apos;plangan ballar
+              bo&apos;yicha universitetimizning yetakchi guruhlari.
+            </p>
+          </div>
+
+          <Link
+            href="/talents"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-tiu-800 hover:text-tiu-950 transition-colors self-start sm:self-auto"
+          >
+            <span>Barcha talabalar</span>
+            <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
 
-        {/* Asosiy Sarlavha */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] drop-shadow-md">
-          Kelajak Liderlari va{" "}
-          <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent">
-            Iqtidorlar Ekotizimi
-          </span>
-        </h1>
+        {/* Top Guruhlar Kartochkalari (Glassmorphic) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {topGroups.map((group, index) => (
+            <div
+              key={group.groupName}
+              className="bg-white/80 backdrop-blur-2xl rounded-3xl border border-white/70 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between space-y-5 group"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-tiu-900 text-white flex items-center justify-center font-black text-base shadow-xs group-hover:scale-105 transition-transform">
+                    {group.groupName.slice(0, 2)}
+                  </div>
+                  <span
+                    className={`px-3 py-1 rounded-xl text-xs font-black uppercase ${
+                      index === 0
+                        ? "bg-amber-400 text-slate-950 shadow-xs"
+                        : index === 1
+                        ? "bg-slate-300 text-slate-900"
+                        : index === 2
+                        ? "bg-amber-100 text-amber-900"
+                        : "bg-slate-100 text-slate-600"
+                    }`}
+                  >
+                    #{index + 1}-guruh
+                  </span>
+                </div>
 
-        {/* 3-4 Sahifali Qisqacha Tanishtiruv Bo'limi (HomeIntroTabs) */}
-        <HomeIntroTabs />
-      </div>
+                <div>
+                  <h3 className="text-xl font-black text-slate-900 group-hover:text-tiu-900 transition-colors">
+                    {group.groupName}
+                  </h3>
+                  <p className="text-xs font-bold text-tiu-800 mt-0.5 line-clamp-1">
+                    {group.faculty}
+                  </p>
+                </div>
+
+                {/* Metrikalar: GPA & Iqtidorlilar */}
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <div className="p-2.5 rounded-xl bg-amber-50/80 border border-amber-200/60 text-center">
+                    <span className="text-[10px] font-bold text-amber-800 uppercase block">O&apos;rtacha GPA</span>
+                    <span className="text-sm font-black text-amber-950 mt-0.5 block flex items-center justify-center space-x-1">
+                      <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500 inline" />
+                      <span>{group.avgGpa.toFixed(2)}</span>
+                    </span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-blue-50/80 border border-blue-200/60 text-center">
+                    <span className="text-[10px] font-bold text-blue-800 uppercase block">Iqtidorlilar</span>
+                    <span className="text-sm font-black text-blue-950 mt-0.5 block">
+                      {group.talentsCount} nafar
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-1 text-[11px] text-slate-500">
+                  Yetakchi talaba: <strong className="text-slate-800">{group.topStudent}</strong>
+                </div>
+              </div>
+
+              <Link
+                href={`/talents?q=${group.groupName}`}
+                className="w-full py-2.5 rounded-xl border border-slate-200 hover:border-tiu-900 bg-slate-50 hover:bg-tiu-900 text-slate-700 hover:text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition-all shadow-2xs"
+              >
+                <span>Guruh talabalari</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 2-3 SAHIFA (SCROLL 2): TOP IQTIDORLILAR CAROUSELDA                        */}
+      {/* ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <TalentsCarousel
+          talents={carouselTalents}
+          title="Top Iqtidorli Talabalarimiz (Reyting)"
+          subtitle="Oliy o'quv yurtida yutuq, ko'nikma va ilmiy natijalari bilan peshqadamlik qilayotgan talabalar"
+        />
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 3-SAHIFA (SCROLL 3): SO'NGGI TANLOV VA GRANTLAR                           */}
+      {/* ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-5">
+          <div>
+            <div className="inline-flex items-center space-x-2 text-xs font-black text-amber-600 uppercase tracking-wider mb-1.5">
+              <Award className="w-4 h-4 text-amber-500" />
+              <span>Imkoniyatlar va Rag&apos;bat</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              So&apos;nggi Tanlovlar va Grantlar
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
+              Universitet rektori grantlari, xalqaro musobaqalar va 100% kontrakt qoplami dasturlari.
+            </p>
+          </div>
+
+          <Link
+            href="/opportunities"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-tiu-800 hover:text-tiu-950 transition-colors self-start sm:self-auto"
+          >
+            <span>Barcha tanlovlar</span>
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* So'nggi Grantlar Kartochkalari (Glassmorphism & Shadows) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {opportunities.map((opp) => {
+            const daysLeft = Math.max(
+              0,
+              Math.ceil(
+                (new Date(opp.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
+              )
+            );
+
+            return (
+              <Link
+                key={opp.id}
+                href={`/opportunities/${opp.id}`}
+                className="group bg-white/80 backdrop-blur-2xl rounded-3xl border border-white/70 overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  {/* Rasm */}
+                  <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
+                    <img
+                      src={
+                        opp.imageUrl ||
+                        "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1000&auto=format&fit=crop&q=80"
+                      }
+                      alt={opp.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <span className="px-3 py-1 rounded-xl text-[11px] font-black uppercase bg-tiu-900 text-white shadow-xs">
+                        {opp.type}
+                      </span>
+                    </div>
+                    <div className="absolute top-3 right-3">
+                      <span className="px-2.5 py-1 rounded-xl text-[11px] font-black bg-amber-500 text-slate-950 shadow-xs">
+                        {daysLeft} kun qoldi
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-6 space-y-3">
+                    <h3 className="text-xl font-black text-slate-900 group-hover:text-tiu-800 transition-colors line-clamp-2 leading-snug">
+                      {opp.title}
+                    </h3>
+
+                    {opp.award && (
+                      <div className="p-2.5 rounded-xl bg-amber-50/80 border border-amber-200/80 text-xs font-black text-amber-950 flex items-center space-x-1.5">
+                        <Sparkles className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                        <span className="truncate">Mukofot: {opp.award}</span>
+                      </div>
+                    )}
+
+                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                      {opp.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="px-6 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-tiu-900 group-hover:bg-tiu-50/50 transition-colors">
+                  <span className="text-[11px] text-slate-400 font-medium">
+                    Kvota: {opp.quota} nafar
+                  </span>
+                  <span className="flex items-center space-x-1 text-tiu-800 group-hover:translate-x-1 transition-transform">
+                    <span>Batafsil & Topshirish</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
     </div>
   );
 }
