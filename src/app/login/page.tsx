@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Sparkles, ArrowRight, Lock, User, AlertCircle } from "lucide-react";
+import { Sparkles, ArrowRight, Lock, User, AlertCircle, GraduationCap, Building2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -128,7 +128,10 @@ export default function LoginPage() {
               onClick={() => handleQuickLogin("jasur@student.tiu.uz", "student123")}
               className="p-2 border border-slate-200 hover:border-tiu-400 rounded-lg text-left bg-slate-50 hover:bg-tiu-50/50 transition-colors"
             >
-              <div className="font-bold text-slate-800">🎓 Talaba</div>
+              <div className="font-bold text-slate-800 flex items-center space-x-1.5">
+                <GraduationCap className="w-4 h-4 text-tiu-700" />
+                <span>Talaba</span>
+              </div>
               <div className="text-[10px] text-slate-500">jasur@student.tiu.uz</div>
             </button>
             <button
@@ -136,7 +139,10 @@ export default function LoginPage() {
               onClick={() => handleQuickLogin("department@tiu.uz", "dept123")}
               className="p-2 border border-slate-200 hover:border-tiu-400 rounded-lg text-left bg-slate-50 hover:bg-tiu-50/50 transition-colors"
             >
-              <div className="font-bold text-slate-800">🏛️ Bo&apos;lim Boshlig&apos;i</div>
+              <div className="font-bold text-slate-800 flex items-center space-x-1.5">
+                <Building2 className="w-4 h-4 text-amber-600" />
+                <span>Bo&apos;lim Boshlig&apos;i</span>
+              </div>
               <div className="text-[10px] text-slate-500">department@tiu.uz</div>
             </button>
           </div>

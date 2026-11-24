@@ -63,18 +63,16 @@ export default function Navbar() {
         <div className="flex justify-between h-20 items-center">
           
           {/* YUQORI CHAP TARAFDA: TIU RASMIY LOGOSI VA MINIMALISTIK BRENDING */}
-          <Link href="/" className="flex items-center space-x-3.5 group">
-            {/* TIU Rasmiy Logosi */}
-            <div className="relative p-1 rounded-2xl bg-white/80 border border-slate-200/60 shadow-xs group-hover:scale-105 transition-transform">
-              <img
-                src="/images/tiu-logo.png"
-                alt="Tashkent International University"
-                className="h-11 sm:h-12 w-auto object-contain"
-              />
-            </div>
+          <Link href="/" className="flex items-center space-x-3 group">
+            {/* TIU Rasmiy Logosi - Backgroundsiz */}
+            <img
+              src="/images/tiu-logo.png"
+              alt="Tashkent International University"
+              className="h-11 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105"
+            />
 
             {/* Platforma Matnli Logosi */}
-            <div className="hidden sm:block pl-1">
+            <div className="hidden sm:block">
               <div className="flex items-center space-x-1.5">
                 <span className="font-black text-xl tracking-tight text-tiu-950">TIU</span>
                 <span className="text-xl font-black bg-gradient-to-r from-tiu-700 via-tiu-800 to-amber-600 bg-clip-text text-transparent">
@@ -87,22 +85,30 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* O'rta: Minimalistik va Glassmorphism Navigatsiya (Faqat kabinet tashqarisida) */}
+          {/* O'rta: Minimalistik va Backgroundsiz Navigatsiya (Cursor qoyilganda animatsion chiziq) */}
           {!isDashboard ? (
-            <nav className="hidden md:flex items-center p-1 rounded-2xl bg-slate-100/60 backdrop-blur-md border border-slate-200/50 shadow-inner space-x-1">
+            <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                      isActive
-                        ? "bg-white text-tiu-950 shadow-xs scale-100 font-black"
-                        : "text-slate-600 hover:text-tiu-900 hover:bg-white/50"
+                    className={`relative px-3.5 py-2 text-xs lg:text-sm font-bold transition-colors duration-200 group ${
+                      isActive ? "text-tiu-950 font-black" : "text-slate-600 hover:text-tiu-950"
                     }`}
                   >
-                    {link.name}
+                    <span className="relative z-10 transition-transform duration-200 group-hover:-translate-y-0.5 inline-block">
+                      {link.name}
+                    </span>
+                    {/* Backgroundsiz jonli animatsion chiziq */}
+                    <span
+                      className={`absolute bottom-0 left-2 right-2 h-[2.5px] bg-gradient-to-r from-tiu-800 via-tiu-900 to-amber-500 rounded-full transition-all duration-300 ease-out ${
+                        isActive
+                          ? "opacity-100 scale-x-100"
+                          : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"
+                      }`}
+                    />
                   </Link>
                 );
               })}
@@ -196,9 +202,10 @@ export default function Navbar() {
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3.5 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-100"
+              className="flex items-center space-x-2 px-3.5 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-100"
             >
-              &larr; Asosiy portalga qaytish
+              <ArrowLeft className="w-4 h-4" />
+              <span>Asosiy portalga qaytish</span>
             </Link>
           )}
 

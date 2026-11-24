@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Award, PlusCircle, Users, Calendar, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Award, PlusCircle, Users, Calendar, AlertCircle, CheckCircle2, Gift, X } from "lucide-react";
 import { OPPORTUNITY_TYPES } from "@/lib/constants";
 
 export default function DepartmentOpportunitiesPage() {
@@ -136,8 +136,9 @@ export default function DepartmentOpportunitiesPage() {
                 </p>
 
                 {opp.award && (
-                  <div className="text-xs font-semibold text-emerald-700">
-                    🎁 Mukofot: {opp.award}
+                  <div className="text-xs font-semibold text-emerald-700 flex items-center space-x-1">
+                    <Gift className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Mukofot: {opp.award}</span>
                   </div>
                 )}
               </div>
@@ -164,8 +165,8 @@ export default function DepartmentOpportunitiesPage() {
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-bold text-slate-900 text-lg">Yangi Tanlov / Grant E&apos;lon Qilish</h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 font-bold">
-                ✕
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg">
+                <X className="w-5 h-5" />
               </button>
             </div>
 

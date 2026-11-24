@@ -22,6 +22,13 @@ import {
   FileText,
   UserCheck,
   Instagram,
+  Crown,
+  Calendar,
+  Building2,
+  Target,
+  Medal,
+  Clock,
+  ArrowRight,
 } from "lucide-react";
 import JoinTeamModal from "./JoinTeamModal";
 
@@ -90,6 +97,7 @@ interface TeamDetailInteractiveProps {
     faculty?: string | null;
     avatarUrl?: string | null;
     neededRoles?: string | null;
+    createdAt?: string | Date;
     leader: {
       id: string;
       email?: string | null;
@@ -218,94 +226,227 @@ export default function TeamDetailInteractive({
     return (a.orderIndex || 99) - (b.orderIndex || 99);
   });
 
+  // Tashkiliy sanani formatlash
+  const formattedCreatedDate = team.createdAt
+    ? new Date(team.createdAt).toLocaleDateString("uz-UZ", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "2024-yil Sentabr";
+
   return (
     <div className="space-y-8">
-      {/* 1. JAMOA ASOSIY BLOKI: RASMI, NOMI, SARLAVHASI, MAQSAD VA YO'NALISHLARI */}
-      <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-sm space-y-6">
-        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 border-b border-slate-100 pb-6">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-            {/* Jamoa Rasmi */}
-            <div className="w-28 h-28 rounded-3xl bg-slate-900 text-white flex items-center justify-center font-black text-3xl shadow-md overflow-hidden flex-shrink-0">
-              {team.avatarUrl ? (
-                <img src={team.avatarUrl} alt={team.name} className="w-full h-full object-cover" />
-              ) : (
-                team.name.charAt(0)
-              )}
-            </div>
+      {/* 1. JAMOA ASOSIY BLOKI: 16x9 BANNER, NOMI, TASHKILIY SANA, YO'NALISHLAR VA 1x1 AZOLAR RASMLARI */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
+        
+        {/* 16x9 Widescreen Banner va Jamoa Sarlavhasi */}
+        <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden bg-slate-950 shadow-md">
+          <img
+            src={
+              team.avatarUrl ||
+              "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80"
+            }
+            alt={team.name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-transparent" />
 
-            <div className="space-y-2">
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                {/* Sarlavhasi / Toifasi */}
-                <span className="px-3 py-1 rounded-lg text-xs font-black uppercase bg-tiu-50 text-tiu-900 border border-tiu-200">
-                  {team.category}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700">
-                  {team.faculty || "Universitetlararo"}
-                </span>
+          {/* Banner Ichidagi Kontent */}
+          <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 right-4 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div className="flex items-center space-x-4">
+              {/* Jamoa 1x1 Rasmi */}
+              <div className="w-16 h-16 sm:w-20 sm:h-20 aspect-square rounded-2xl bg-white p-1 shadow-2xl flex-shrink-0">
+                <div className="w-full h-full rounded-xl overflow-hidden bg-tiu-900 text-white flex items-center justify-center font-black text-2xl">
+                  {team.avatarUrl ? (
+                    <img src={team.avatarUrl} alt="" className="w-full h-full object-cover aspect-square" />
+                  ) : (
+                    team.name.charAt(0)
+                  )}
+                </div>
               </div>
 
-              {/* Jamoa Nomi */}
-              <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                {team.name}
-              </h1>
-
-              {/* Jamoa Sardori Qisqacha */}
-              <div className="pt-1 flex items-center justify-center sm:justify-start">
-                <button
-                  type="button"
-                  onClick={() => setSelectedStudent(team.leader.profile || null)}
-                  className="group inline-flex items-center space-x-2.5 p-1 px-3 rounded-full bg-slate-50 hover:bg-tiu-50 border border-slate-200 hover:border-tiu-300 transition-all text-left"
-                >
-                  <div className="w-6 h-6 rounded-full bg-tiu-900 text-white flex items-center justify-center text-xs font-bold overflow-hidden">
-                    {team.leader.profile?.avatarUrl ? (
-                      <img src={team.leader.profile.avatarUrl} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      "S"
-                    )}
-                  </div>
-                  <span className="text-xs font-extrabold text-slate-900 group-hover:text-tiu-900">
-                    👑 Sardor: {team.leader.profile?.fullName || "Yetakchi"} (Profil &rarr;)
+              {/* Jamoa Nomi va Toifalari */}
+              <div className="text-white space-y-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-3 py-0.5 rounded-lg text-xs font-black uppercase bg-amber-400 text-slate-950 shadow-xs">
+                    {team.category}
                   </span>
-                </button>
+                  <span className="px-2.5 py-0.5 rounded-lg text-xs font-semibold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                    {team.faculty || "Axborot Texnologiyalari"}
+                  </span>
+                </div>
+                <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white drop-shadow-md">
+                  {team.name}
+                </h1>
               </div>
             </div>
-          </div>
 
-          <div className="flex-shrink-0">
-            <JoinTeamModal
-              teamId={team.id}
-              isLoggedIn={!!currentUser}
-              isStudent={currentUser?.role === "STUDENT"}
-              isAlreadyMember={isAlreadyMember}
-              isPending={isPending}
-            />
+            <div className="flex-shrink-0">
+              <JoinTeamModal
+                teamId={team.id}
+                isLoggedIn={!!currentUser}
+                isStudent={currentUser?.role === "STUDENT"}
+                isAlreadyMember={isAlreadyMember}
+                isPending={isPending}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Maqsad va Yo'nalishlari */}
+        {/* Jamoa Tashkiliy Sanasi va Yo'nalishlar Metriklari */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+          {/* Tashkiliy Sana */}
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-blue-100/70 text-blue-900">
+              <Calendar className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-[10px] font-bold uppercase text-slate-400">Tashkiliy Sana</div>
+              <div className="text-sm font-black text-slate-900">
+                {formattedCreatedDate}
+              </div>
+            </div>
+          </div>
+
+          {/* Asosiy Yo'nalish / Qiziqish */}
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-amber-100/70 text-amber-900">
+              <Target className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-[10px] font-bold uppercase text-slate-400">Asosiy Qiziqish & Yo&apos;nalish</div>
+              <div className="text-sm font-black text-slate-900 truncate">
+                {team.category}
+              </div>
+            </div>
+          </div>
+
+          {/* Dekanat va Fakultet */}
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-emerald-100/70 text-emerald-900">
+              <Building2 className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-[10px] font-bold uppercase text-slate-400">Dekanat / Fakultet</div>
+              <div className="text-sm font-black text-slate-900 truncate">
+                {team.faculty || "Axborot Texnologiyalari Dekanati"}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Jamoa Haqida To'liq Ma'lumot */}
         <div className="space-y-2">
           <h3 className="text-xs font-black uppercase tracking-wider text-slate-400">
-            Jamoaning Asosiy Maqsadi va Yo&apos;nalishi
+            Jamoa Haqida To&apos;liq Ma&apos;lumot va Missiyasi
           </h3>
-          <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+          <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal bg-slate-50/70 p-5 rounded-2xl border border-slate-100 whitespace-pre-line">
             {team.description}
           </p>
         </div>
 
-        {/* Qidirilayotgan Yo'nalishlar */}
+        {/* Qidirilayotgan Yo'nalishlar / Ko'nikmalar */}
         {team.neededRoles && (
           <div className="p-4 bg-amber-50/70 border border-amber-200/90 rounded-2xl flex items-start space-x-3">
             <Sparkles className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <div>
               <h4 className="text-xs font-bold uppercase text-amber-900 tracking-wider">
-                Jamoaga qidirilayotgan mutaxassislar / yo&apos;nalishlar:
+                Qiziqish va Talab qilinayotgan mutaxassisliklar:
               </h4>
-              <p className="text-xs sm:text-sm text-amber-950 font-semibold mt-0.5">
-                {team.neededRoles}
-              </p>
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {team.neededRoles.split(",").map((role) => (
+                  <span
+                    key={role}
+                    className="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-amber-950 border border-amber-200/80 shadow-2xs"
+                  >
+                    {role.trim()}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         )}
+
+        {/* JAMOA A'ZOLARI VA SARDORNING 1x1 RASMLARI (GALEREYA & PORTFOLIO) */}
+        <div className="space-y-3 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center space-x-2">
+              <Users className="w-4 h-4 text-tiu-800" />
+              <span>Jamoa Tarkibi va A&apos;zolari (1x1 Formatda):</span>
+            </h4>
+            <span className="text-xs text-slate-400 font-semibold">
+              {sortedMembers.length} nafar a&apos;zo
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {sortedMembers.map((member, idx) => {
+              const isLeader =
+                member.role.toLowerCase().includes("sardor") &&
+                !member.role.toLowerCase().includes("vitse") &&
+                !member.role.toLowerCase().includes("yordamchi");
+              const isVice =
+                member.role.toLowerCase().includes("vitse") ||
+                member.role.toLowerCase().includes("yordamchi");
+
+              return (
+                <div
+                  key={member.id || idx}
+                  onClick={() => setSelectedStudent(member.user.profile || null)}
+                  className={`group p-3 rounded-2xl border transition-all cursor-pointer flex flex-col items-center text-center space-y-2 hover:-translate-y-1 hover:shadow-md ${
+                    isLeader
+                      ? "bg-amber-50/70 border-amber-300 shadow-2xs"
+                      : isVice
+                      ? "bg-blue-50/60 border-blue-200/80"
+                      : "bg-white border-slate-200/80 hover:border-tiu-800"
+                  }`}
+                  title={`${member.user.profile?.fullName || "A'zo"} - Portfoliosini ko'rish`}
+                >
+                  {/* 1x1 Formatdagi Rasm */}
+                  <div className="relative w-16 h-16 sm:w-18 sm:h-18 aspect-square rounded-2xl overflow-hidden bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
+                    {member.user.profile?.avatarUrl ? (
+                      <img
+                        src={member.user.profile.avatarUrl}
+                        alt=""
+                        className="w-full h-full object-cover aspect-square"
+                      />
+                    ) : (
+                      member.user.profile?.fullName?.charAt(0) || "A"
+                    )}
+
+                    {isLeader && (
+                      <div className="absolute top-1 right-1 p-1 rounded-md bg-amber-400 text-slate-950 shadow-xs">
+                        <Crown className="w-3 h-3" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="w-full">
+                    <div className="text-xs font-black text-slate-900 group-hover:text-tiu-800 transition-colors truncate">
+                      {member.user.profile?.fullName || "A'zo"}
+                    </div>
+                    <div className="text-[10px] font-bold text-slate-500 uppercase mt-0.5 truncate flex items-center justify-center space-x-1">
+                      {isLeader ? (
+                        <span className="text-amber-800 font-extrabold flex items-center space-x-0.5">
+                          <Crown className="w-2.5 h-2.5 inline" />
+                          <span>Sardor</span>
+                        </span>
+                      ) : isVice ? (
+                        <span className="text-blue-800 font-extrabold flex items-center space-x-0.5">
+                          <Star className="w-2.5 h-2.5 inline" />
+                          <span>Vitse-sardor</span>
+                        </span>
+                      ) : (
+                        <span>{member.role}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* 2. TABLAR: 1-TAB: IZOHLAR VA XULOSALAR | 2-TAB: A'ZOLAR JADVALI | 3-TAB: NATIJALAR VA YUTUQLAR */}
@@ -524,12 +665,14 @@ export default function TeamDetailInteractive({
                           {/* 3. Jamoaviy Roli (1-qator Sardor, 2-qator Yordamchi) */}
                           <td className="py-4 px-6">
                             {isLeader ? (
-                              <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-xl text-xs font-black uppercase bg-amber-400 text-slate-950 shadow-xs border border-amber-500">
-                                <span>👑 Jamoa Sardori</span>
+                              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-amber-400 text-slate-950 shadow-xs border border-amber-500">
+                                <Crown className="w-3.5 h-3.5" />
+                                <span>Jamoa Sardori</span>
                               </span>
                             ) : isViceLeader ? (
-                              <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-xl text-xs font-black uppercase bg-blue-100 text-blue-900 border border-blue-300">
-                                <span>⭐ Vitse-sardor</span>
+                              <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-blue-100 text-blue-900 border border-blue-300">
+                                <Star className="w-3.5 h-3.5" />
+                                <span>Vitse-sardor</span>
                               </span>
                             ) : (
                               <span className="inline-block px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700">

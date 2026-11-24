@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Camera, PlusCircle, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Camera, PlusCircle, AlertCircle, CheckCircle2, Newspaper, X } from "lucide-react";
 
 export default function DepartmentEventsPage() {
   const [events, setEvents] = useState<any[]>([]);
@@ -120,8 +120,18 @@ export default function DepartmentEventsPage() {
                 </div>
               )}
               <div className="space-y-1">
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-tiu-50 text-tiu-800">
-                  {ev.type === "EVENT_HIGHLIGHT" ? "📸 Tadbir lavhasi" : "📰 Yangilik"}
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-tiu-50 text-tiu-800 inline-flex items-center space-x-1">
+                  {ev.type === "EVENT_HIGHLIGHT" ? (
+                    <>
+                      <Camera className="w-3 h-3 text-tiu-700" />
+                      <span>Tadbir lavhasi</span>
+                    </>
+                  ) : (
+                    <>
+                      <Newspaper className="w-3 h-3 text-blue-700" />
+                      <span>Yangilik</span>
+                    </>
+                  )}
                 </span>
                 <h3 className="font-bold text-slate-900 text-sm line-clamp-1">{ev.title}</h3>
                 <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">{ev.content}</p>
@@ -140,8 +150,8 @@ export default function DepartmentEventsPage() {
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-bold text-slate-900 text-base">Yangi Lavha / Yangilik Qo&apos;shish</h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 font-bold">
-                ✕
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg">
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -177,8 +187,8 @@ export default function DepartmentEventsPage() {
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
                   >
-                    <option value="EVENT_HIGHLIGHT">📸 Tadbirdan fotolavha</option>
-                    <option value="NEWS">📰 Rasmiy yangilik</option>
+                    <option value="EVENT_HIGHLIGHT">Tadbirdan fotolavha</option>
+                    <option value="NEWS">Rasmiy yangilik</option>
                   </select>
                 </div>
 

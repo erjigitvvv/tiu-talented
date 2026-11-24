@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, Trophy, FileCheck, ExternalLink, AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import { PlusCircle, Trophy, FileCheck, ExternalLink, AlertCircle, CheckCircle2, Clock, XCircle, X } from "lucide-react";
 import { ACHIEVEMENT_CATEGORIES } from "@/lib/constants";
 
 export default function StudentAchievementsPage() {
@@ -150,19 +150,21 @@ export default function StudentAchievementsPage() {
               <div className="flex md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 gap-3">
                 <div>
                   {ach.status === "APPROVED" && (
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                      ✓ Tasdiqlandi (+{ach.points} ball)
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 inline-flex items-center space-x-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Tasdiqlandi (+{ach.points} ball)</span>
                     </span>
                   )}
                   {ach.status === "PENDING" && (
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center space-x-1">
-                      <Clock className="w-3.5 h-3.5" />
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 inline-flex items-center space-x-1">
+                      <Clock className="w-3.5 h-3.5 text-amber-600" />
                       <span>Tekshiruvda</span>
                     </span>
                   )}
                   {ach.status === "REJECTED" && (
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-200">
-                      ✗ Rad etildi
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-200 inline-flex items-center space-x-1">
+                      <XCircle className="w-3.5 h-3.5 text-red-600" />
+                      <span>Rad etildi</span>
                     </span>
                   )}
                 </div>
@@ -192,9 +194,9 @@ export default function StudentAchievementsPage() {
               <h3 className="font-bold text-slate-900 text-lg">Yangi Yutuq Yuklash</h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-slate-400 hover:text-slate-600 text-xl font-bold"
+                className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
 

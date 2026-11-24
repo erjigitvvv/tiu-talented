@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { Award, Calendar, ChevronRight, CheckCircle2 } from "lucide-react";
+import { Award, Calendar, ChevronRight, CheckCircle2, Gift } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -59,8 +59,9 @@ export default async function StudentOpportunitiesPage() {
                 </p>
 
                 {opp.award && (
-                  <div className="text-xs font-semibold text-emerald-700 bg-emerald-50/60 p-2 rounded-lg border border-emerald-100">
-                    🎁 Mukofot: {opp.award}
+                  <div className="text-xs font-semibold text-emerald-700 bg-emerald-50/60 p-2 rounded-lg border border-emerald-100 flex items-center space-x-1.5">
+                    <Gift className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Mukofot: {opp.award}</span>
                   </div>
                 )}
               </div>

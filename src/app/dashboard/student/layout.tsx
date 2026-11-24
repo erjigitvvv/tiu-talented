@@ -59,8 +59,9 @@ export default async function StudentDashboardLayout({
                 {user.profile.specialty}
               </p>
             )}
-            <div className="mt-3 py-1.5 px-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-xs font-black inline-block">
-              🏆 {user.profile?.totalPoints || 0} ball to&apos;plangan
+            <div className="mt-3 py-1.5 px-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-xs font-black inline-flex items-center space-x-1.5">
+              <Trophy className="w-3.5 h-3.5 text-amber-600" />
+              <span>{user.profile?.totalPoints || 0} ball to&apos;plangan</span>
             </div>
           </div>
 

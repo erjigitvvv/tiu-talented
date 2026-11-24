@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { UserPlus, CheckCircle2, AlertCircle } from "lucide-react";
+import { UserPlus, CheckCircle2, AlertCircle, X } from "lucide-react";
 
 interface JoinTeamModalProps {
   teamId: string;
@@ -108,8 +108,8 @@ export default function JoinTeamModal({
           <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-4 shadow-2xl border border-slate-100">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-bold text-slate-900 text-base">Jamoaga Qo&apos;shilish So&apos;rovi</h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 font-bold">
-                ✕
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg">
+                <X className="w-5 h-5" />
               </button>
             </div>
 

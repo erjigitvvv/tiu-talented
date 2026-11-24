@@ -157,8 +157,9 @@ export default async function TalentDetailPage({ params }: TalentDetailPageProps
                   </p>
 
                   {ach.adminFeedback && (
-                    <div className="text-xs text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 inline-block font-medium">
-                      ✓ Bo&apos;lim xulosasi: {ach.adminFeedback}
+                    <div className="text-xs text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 inline-flex items-center space-x-1.5 font-medium">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Bo&apos;lim xulosasi: {ach.adminFeedback}</span>
                     </div>
                   )}
                 </div>

@@ -18,6 +18,7 @@ import {
   Calendar,
   Users,
   Target,
+  Medal,
 } from "lucide-react";
 
 export interface StudentOpportunityItem {
@@ -210,16 +211,19 @@ export default function TalentsTableClient({
                       {/* 2. O'RNI: FAQAT 3 TA O'RIN AJRALIB TURADI */}
                       <td className="py-4 px-4">
                         {rank === 1 ? (
-                          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-xl text-xs font-black uppercase bg-amber-400 text-slate-950 shadow-xs border border-amber-500">
-                            <span>🥇 1-o&apos;rin</span>
+                          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-amber-400 text-slate-950 shadow-xs border border-amber-500">
+                            <Medal className="w-3.5 h-3.5" />
+                            <span>1-o&apos;rin</span>
                           </span>
                         ) : rank === 2 ? (
-                          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-xl text-xs font-black uppercase bg-slate-300 text-slate-900 border border-slate-400">
-                            <span>🥈 2-o&apos;rin</span>
+                          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-slate-300 text-slate-900 border border-slate-400">
+                            <Medal className="w-3.5 h-3.5" />
+                            <span>2-o&apos;rin</span>
                           </span>
                         ) : rank === 3 ? (
-                          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-xl text-xs font-black uppercase bg-amber-100 text-amber-900 border border-amber-300">
-                            <span>🥉 3-o&apos;rin</span>
+                          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase bg-amber-100 text-amber-900 border border-amber-300">
+                            <Medal className="w-3.5 h-3.5" />
+                            <span>3-o&apos;rin</span>
                           </span>
                         ) : (
                           /* Qolganlari oddiy ko'rinishda */
@@ -417,33 +421,36 @@ export default function TalentsTableClient({
               <div className="flex border-b border-slate-200 gap-4">
                 <button
                   onClick={() => setPortfolioTab("achievements")}
-                  className={`pb-2.5 text-xs font-black transition-all border-b-2 ${
+                  className={`pb-2.5 text-xs font-black transition-all border-b-2 inline-flex items-center space-x-1.5 ${
                     portfolioTab === "achievements"
                       ? "border-tiu-900 text-tiu-900"
                       : "border-transparent text-slate-400 hover:text-slate-700"
                   }`}
                 >
-                  🏆 Yutuqlar ({selectedStudent.achievements.length})
+                  <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Yutuqlar ({selectedStudent.achievements.length})</span>
                 </button>
                 <button
                   onClick={() => setPortfolioTab("teams")}
-                  className={`pb-2.5 text-xs font-black transition-all border-b-2 ${
+                  className={`pb-2.5 text-xs font-black transition-all border-b-2 inline-flex items-center space-x-1.5 ${
                     portfolioTab === "teams"
                       ? "border-tiu-900 text-tiu-900"
                       : "border-transparent text-slate-400 hover:text-slate-700"
                   }`}
                 >
-                  👥 Loyiha Jamoalari ({selectedStudent.teams.length})
+                  <Users className="w-3.5 h-3.5 text-tiu-700" />
+                  <span>Loyiha Jamoalari ({selectedStudent.teams.length})</span>
                 </button>
                 <button
                   onClick={() => setPortfolioTab("opportunities")}
-                  className={`pb-2.5 text-xs font-black transition-all border-b-2 ${
+                  className={`pb-2.5 text-xs font-black transition-all border-b-2 inline-flex items-center space-x-1.5 ${
                     portfolioTab === "opportunities"
                       ? "border-tiu-900 text-tiu-900"
                       : "border-transparent text-slate-400 hover:text-slate-700"
                   }`}
                 >
-                  🎯 Tanlov va Grantlar ({selectedStudent.portfolioOpportunities.length})
+                  <Target className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Tanlov va Grantlar ({selectedStudent.portfolioOpportunities.length})</span>
                 </button>
               </div>
 

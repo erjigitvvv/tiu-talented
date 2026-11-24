@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { UserCheck, Search, Trophy, ExternalLink, ShieldCheck } from "lucide-react";
+import { UserCheck, Search, Trophy, ExternalLink, ShieldCheck, CheckCircle2, Clock } from "lucide-react";
 import { FACULTIES } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
@@ -150,12 +150,14 @@ export default async function DepartmentTalentsPage({ searchParams }: Department
 
                     <td className="py-4 px-6 text-center">
                       <div className="flex items-center justify-center gap-1.5">
-                        <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-bold" title="Tasdiqlangan">
-                          {approvedCount} ✓
+                        <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-bold inline-flex items-center space-x-1" title="Tasdiqlangan">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          <span>{approvedCount}</span>
                         </span>
                         {pendingCount > 0 && (
-                          <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-bold" title="Kutilmoqda">
-                            {pendingCount} ⏳
+                          <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-bold inline-flex items-center space-x-1" title="Kutilmoqda">
+                            <Clock className="w-3 h-3 text-amber-600" />
+                            <span>{pendingCount}</span>
                           </span>
                         )}
                       </div>

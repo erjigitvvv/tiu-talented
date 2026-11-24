@@ -69,6 +69,7 @@ export default async function TeamDetailPage({ params }: TeamDetailPageProps) {
   // Format data for interactive component
   const teamFormatted = {
     ...team,
+    createdAt: team.createdAt.toISOString(),
     members: acceptedMembers.map((m) => ({
       ...m,
       user: {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ShieldCheck, CheckCircle2, XCircle, ExternalLink, FileText, AlertCircle, Clock } from "lucide-react";
+import { ShieldCheck, CheckCircle2, XCircle, ExternalLink, FileText, AlertCircle, Clock, X } from "lucide-react";
 
 export default function DepartmentVerificationsPage() {
   const [achievements, setAchievements] = useState<any[]>([]);
@@ -195,11 +195,21 @@ export default function DepartmentVerificationsPage() {
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-slate-100">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-bold text-slate-900 text-base">
-                {modalMode === "APPROVE" ? "✓ Yutuqni Tasdiqlash va Ball berish" : "✗ Yutuqni Rad Etish"}
+              <h3 className="font-bold text-slate-900 text-base inline-flex items-center space-x-1.5">
+                {modalMode === "APPROVE" ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>Yutuqni Tasdiqlash va Ball berish</span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="w-4 h-4 text-red-600" />
+                    <span>Yutuqni Rad Etish</span>
+                  </>
+                )}
               </h3>
-              <button onClick={() => setModalMode(null)} className="text-slate-400 hover:text-slate-600 font-bold">
-                ✕
+              <button onClick={() => setModalMode(null)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg">
+                <X className="w-5 h-5" />
               </button>
             </div>
 

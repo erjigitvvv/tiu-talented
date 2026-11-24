@@ -10,6 +10,7 @@ import {
   Camera,
   ShieldCheck,
   Sparkles,
+  Building2,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -46,7 +47,7 @@ export default async function DepartmentDashboardLayout({
         <aside className="w-full md:w-64 flex-shrink-0 space-y-6">
           <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm text-center">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-tiu-950 to-tiu-800 text-white flex items-center justify-center font-bold text-2xl mx-auto shadow-sm">
-              🏛️
+              <Building2 className="w-8 h-8 text-amber-400" />
             </div>
             <h3 className="font-bold text-slate-900 text-sm mt-3 line-clamp-1">
               {user.profile?.fullName || "Bo'lim Boshlig'i"}

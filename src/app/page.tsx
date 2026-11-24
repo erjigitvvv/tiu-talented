@@ -19,7 +19,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   // 1. Ma'lumotlarni parallel yuklash
-  const [students, opportunities, totalStudents, totalTeams, totalGrants] = await Promise.all([
+  const [students, topTeams, opportunities, totalStudents, totalTeams, totalGrants] = await Promise.all([
     prisma.user.findMany({
       where: { role: "STUDENT" },
       include: {
@@ -31,6 +31,34 @@ export default async function HomePage() {
       orderBy: {
         profile: {
           totalPoints: "desc",
+        },
+      },
+    }),
+    prisma.team.findMany({
+      take: 3,
+      include: {
+        leader: {
+          include: {
+            profile: true,
+          },
+        },
+        members: {
+          where: { status: "ACCEPTED" },
+          include: {
+            user: {
+              include: {
+                profile: true,
+              },
+            },
+          },
+          orderBy: { orderIndex: "asc" },
+        },
+        achievements: {
+          orderBy: { dateAchieved: "desc" },
+          take: 2,
+        },
+        _count: {
+          select: { members: true, achievements: true },
         },
       },
     }),
@@ -110,7 +138,7 @@ export default async function HomePage() {
     <div className="space-y-24 pb-20">
       
       {/* ========================================================================= */}
-      {/* 1-SAHIFA: BOSH SAHIFA HERO (TO'LIQ MINIMALISTIC VA GLASSMORPHISMDA)      */}
+      {/* 1-SAHIFA: BOSH SAHIFA HERO (OCHROQ FON, FAQAT SARLAVHA, NO BUTTONS)       */}
       {/* ========================================================================= */}
       <section className="relative min-h-[calc(100vh-80px)] flex items-center justify-center overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
         {/* Universitet Binosi Rasmi (Background) */}
@@ -119,68 +147,193 @@ export default async function HomePage() {
           style={{ backgroundImage: `url('/images/tiu-campus.jpg')` }}
         />
 
-        {/* Qoraytirilgan va xiralashtirilgan fon qatlami */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-tiu-950/65 backdrop-blur-[2px]" />
+        {/* Biroz ochroq, tabiiy yorug'likni ko'rsatuvchi xiralashtirilgan fon qatlami */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/25 to-slate-900/45 backdrop-blur-[1px]" />
 
-        {/* Glassmorphism Asosiy Hero Kartochkasi */}
-        <div className="relative z-10 max-w-4xl mx-auto w-full text-center space-y-8 animate-in fade-in duration-500">
+        {/* Glassmorphism Asosiy Hero Kartochkasi (Faqat sarlavha va qisqacha tanishtirish) */}
+        <div className="relative z-10 max-w-4xl mx-auto w-full text-center space-y-6 animate-in fade-in duration-500">
           
-          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/10 border border-white/25 backdrop-blur-xl shadow-lg">
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <span className="text-xs sm:text-sm font-bold tracking-wide text-white">
-              Toshkent Xalqaro Universiteti • Iqtidorlar Portali
-            </span>
+          <div className="bg-white/80 backdrop-blur-2xl rounded-3xl p-8 sm:p-14 border border-white/70 shadow-2xl space-y-6">
+            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-tiu-50/90 border border-tiu-200/90 shadow-2xs">
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              <span className="text-xs sm:text-sm font-black tracking-wide text-tiu-950">
+                Toshkent Xalqaro Universiteti • Iqtidorlar Portali
+              </span>
+            </div>
+
+            {/* Asosiy Sarlavha */}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.15]">
+              Kelajak Liderlari va{" "}
+              <span className="bg-gradient-to-r from-tiu-800 via-tiu-900 to-amber-600 bg-clip-text text-transparent">
+                Iqtidorlar Ekotizimi
+              </span>
+            </h1>
+
+            {/* Tanishtirish Matni */}
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
+              Toshkent Xalqaro Universiteti (TIU) iqtidorli talabalarini aniqlash, jamoalarga birlashtirish,
+              innovatsion loyihalar va xalqaro tanlovlarda ishtirok etishlarini tizimli qo&apos;llab-quvvatlash
+              uchun yagona raqamli platforma.
+            </p>
+
+            {/* Pastga scroll ko'rsatkichi */}
+            <div className="pt-2 flex flex-col items-center justify-center space-y-1.5 opacity-75 animate-bounce">
+              <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">
+                Pastga aylantiring
+              </span>
+              <ArrowDown className="w-4 h-4 text-tiu-800" />
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1] drop-shadow-md">
-            Kelajak Liderlari va{" "}
-            <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent">
-              Iqtidorlar Ekotizimi
-            </span>
-          </h1>
+        </div>
+      </section>
 
-          {/* Tanishtirish Matni (Minimalistic Glass Banner) */}
-          <div className="bg-white/10 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-white/20 shadow-2xl max-w-3xl mx-auto text-slate-100 text-sm sm:text-base leading-relaxed font-normal">
-            Toshkent Xalqaro Universiteti (TIU) iqtidorli talabalarini aniqlash, jamoalarga birlashtirish,
-            xalqaro olimpiada va hakatonlarda qatnashishlarini qo&apos;llab-quvvatlash hamda rektorat grantlari
-            bilan taqdirlash uchun maxsus raqamli platforma.
+      {/* ========================================================================= */}
+      {/* 2-SAHIFA: TOP JAMOALAR (3-TALIK JAMOA KARTASI)                            */}
+      {/* ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-5">
+          <div>
+            <div className="inline-flex items-center space-x-2 text-xs font-black text-tiu-800 uppercase tracking-wider mb-1.5">
+              <Users className="w-4 h-4 text-tiu-700" />
+              <span>Jamoaviy Hamkorlik</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              Universitetning Top Jamoalari
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
+              Xalqaro hakatonlar, olimpiadalar va startap tanlovlarida universitetimiz sharafini himoya qilayotgan yetakchi jamoalar.
+            </p>
           </div>
 
-          {/* Tugmalar */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <a
-              href="#top-groups"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-xl shadow-amber-500/25 hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center space-x-2"
-            >
-              <span>Top Guruhlarni ko&apos;rish</span>
-              <ArrowDown className="w-4 h-4" />
-            </a>
+          <Link
+            href="/teams"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-tiu-800 hover:text-tiu-950 transition-colors self-start sm:self-auto group"
+          >
+            <span>Barcha jamoalar katalogi</span>
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
 
-            <Link
-              href="/teams"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-xs sm:text-sm bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-xl shadow-lg hover:scale-105 transition-all flex items-center justify-center space-x-2"
-            >
-              <Users className="w-4 h-4" />
-              <span>Jamoalar Katalogi</span>
-            </Link>
+        {/* 3-talik Top Jamoalar Kartochkalari */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {topTeams.map((team, idx) => {
+            const acceptedMembers = team.members;
+            return (
+              <Link
+                key={team.id}
+                href={`/teams/${team.id}`}
+                className="group bg-white/80 backdrop-blur-2xl rounded-3xl border border-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between space-y-5"
+              >
+                <div className="space-y-4">
+                  {/* 16:9 Banner yoki Jamoa Rasmi */}
+                  <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-slate-900">
+                    <img
+                      src={
+                        team.avatarUrl ||
+                        (idx === 0
+                          ? "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80"
+                          : idx === 1
+                          ? "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&auto=format&fit=crop&q=80"
+                          : "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80")
+                      }
+                      alt={team.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <span className="px-3 py-1 rounded-xl text-[11px] font-black uppercase bg-tiu-950/85 backdrop-blur-md text-white border border-white/20 shadow-xs">
+                        {team.category}
+                      </span>
+                    </div>
+                    <div className="absolute top-3 right-3">
+                      <span className="px-2.5 py-1 rounded-xl text-[11px] font-black bg-amber-400 text-slate-950 shadow-xs flex items-center space-x-1">
+                        <Trophy className="w-3 h-3 text-slate-950" />
+                        <span>#{idx + 1} Top</span>
+                      </span>
+                    </div>
+                  </div>
 
-            <Link
-              href="/talents"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl font-black text-xs sm:text-sm bg-white/10 hover:bg-white/20 text-white border border-white/25 backdrop-blur-xl shadow-lg hover:scale-105 transition-all flex items-center justify-center space-x-2"
-            >
-              <Trophy className="w-4 h-4 text-amber-400" />
-              <span>Iqtidorlilar</span>
-            </Link>
-          </div>
+                  {/* Jamoa Nomi va Fakulteti */}
+                  <div>
+                    <h3 className="text-xl font-black text-slate-900 group-hover:text-tiu-800 transition-colors">
+                      {team.name}
+                    </h3>
+                    <p className="text-xs font-semibold text-tiu-800 mt-0.5">
+                      {team.faculty || "Axborot Texnologiyalari Dekanati"}
+                    </p>
+                  </div>
 
-          {/* Pastga scroll ko'rsatkichi */}
-          <div className="pt-10 flex flex-col items-center justify-center space-y-2 opacity-80 animate-bounce">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-300">
-              Pastga aylantiring
-            </span>
-            <ArrowDown className="w-4 h-4 text-amber-400" />
-          </div>
+                  {/* Qisqa izoh */}
+                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                    {team.description}
+                  </p>
 
+                  {/* Jamoa Sardori va A'zolari 1x1 rasmlari */}
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      {/* Sardor 1x1 rasm */}
+                      <div className="relative w-8 h-8 rounded-lg overflow-hidden bg-tiu-900 text-white flex items-center justify-center text-xs font-black shadow-xs ring-2 ring-amber-400">
+                        {team.leader.profile?.avatarUrl ? (
+                          <img
+                            src={team.leader.profile.avatarUrl}
+                            alt=""
+                            className="w-full h-full object-cover aspect-square"
+                          />
+                        ) : (
+                          team.leader.profile?.fullName?.charAt(0) || "S"
+                        )}
+                      </div>
+                      <div className="text-[11px]">
+                        <span className="text-slate-400 font-bold block leading-none">Sardor:</span>
+                        <span className="font-extrabold text-slate-900 truncate block max-w-[120px] leading-tight">
+                          {team.leader.profile?.fullName || "Yetakchi"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* A'zolar stack rasmlari (1x1) */}
+                    <div className="flex -space-x-2 overflow-hidden items-center">
+                      {acceptedMembers.slice(0, 4).map((m, mIdx) => (
+                        <div
+                          key={m.id || mIdx}
+                          className="inline-block w-7 h-7 rounded-lg ring-2 ring-white overflow-hidden bg-slate-200"
+                        >
+                          {m.user?.profile?.avatarUrl ? (
+                            <img
+                              src={m.user.profile.avatarUrl}
+                              alt=""
+                              className="w-full h-full object-cover aspect-square"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-700 bg-slate-100">
+                              {m.user?.profile?.fullName?.charAt(0) || "A"}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                      {acceptedMembers.length > 4 && (
+                        <div className="inline-flex w-7 h-7 rounded-lg ring-2 ring-white bg-tiu-900 text-white text-[10px] font-black items-center justify-center">
+                          +{acceptedMembers.length - 4}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pastki tugma / ko'rsatkich */}
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-tiu-900">
+                  <span className="text-[11px] text-slate-500 flex items-center space-x-1">
+                    <Users className="w-3.5 h-3.5 text-slate-400" />
+                    <span>{acceptedMembers.length} a&apos;zo</span>
+                  </span>
+                  <span className="flex items-center space-x-1 text-tiu-800 group-hover:translate-x-1 transition-transform">
+                    <span>Jamoa profili</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

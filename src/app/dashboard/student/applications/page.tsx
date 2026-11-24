@@ -101,8 +101,9 @@ export default async function StudentApplicationsPage() {
                 </div>
 
                 {app.adminNotes && (
-                  <div className="p-3 bg-tiu-50/70 border border-tiu-200 rounded-xl text-tiu-950 font-medium">
-                    ✓ Bo&apos;lim xulosasi va fikri: {app.adminNotes}
+                  <div className="p-3 bg-tiu-50/70 border border-tiu-200 rounded-xl text-tiu-950 font-medium flex items-start space-x-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <span>Bo&apos;lim xulosasi va fikri: {app.adminNotes}</span>
                   </div>
                 )}
               </div>

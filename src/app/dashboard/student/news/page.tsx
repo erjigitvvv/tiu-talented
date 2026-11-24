@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Newspaper, Calendar, Sparkles } from "lucide-react";
+import { Newspaper, Calendar, Sparkles, Camera } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -43,8 +43,18 @@ export default async function StudentNewsPage() {
               )}
               <div className="space-y-2 flex-grow">
                 <div className="flex items-center space-x-2">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-tiu-50 text-tiu-800">
-                    {item.type === "EVENT_HIGHLIGHT" ? "📸 Tadbirdan fotolavha" : "📰 Yangilik"}
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-tiu-50 text-tiu-800 inline-flex items-center space-x-1">
+                    {item.type === "EVENT_HIGHLIGHT" ? (
+                      <>
+                        <Camera className="w-3 h-3 text-tiu-700" />
+                        <span>Tadbirdan fotolavha</span>
+                      </>
+                    ) : (
+                      <>
+                        <Newspaper className="w-3 h-3 text-blue-700" />
+                        <span>Yangilik</span>
+                      </>
+                    )}
                   </span>
                   <span className="text-xs text-slate-400">
                     {item.eventDate

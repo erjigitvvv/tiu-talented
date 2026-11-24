@@ -12,6 +12,7 @@ import {
   Award,
   Newspaper,
   User,
+  XCircle,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -181,18 +182,21 @@ export default async function StudentDashboardPage() {
 
                 <div>
                   {ach.status === "APPROVED" && (
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-                      ✓ Tasdiqlandi (+{ach.points} ball)
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 inline-flex items-center space-x-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Tasdiqlandi (+{ach.points} ball)</span>
                     </span>
                   )}
                   {ach.status === "PENDING" && (
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
-                      ⏳ Tekshiruvda
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 inline-flex items-center space-x-1">
+                      <Clock className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Tekshiruvda</span>
                     </span>
                   )}
                   {ach.status === "REJECTED" && (
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800">
-                      ✗ Rad etildi
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 inline-flex items-center space-x-1">
+                      <XCircle className="w-3.5 h-3.5 text-red-600" />
+                      <span>Rad etildi</span>
                     </span>
                   )}
                 </div>

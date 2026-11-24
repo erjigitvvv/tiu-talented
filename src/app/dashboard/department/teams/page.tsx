@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Users, PlusCircle, CheckCircle2, XCircle, UserPlus, ExternalLink, AlertCircle, ShieldCheck } from "lucide-react";
+import { Users, PlusCircle, CheckCircle2, XCircle, UserPlus, ExternalLink, AlertCircle, ShieldCheck, Crown, X } from "lucide-react";
 import { FACULTIES } from "@/lib/constants";
 
 export default function DepartmentTeamsPage() {
@@ -211,15 +211,17 @@ export default function DepartmentTeamsPage() {
                           <div className="flex items-center space-x-2 flex-shrink-0">
                             <button
                               onClick={() => handleMemberStatus(team.id, req.id, "ACCEPTED")}
-                              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs"
+                              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs inline-flex items-center space-x-1"
                             >
-                              ✓ Qabul qilish
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <span>Qabul qilish</span>
                             </button>
                             <button
                               onClick={() => handleMemberStatus(team.id, req.id, "REJECTED")}
-                              className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 font-bold text-xs"
+                              className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 font-bold text-xs inline-flex items-center space-x-1"
                             >
-                              ✗ Rad etish
+                              <XCircle className="w-3.5 h-3.5" />
+                              <span>Rad etish</span>
                             </button>
                           </div>
                         </div>
@@ -252,7 +254,14 @@ export default function DepartmentTeamsPage() {
                               {member.user?.profile?.fullName}
                             </div>
                             <div className="text-[10px] text-slate-500">
-                              {member.role === "LEADER" ? "👑 Jamoa Yetakchisi" : member.role}
+                              {member.role === "LEADER" ? (
+                                <span className="inline-flex items-center space-x-1 text-amber-700 font-bold">
+                                  <Crown className="w-3 h-3 text-amber-500" />
+                                  <span>Jamoa Yetakchisi</span>
+                                </span>
+                              ) : (
+                                member.role
+                              )}
                             </div>
                           </div>
                         </div>
@@ -279,8 +288,8 @@ export default function DepartmentTeamsPage() {
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-bold text-slate-900 text-lg">Yangi Iqtidorlar Jamoasini Yaratish</h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 font-bold">
-                ✕
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg">
+                <X className="w-5 h-5" />
               </button>
             </div>
 

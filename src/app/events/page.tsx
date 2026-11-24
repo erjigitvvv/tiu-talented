@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { Calendar, Camera, Sparkles, ChevronRight } from "lucide-react";
+import { Calendar, Camera, Sparkles, ChevronRight, Newspaper } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -54,8 +54,18 @@ export default async function EventsPage() {
                       <Sparkles className="w-10 h-10" />
                     </div>
                   )}
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[11px] font-bold bg-slate-900/80 backdrop-blur-sm text-white">
-                    {post.type === "EVENT_HIGHLIGHT" ? "📸 Fotolavha" : "📰 Yangilik"}
+                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[11px] font-bold bg-slate-900/80 backdrop-blur-sm text-white inline-flex items-center space-x-1">
+                    {post.type === "EVENT_HIGHLIGHT" ? (
+                      <>
+                        <Camera className="w-3 h-3 text-amber-400" />
+                        <span>Fotolavha</span>
+                      </>
+                    ) : (
+                      <>
+                        <Newspaper className="w-3 h-3 text-blue-400" />
+                        <span>Yangilik</span>
+                      </>
+                    )}
                   </span>
                 </div>
 

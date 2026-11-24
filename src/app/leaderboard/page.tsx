@@ -110,15 +110,15 @@ export default async function LeaderboardPage({ searchParams }: LeaderboardPageP
                     <td className="py-4 px-6 text-center font-extrabold text-sm sm:text-base">
                       {rank === 1 ? (
                         <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-400 text-slate-950 shadow-sm">
-                          🥇
+                          <Medal className="w-4 h-4 text-slate-950" />
                         </span>
                       ) : rank === 2 ? (
                         <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-200 text-slate-800">
-                          🥈
+                          <Medal className="w-4 h-4 text-slate-700" />
                         </span>
                       ) : rank === 3 ? (
                         <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-700/20 text-amber-900">
-                          🥉
+                          <Medal className="w-4 h-4 text-amber-800" />
                         </span>
                       ) : (
                         <span className="text-slate-400">#{rank}</span>
