@@ -5,6 +5,10 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log("Baza tozalanmoqda...");
+  await prisma.studentPortfolioOpportunity.deleteMany();
+  await prisma.teamFeedback.deleteMany();
+  await prisma.opportunityComment.deleteMany();
+  await prisma.newsComment.deleteMany();
   await prisma.teamAchievementComment.deleteMany();
   await prisma.teamAchievement.deleteMany();
   await prisma.teamMember.deleteMany();
@@ -36,6 +40,7 @@ async function main() {
           courseYear: 0,
           gpa: 5.0,
           phone: "+998 71 200 00 01",
+          telegram: "@vohidov_tiu",
           bio: "TIU Bosh Administratori va Ilmiy ishlar bo'yicha mas'ul prorektor",
           avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80",
           skills: "Management, Education, Strategic Planning",
@@ -59,6 +64,7 @@ async function main() {
           courseYear: 0,
           gpa: 5.0,
           phone: "+998 71 200 00 02",
+          telegram: "@shahzod_normatov",
           bio: "Iqtidorli yoshlar bilan ishlash bo'yicha yetakchi mutaxassis va mentor",
           avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
           skills: "Talent Discovery, Mentorship, Event Organization",
@@ -88,6 +94,8 @@ async function main() {
           courseYear: 3,
           gpa: 4.92,
           phone: "+998 90 123 45 67",
+          telegram: "@jasur_aliyev_dev",
+          instagram: "@jasur_codes",
           bio: "Full Stack Developer va AI tadqiqotchisi. Respublika hakatoni g'olibi, xalqaro ICPC yarim finalchisi.",
           avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
           skills: "Next.js, TypeScript, Python, TensorFlow, Docker, PostgreSQL",
@@ -117,6 +125,8 @@ async function main() {
           courseYear: 2,
           gpa: 4.88,
           phone: "+998 90 234 56 78",
+          telegram: "@madina_karimova",
+          instagram: "@madina_finance",
           bio: "Scopus Q2 ilmiy maqola muallifi. Markaziy Osiyo yosh iqtisodchilari forumi spikeri.",
           avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&auto=format&fit=crop&q=80",
           skills: "Financial Modeling, Data Analytics, Python, Econometrics, Stata",
@@ -142,10 +152,12 @@ async function main() {
           dekanat: "Axborot Texnologiyalari Dekanati",
           faculty: "Axborot Texnologiyalari",
           specialty: "Sun'iy intellekt va Data Science",
-          groupName: "AI-22-02",
+          groupName: "SE-22-01", // Guruhim bo'limida Jasur bilan bir guruhda!
           courseYear: 3,
           gpa: 4.81,
           phone: "+998 90 345 67 89",
+          telegram: "@behruz_ai",
+          instagram: "@behruz_iot",
           bio: "Startap asoschisi va IoT muhandisi. 'Yashil energiya' loyihasi bo'yicha Rektor granti sohibi.",
           avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80",
           skills: "IoT, Arduino, Robotics, Computer Vision, React Native",
@@ -175,6 +187,8 @@ async function main() {
           courseYear: 4,
           gpa: 4.90,
           phone: "+998 90 456 78 90",
+          telegram: "@sevara_debat",
+          instagram: "@sevara_lingua",
           bio: "IELTS 8.5 va xalqaro debat chempioni. TEDxTIU tashkilotchisi va yoshlar elchisi.",
           avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&auto=format&fit=crop&q=80",
           skills: "Debate, Public Speaking, Academic Translation, Content Strategy",
@@ -204,6 +218,8 @@ async function main() {
           courseYear: 3,
           gpa: 4.75,
           phone: "+998 90 567 89 01",
+          telegram: "@dilshod_pm",
+          instagram: "@dilshod_growth",
           bio: "Biznes inkubator rezidenti, bir qator talabalar startaplarining Product Owneri.",
           avatarUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop&q=80",
           skills: "Agile, Scrum, Business Analytics, Product Growth",
@@ -229,10 +245,12 @@ async function main() {
           dekanat: "Axborot Texnologiyalari Dekanati",
           faculty: "Axborot Texnologiyalari",
           specialty: "Kiberxavfsizlik",
-          groupName: "CS-23-01",
+          groupName: "SE-22-01", // Guruhim bo'limida SE-22-01 da!
           courseYear: 2,
           gpa: 4.87,
           phone: "+998 90 678 90 12",
+          telegram: "@nigora_cyber",
+          instagram: "@nigora_sec",
           bio: "CTF (Capture The Flag) kiberxavfsizlik musobaqalarining doimiy sovrindori.",
           avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80",
           skills: "Ethical Hacking, Penetration Testing, Network Security, Linux",
@@ -240,6 +258,33 @@ async function main() {
         },
       },
     },
+  });
+
+  // Student Portfolio Opportunities (Talabaning portfolioga biriktirilgan tanlovlari)
+  await prisma.studentPortfolioOpportunity.createMany({
+    data: [
+      {
+        userId: student1.id,
+        title: "TIU Rektor Granti 2025",
+        type: "GRANT",
+        result: "Grant Sohibi (100% Kontrakt)",
+        year: "2025",
+      },
+      {
+        userId: student1.id,
+        title: "Tashkent Open AI Hackathon",
+        type: "HACKATHON",
+        result: "1-o'rin (Bosh Mukofot)",
+        year: "2026",
+      },
+      {
+        userId: student2.id,
+        title: "Markaziy Osiyo Yosh Iqtisodchilari Tanlovi",
+        type: "COMPETITION",
+        result: "G'olib (Oltin Medal)",
+        year: "2025",
+      },
+    ],
   });
 
   // Yutuqlar (Achievements)
@@ -290,7 +335,7 @@ async function main() {
     data: {
       name: "TIU AI & Robotics Lab",
       slug: "tiu-ai-robotics-lab",
-      description: "Sun'iy intellekt, kompyuter ko'rishi va avtonom robototexnika sohasida xalqaro hakatonlarda universitet nomidan qatnashuvchi muhandislar jamoasi.",
+      description: "Sun'iy intellekt, kompyuter ko'rishi va avtonom robototexnika sohasida xalqaro hakatonlarda universitet nomidan qatnashuvchi muhandislar jamoasi. Jamoaning asosiy maqsadi — aqlli transport tizimlari, kompyuter ko'rish algoritmlari va avtonom robotlarni sanoatda tatbiq etish.",
       category: "Hakaton jamoasi",
       faculty: "Axborot Texnologiyalari",
       status: "RECRUITING",
@@ -301,18 +346,21 @@ async function main() {
         create: [
           {
             userId: student1.id,
-            role: "LEADER",
+            role: "Sardor (Team Lead)",
+            orderIndex: 1,
             status: "ACCEPTED",
           },
           {
             userId: student3.id,
-            role: "IoT & Hardware Engineer",
+            role: "Yordamchi (Vitse-sardor & Hardware Lead)",
+            orderIndex: 2,
             status: "ACCEPTED",
             joinNote: "Datchiklar va apparat ta'minoti bo'yicha mas'ul",
           },
           {
             userId: student6.id,
-            role: "Kiberxavfsizlik Mutaxassisi",
+            role: "Kiberxavfsizlik va QA Mutaxassisi",
+            orderIndex: 3,
             status: "ACCEPTED",
             joinNote: "Tizim xavfsizligi va audit bo'yicha mas'ul",
           },
@@ -321,66 +369,30 @@ async function main() {
     },
   });
 
-  const team2 = await prisma.team.create({
-    data: {
-      name: "EcoSmart Green Solutions",
-      slug: "ecosmart-green-solutions",
-      description: "Yashil energetika va ekologik toza energiya tejovchi texnologiyalarni yaratuvchi talabalar startapi.",
-      category: "Startap",
-      faculty: "Menejment va Xalqaro Biznes",
-      status: "RECRUITING",
-      neededRoles: "Backend Developer, Marketing Manager, Pitch Master",
-      avatarUrl: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&auto=format&fit=crop&q=80",
-      leaderId: student3.id,
-      members: {
-        create: [
-          {
-            userId: student3.id,
-            role: "LEADER",
-            status: "ACCEPTED",
-          },
-          {
-            userId: student5.id,
-            role: "Biznes & Mahsulot Boshqaruvchisi",
-            status: "ACCEPTED",
-            joinNote: "Moliyaviy reja va investitsiya taqdimotlari uchun mas'ul",
-          },
-        ],
+  // 1-Tab: Izohlar va xulosalar (TeamFeedbacks)
+  await prisma.teamFeedback.createMany({
+    data: [
+      {
+        teamId: team1.id,
+        authorName: "Dr. Alisher Vohidov",
+        authorRole: "Ilmiy ishlar bo'yicha prorektor",
+        authorAvatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop&q=80",
+        content: "TIU AI & Robotics jamoasi o'tgan o'quv yilida universitetimiz sha'nini xalqaro miqyosda munosib himoya qildi. Ularning AI algoritmlari amaliyotda yuqori samaradorlik ko'rsatmoqda.",
+        rating: 5,
       },
-    },
+      {
+        teamId: team1.id,
+        authorName: "Shahzod Normatov",
+        authorRole: "Iqtidorli talabalar bo'limi boshlig'i",
+        authorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
+        content: "Jamoa tarkibi juda jips shakllangan. Hardware va Software qismlari sinxron ishlaydi. Yangi a'zolar uchun ajoyib professional maktab bo'la oladi.",
+        rating: 5,
+      },
+    ],
   });
 
-  const team3 = await prisma.team.create({
-    data: {
-      name: "Fintech Alpha TIU",
-      slug: "fintech-alpha-tiu",
-      description: "Markaziy Osiyoda mikromoliya va raqamli to'lov tizimlarini avtomatlashtirish bo'yicha ilmiy-amaliy tadqiqot jamoasi.",
-      category: "Ilmiy tadqiqot",
-      faculty: "Iqtisodiyot va Moliya",
-      status: "RECRUITING",
-      neededRoles: "Data Analyst, Frontend Dasturchi",
-      avatarUrl: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&auto=format&fit=crop&q=80",
-      leaderId: student2.id,
-      members: {
-        create: [
-          {
-            userId: student2.id,
-            role: "LEADER",
-            status: "ACCEPTED",
-          },
-          {
-            userId: student4.id,
-            role: "Xalqaro Aloqalar & PR",
-            status: "ACCEPTED",
-            joinNote: "Ingliz tilidagi ilmiy dokladlar va grant arizalari bo'yicha mas'ul",
-          },
-        ],
-      },
-    },
-  });
-
-  // Jamoa Yutuqlari (Team Achievements - Post kabi ko'rinish)
-  const team1Ach1 = await prisma.teamAchievement.create({
+  // Jamoa Yutuqlari (Team Achievements - 3-Tab uchun)
+  await prisma.teamAchievement.create({
     data: {
       teamId: team1.id,
       title: "Markaziy Osiyo AI Hakatonida 1-o'rin va Bosh Mukofot",
@@ -407,7 +419,7 @@ async function main() {
     },
   });
 
-  const team1Ach2 = await prisma.teamAchievement.create({
+  await prisma.teamAchievement.create({
     data: {
       teamId: team1.id,
       title: "Toshkent Robosumo Open 2026 Musobaqasida Oltin Medal",
@@ -417,37 +429,6 @@ async function main() {
       description: "Avtonom robotlarning to'siqlarni yengish va muhandislik yechimlari bo'yicha 1-darajali sertifikat.",
       viewsCount: 198,
       likesCount: 42,
-      comments: {
-        create: [
-          {
-            authorName: "Shahzod Normatov",
-            authorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
-            content: "Robototexnika laboratoriyasining mehnati o'z samarasini berdi!",
-          },
-        ],
-      },
-    },
-  });
-
-  const team2Ach1 = await prisma.teamAchievement.create({
-    data: {
-      teamId: team2.id,
-      title: "TIU Startap Inkubatorida 25,000,000 UZS Grant Sohibi",
-      rank: "Grant Sohibi",
-      dateAchieved: new Date("2026-02-18"),
-      imageUrl: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&auto=format&fit=crop&q=80",
-      description: "Yashil energetika bo'yicha aqlli sensorlar loyihasi investorlar tomonidan yuqori baholanib, birinchi bosqich moliyalashtirish ajratildi.",
-      viewsCount: 265,
-      likesCount: 39,
-      comments: {
-        create: [
-          {
-            authorName: "Jasur Aliyev",
-            authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
-            content: "Tabriklayman Behruz! Loyihaning texnik qismida birga ishlaymiz.",
-          },
-        ],
-      },
     },
   });
 
@@ -456,12 +437,29 @@ async function main() {
     data: {
       title: "TIU Rektor Granti 2026",
       type: "GRANT",
-      description: "O'quv yili davomida eng yuqori ilmiy, akademik va innovatsion yutuqlarga erishgan iqtidorli talabalarning to'lov-kontrakt summasi 100% to'lab beriladi.",
-      requirements: "GPA kamida 4.5, kamida 2 ta tasdiqlangan ilmiy yoki startap yutuq, motivatsion xat.",
+      description: "O'quv yili davomida eng yuqori ilmiy, akademik va innovatsion yutuqlarga erishgan iqtidorli talabalarning to'lov-kontrakt summasi 100% to'lab beriladi. Tanlov doirasida har bir fakultetdan saralab olingan iqtidor egalari moddiy va ma'naviy rag'batlantiriladi.",
+      requirements: "1. GPA ko'rsatkichi kamida 4.5 bo'lishi shart.\n2. Kamida 2 ta tasdiqlangan ilmiy maqola yoki startap loyihasi mavjudligi.\n3. Rektor nomiga yozilgan motivatsion xat va portfolio taqdimoti.",
       deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       quota: 5,
-      award: "100% To'lov-kontrakt qoplami",
+      award: "100% To'lov-kontrakt qoplami + 5,000,000 UZS bir martalik mukofot",
+      imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1000&auto=format&fit=crop&q=80",
+      contactInfo: "Mas'ul: Iqtidorli talabalar bilan ishlash bo'limi, 305-xona. Tel: +998 71 200 00 02. Telegram: @tiu_grant_support",
+      likesCount: 124,
       status: "OPEN",
+      comments: {
+        create: [
+          {
+            authorName: "Jasur Aliyev",
+            authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
+            content: "Ariza topshirish uchun maqolalar Scopus bazasida bo'lishi shartmi yoki OAK nashrlari ham qabul qilinadimi?",
+          },
+          {
+            authorName: "Shahzod Normatov (Bo'lim)",
+            authorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
+            content: "Salom Jasur! OAK va xalqaro konferensiya materiallari ham to'liq qabul qilinadi va baholanadi.",
+          },
+        ],
+      },
     },
   });
 
@@ -470,51 +468,43 @@ async function main() {
       title: "Universitet 'Yil Iqtidorli Dasturchisi' Tanlovi",
       type: "COMPETITION",
       description: "Axborot texnologiyalari va raqamli innovatsiyalar sohasida eng zo'r dasturiy yechim yaratgan talabalar o'rtasida tanlov.",
-      requirements: "GitHub loyiha havolasi, ishlayotgan MVP va arxitektura taqdimoti.",
+      requirements: "1. GitHub repozitoriy havolasi va to'liq arxitektura hujjati.\n2. Ishlayotgan MVP yoki veb/mobil ilova havolasi.\n3. 3 daqiqalik video-taqdimot.",
       deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
       quota: 3,
       award: "1-o'rin: 15,000,000 UZS + Maxsus noutbuk",
+      imageUrl: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1000&auto=format&fit=crop&q=80",
+      contactInfo: "IT Fakulteti Dekanati. Telegram: @tiu_dev_contest",
+      likesCount: 88,
       status: "OPEN",
     },
   });
 
-  // Yangiliklar (News & Events)
-  await prisma.newsEvent.create({
+  // Yangiliklar (News & Events with comments & likes)
+  const news1 = await prisma.newsEvent.create({
     data: {
       title: "TIU TechFest 2026: Iqtidorli talabalar o'z innovatsion loyihalarini namoyish etdi",
       slug: "tiu-techfest-2026-startap-demo-day",
       summary: "Universitetimizda 50 dan ortiq yosh dasturchilar, muhandislar va startapchilar ishtirokida yirik festival bo'lib o'tdi.",
-      content: "Toshkent Xalqaro Universitetida iqtidorli yoshlarni qo'llab-quvvatlash maqsadida tashkil etilgan TIU TechFest 2026 ko'tarinki ruhda yakunlandi. Tadbir davomida talabalar sun'iy intellekt, yashil energetika va fintech yo'nalishlarida o'z loyihalarini rektorat va soha yetakchilariga namoyish etdilar.",
+      content: "Toshkent Xalqaro Universitetida iqtidorli yoshlarni qo'llab-quvvatlash maqsadida tashkil etilgan TIU TechFest 2026 ko'tarinki ruhda yakunlandi. Tadbir davomida talabalar sun'iy intellekt, yashil energetika va fintech yo'nalishlarida o'z loyihalarini rektorat va soha yetakchilariga namoyish etdilar. Hakamlar hay'ati yakuniy natijalarga ko'ra eng yaxshi 3 ta jamoani munosib mukofotladi.",
       type: "NEWS",
       imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1000&auto=format&fit=crop&q=80",
       eventDate: new Date(),
       authorId: dept.id,
-    },
-  });
-
-  await prisma.newsEvent.create({
-    data: {
-      title: "Xalqaro Talabalar Almashinuv Dasturi g'oliblari e'lon qilindi",
-      slug: "xalqaro-talabalar-almashinuv-dasturi-2026",
-      summary: "TIU ning 4 nafar eng faol va iqtidorli talabalari Yevropa universitetlarida bir semestr ta'lim olish imkoniyatini qo'lga kiritdilar.",
-      content: "Universitet xalqaro hamkorlik bo'limi tomonidan o'tkazilgan tanlov natijalariga ko'ra, GPA ko'rsatkichi 4.8 dan yuqori bo'lgan va xalqaro til sertifikatiga ega iqtidorli talabalarimiz g'olib deb topildi.",
-      type: "ANNOUNCEMENT",
-      imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1000&auto=format&fit=crop&q=80",
-      eventDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-      authorId: dept.id,
-    },
-  });
-
-  await prisma.newsEvent.create({
-    data: {
-      title: "Rektorat Qoshidagi Startap Akseleratori yangi mavsumiga start berildi",
-      slug: "rektorat-startap-akseleratori-2026",
-      summary: "Talabalar o'z g'oyalarini real biznesga aylantirishi uchun 50 million so'mgacha bo'lgan dastlabki grant fondi ajratildi.",
-      content: "TIU Startap Akseleratori talabalar jamoalariga o'z prototiplarini bozorga olib chiqishda huquqiy, moliyaviy va texnologik ko'mak beradi. Barcha qiziquvchi jamoalar o'z arizalarini kabinet orqali topshirishlari mumkin.",
-      type: "EVENT_HIGHLIGHT",
-      imageUrl: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1000&auto=format&fit=crop&q=80",
-      eventDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      authorId: dept.id,
+      likesCount: 96,
+      comments: {
+        create: [
+          {
+            authorName: "Madina Karimova",
+            authorAvatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&auto=format&fit=crop&q=80",
+            content: "Juda ajoyib tadbir bo'ldi! Barcha ishtirokchilarga katta rahmat.",
+          },
+          {
+            authorName: "Behruz Shodiyev",
+            authorAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80",
+            content: "Keyingi mavsumda yanada yangi apparat ishlanmalar bilan qatnashamiz!",
+          },
+        ],
+      },
     },
   });
 

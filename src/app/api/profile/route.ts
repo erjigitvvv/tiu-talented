@@ -24,6 +24,8 @@ export async function PUT(request: Request) {
       bio,
       avatarUrl,
       skills,
+      telegram,
+      instagram,
     } = body;
 
     const computedFullName =
@@ -45,6 +47,8 @@ export async function PUT(request: Request) {
         ...(bio !== undefined ? { bio: bio ? bio.trim() : null } : {}),
         ...(avatarUrl !== undefined ? { avatarUrl: avatarUrl ? avatarUrl.trim() : null } : {}),
         ...(skills !== undefined ? { skills: skills ? skills.trim() : null } : {}),
+        ...(telegram !== undefined ? { telegram: telegram ? telegram.trim() : null } : {}),
+        ...(instagram !== undefined ? { instagram: instagram ? instagram.trim() : null } : {}),
       },
     });
 

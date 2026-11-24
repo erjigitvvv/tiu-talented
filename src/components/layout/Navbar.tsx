@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LogOut, Menu, X, ArrowRight } from "lucide-react";
+import { LogOut, Menu, X, ArrowLeft, ShieldCheck } from "lucide-react";
 
 interface CurrentUser {
   id: string;
@@ -24,6 +24,8 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const isDashboard = pathname.startsWith("/dashboard");
+
   useEffect(() => {
     fetch("/api/auth/me")
       .then((res) => res.json())
@@ -41,7 +43,7 @@ export default function Navbar() {
     router.refresh();
   };
 
-  // Asosiy, Jamoalar, Iqtidorlilar, Tanlovlar va Grantlar, Yangiliklar
+  // Ommaviy navlinklar: faqat ommaviy sahifalarda ko'rinadi (kabinet ichida kerak emas)
   const navLinks = [
     { name: "Asosiy", href: "/" },
     { name: "Jamoalar", href: "/teams" },
@@ -57,11 +59,11 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition-all">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           
-          {/* Chap tomon: Platforma matnli brending */}
+          {/* Chap tomon: Platforma Logosi */}
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 rounded-xl bg-tiu-900 flex items-center justify-center text-white shadow-md shadow-tiu-900/10 group-hover:scale-105 transition-transform">
               <span className="font-black text-sm tracking-tighter">TIU</span>
@@ -74,30 +76,42 @@ export default function Navbar() {
                 </span>
               </div>
               <p className="text-[10px] tracking-wider uppercase text-slate-500 font-semibold -mt-1">
-                Iqtidorli Talabalar Portali
+                {isDashboard ? "Boshqaruv Kabineti" : "Iqtidorli Talabalar Portali"}
               </p>
             </div>
           </Link>
 
-          {/* O'rta: Asosiy Navigatsiya */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${
-                    isActive
-                      ? "text-tiu-900 bg-tiu-50/90 font-bold shadow-xs"
-                      : "text-slate-600 hover:text-tiu-900 hover:bg-slate-50"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-          </nav>
+          {/* O'rta: Navigatsiya (Faqat kabinet tashqarisida ko'rinadi) */}
+          {!isDashboard ? (
+            <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${
+                      isActive
+                        ? "text-tiu-900 bg-tiu-50/90 font-bold shadow-xs"
+                        : "text-slate-600 hover:text-tiu-900 hover:bg-slate-50"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
+            </nav>
+          ) : (
+            <div className="hidden md:flex items-center space-x-3">
+              <Link
+                href="/"
+                className="inline-flex items-center space-x-2 text-xs font-bold text-slate-500 hover:text-tiu-900 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-all"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Asosiy portalga qaytish</span>
+              </Link>
+            </div>
+          )}
 
           {/* O'ng tomon: Kirish/Kabinet tugmalari va YUQORI O'NG BURCHAKDAGI TIU RASMIY LOGOSI */}
           <div className="flex items-center space-x-3 sm:space-x-4">
@@ -136,7 +150,7 @@ export default function Navbar() {
               ) : (
                 <Link
                   href="/login"
-                  className="px-5 py-2 text-xs font-bold text-white bg-tiu-900 hover:bg-tiu-950 rounded-xl shadow-sm transition-all"
+                  className="px-5 py-2 text-xs font-bold text-white bg-tiu-900 hover:bg-tiu-950 rounded-xl shadow-xs transition-all"
                 >
                   Kirish
                 </Link>
@@ -171,16 +185,27 @@ export default function Navbar() {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-5 space-y-2">
-          {navLinks.map((link) => (
+          {!isDashboard ? (
+            navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 rounded-xl text-base font-semibold text-slate-700 hover:bg-tiu-50 hover:text-tiu-900"
+              >
+                {link.name}
+              </Link>
+            ))
+          ) : (
             <Link
-              key={link.href}
-              href={link.href}
+              href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-xl text-base font-semibold text-slate-700 hover:bg-tiu-50 hover:text-tiu-900"
+              className="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50"
             >
-              {link.name}
+              &larr; Asosiy portalga qaytish
             </Link>
-          ))}
+          )}
+
           <div className="pt-3 border-t border-slate-100">
             {user ? (
               <div className="space-y-2">

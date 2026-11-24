@@ -12,6 +12,11 @@ export default async function NewsPage() {
           profile: true,
         },
       },
+      comments: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
@@ -31,8 +36,7 @@ export default async function NewsPage() {
             Yangiliklar va E&apos;lonlar
           </h1>
           <p className="text-sm text-slate-500 mt-1 max-w-2xl">
-            Toshkent Xalqaro Universitetining iqtidorli talabalar faoliyati, tanlovlar, festivallar va
-            rasmiy xabarlari bilan tanishing.
+            Toshkent Xalqaro Universiteti iqtidorli talabalarining yangiliklari, tanlovlar va ilmiy tadbirlaridan fotolavhalar
           </p>
         </div>
         <div className="text-xs font-bold px-3.5 py-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 self-start md:self-auto">
@@ -41,7 +45,7 @@ export default async function NewsPage() {
       </div>
 
       {/* Interaktiv Yangiliklar Ro'yxati */}
-      <NewsClient newsList={newsList as any} />
+      <NewsClient initialNewsList={newsList as any} />
     </div>
   );
 }

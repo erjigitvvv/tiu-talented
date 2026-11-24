@@ -14,6 +14,14 @@ export default async function TalentsPage() {
       profile: true,
       achievements: {
         where: { status: "APPROVED" },
+        orderBy: { dateAchieved: "desc" },
+      },
+      portfolioOpportunities: true,
+      teamMembers: {
+        where: { status: "ACCEPTED" },
+        include: {
+          team: true,
+        },
       },
     },
     orderBy: {
@@ -39,7 +47,28 @@ export default async function TalentsPage() {
     skills: user.profile?.skills,
     phone: user.profile?.phone || user.phone,
     email: user.email,
-    achievementsCount: user.achievements.length,
+    telegram: user.profile?.telegram,
+    instagram: user.profile?.instagram,
+    achievements: user.achievements.map((a) => ({
+      id: a.id,
+      title: a.title,
+      category: a.category,
+      points: a.points,
+      dateAchieved: a.dateAchieved,
+      proofUrl: a.proofUrl,
+    })),
+    portfolioOpportunities: user.portfolioOpportunities.map((op) => ({
+      id: op.id,
+      title: op.title,
+      type: op.type,
+      result: op.result,
+      year: op.year,
+    })),
+    teams: user.teamMembers.map((m) => ({
+      id: m.team.id,
+      name: m.team.name,
+      role: m.role,
+    })),
   }));
 
   return (
@@ -63,7 +92,7 @@ export default async function TalentsPage() {
         </div>
       </div>
 
-      {/* Interaktiv Talabalar Jadvali */}
+      {/* Interaktiv Talabalar Jadvali (Top-3 ajralib turadi, qolganlari oddiy) */}
       <TalentsTableClient
         initialTalents={formattedTalents}
         faculties={FACULTIES}

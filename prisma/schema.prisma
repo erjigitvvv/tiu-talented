@@ -24,6 +24,7 @@ model User {
   posts        NewsEvent[]
   ledTeams     Team[]        @relation("TeamLeader")
   teamMembers  TeamMember[]
+  portfolioOpportunities StudentPortfolioOpportunity[]
 }
 
 model Profile {
@@ -43,6 +44,8 @@ model Profile {
   bio         String?
   avatarUrl   String?
   skills      String?  // Masalan: "Python, React, Data Science, Public Speaking"
+  telegram    String?  // Masalan: "@jasur_tiu"
+  instagram   String?  // Masalan: "@jasur_dev"
   totalPoints Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -89,10 +92,24 @@ model Opportunity {
   quota        Int           @default(1)
   status       String        @default("OPEN") // "OPEN" | "CLOSED"
   award        String?       // "10,000,000 UZS", "Xalqaro Stajirovka", "100% Kontrakt qoplash"
+  imageUrl     String?
+  contactInfo  String?
+  likesCount   Int           @default(0)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
   applications Application[]
+  comments     OpportunityComment[]
+}
+
+model OpportunityComment {
+  id            String      @id @default(uuid())
+  opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  authorName    String
+  authorAvatar  String?
+  content       String
+  createdAt     DateTime    @default(now())
 }
 
 model Application {
@@ -112,37 +129,51 @@ model Application {
 }
 
 model NewsEvent {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   title       String
-  slug        String   @unique
+  slug        String        @unique
   summary     String
   content     String
-  type        String   @default("NEWS")
+  type        String        @default("NEWS")
   imageUrl    String?
   eventDate   DateTime?
   authorId    String
-  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likesCount  Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  comments    NewsComment[]
+}
+
+model NewsComment {
+  id           String    @id @default(uuid())
+  newsId       String
+  news         NewsEvent @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  authorName   String
+  authorAvatar String?
+  content      String
+  createdAt    DateTime  @default(now())
 }
 
 model Team {
-  id          String        @id @default(uuid())
-  name        String        @unique
-  slug        String        @unique
-  description String
-  category    String
-  faculty     String?
-  avatarUrl   String?
-  projectUrl  String?
-  status      String        @default("RECRUITING")
-  neededRoles String?
-  leaderId    String
-  leader      User          @relation("TeamLeader", fields: [leaderId], references: [id])
-  members     TeamMember[]
+  id           String             @id @default(uuid())
+  name         String             @unique
+  slug         String             @unique
+  description  String
+  category     String
+  faculty      String?
+  avatarUrl    String?
+  projectUrl   String?
+  status       String             @default("RECRUITING")
+  neededRoles  String?
+  leaderId     String
+  leader       User               @relation("TeamLeader", fields: [leaderId], references: [id])
+  members      TeamMember[]
   achievements TeamAchievement[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  feedbacks    TeamFeedback[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
 }
 
 model TeamMember {
@@ -151,12 +182,25 @@ model TeamMember {
   team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role      String   @default("MEMBER")
+  role      String   @default("MEMBER") // "LEADER", "VICE_LEADER", "DEVELOPER", etc.
+  orderIndex Int     @default(99)
   status    String   @default("ACCEPTED")
   joinNote  String?
   joinedAt  DateTime @default(now())
 
   @@unique([teamId, userId])
+}
+
+model TeamFeedback {
+  id           String   @id @default(uuid())
+  teamId       String
+  team         Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  authorName   String
+  authorRole   String?  // Masalan: "Iqtidorlilar bo'limi", "Mentor", "Rektorat"
+  authorAvatar String?
+  content      String
+  rating       Int      @default(5)
+  createdAt    DateTime @default(now())
 }
 
 model TeamAchievement {
@@ -184,4 +228,15 @@ model TeamAchievementComment {
   authorAvatar  String?
   content       String
   createdAt     DateTime        @default(now())
+}
+
+model StudentPortfolioOpportunity {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  type      String   // "GRANT", "HACKATHON", "COMPETITION"
+  result    String?  // "G'olib (1-o'rin)", "Finalchi", "Grant sohibi", "Faol ishtirokchi"
+  year      String?  // "2026"
+  createdAt DateTime @default(now())
 }

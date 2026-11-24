@@ -36,7 +36,7 @@ export default async function TeamDetailPage({ params }: TeamDetailPageProps) {
             },
           },
         },
-        orderBy: { joinedAt: "asc" },
+        orderBy: { orderIndex: "asc" },
       },
       achievements: {
         include: {
@@ -45,6 +45,9 @@ export default async function TeamDetailPage({ params }: TeamDetailPageProps) {
           },
         },
         orderBy: { dateAchieved: "desc" },
+      },
+      feedbacks: {
+        orderBy: { createdAt: "desc" },
       },
     },
   });

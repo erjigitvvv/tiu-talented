@@ -18,6 +18,8 @@ export default function StudentProfilePage() {
     bio: "",
     avatarUrl: "",
     skills: "",
+    telegram: "",
+    instagram: "",
   });
 
   const [loading, setLoading] = useState(true);
@@ -45,6 +47,8 @@ export default function StudentProfilePage() {
             bio: p.bio || "",
             avatarUrl: p.avatarUrl || "",
             skills: p.skills || "",
+            telegram: p.telegram || "",
+            instagram: p.instagram || "",
           });
         }
       })
@@ -164,6 +168,34 @@ export default function StudentProfilePage() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+998 90 123 45 67"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                Telegram Username
+              </label>
+              <input
+                type="text"
+                name="telegram"
+                value={formData.telegram}
+                onChange={handleChange}
+                placeholder="@username"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                Instagram Username
+              </label>
+              <input
+                type="text"
+                name="instagram"
+                value={formData.instagram}
+                onChange={handleChange}
+                placeholder="@username"
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
               />
             </div>

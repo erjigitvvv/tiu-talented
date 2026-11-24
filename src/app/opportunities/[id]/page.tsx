@@ -2,8 +2,20 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { Award, Calendar, CheckCircle2, Users, ArrowLeft, AlertCircle, FileText } from "lucide-react";
+import {
+  Award,
+  Calendar,
+  CheckCircle2,
+  Users,
+  ArrowLeft,
+  AlertCircle,
+  FileText,
+  Sparkles,
+  PhoneCall,
+  Clock,
+} from "lucide-react";
 import ApplyClientSection from "./ApplyClientSection";
+import OpportunityInteractiveQA from "./OpportunityInteractiveQA";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +30,9 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
     where: { id: params.id },
     include: {
       applications: true,
+      comments: {
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 
@@ -40,6 +55,13 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
     });
   }
 
+  const daysLeft = Math.max(
+    0,
+    Math.ceil(
+      (new Date(opportunity.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
+    )
+  );
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       <Link
@@ -50,69 +72,122 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
         <span>Barcha tanlovlarga qaytish</span>
       </Link>
 
-      <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-5">
-          <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-50 text-amber-700 border border-amber-200 uppercase">
-            {opportunity.type}
-          </span>
-          <div className="flex items-center space-x-4 text-xs text-slate-500 font-medium">
-            <span>Kvota: <strong className="text-slate-800">{opportunity.quota} nafar</strong></span>
-            <span>Arizalar soni: <strong className="text-slate-800">{opportunity.applications.length} ta</strong></span>
+      {/* Tanlov Asosiy Kartochkasi */}
+      <div className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm space-y-6">
+        {/* 1. Tanlov Rasmi */}
+        <div className="relative h-64 sm:h-80 w-full bg-slate-100 overflow-hidden">
+          <img
+            src={
+              opportunity.imageUrl ||
+              "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&auto=format&fit=crop&q=80"
+            }
+            alt={opportunity.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+          <div className="absolute top-4 left-4">
+            <span className="px-3.5 py-1.5 rounded-xl text-xs font-black uppercase bg-tiu-900 text-white shadow-md">
+              {opportunity.type}
+            </span>
+          </div>
+          <div className="absolute bottom-4 left-4 right-4 text-white">
+            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-amber-500 text-slate-950 text-xs font-black mb-2 shadow-md">
+              <Clock className="w-3.5 h-3.5" />
+              <span>{daysLeft} kun qoldi</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight leading-snug drop-shadow-sm">
+              {opportunity.title}
+            </h1>
           </div>
         </div>
 
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            {opportunity.title}
-          </h1>
-          <div className="mt-4 flex flex-wrap gap-4 text-xs">
-            <div className="p-3 bg-amber-50 rounded-xl border border-amber-200/60">
-              <span className="text-amber-800 font-medium block">Mukofot jamg&apos;armasi:</span>
-              <span className="text-base font-extrabold text-amber-900">
-                {opportunity.award || "Diplom va sertifikat"}
+        <div className="p-6 sm:p-10 space-y-8">
+          {/* Kvota va Qabul muddati ko'rsatkichlari */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200">
+              <span className="text-[10px] font-bold uppercase text-amber-800 tracking-wider block">
+                Mukofot / Imkoniyat
+              </span>
+              <span className="text-sm font-black text-amber-950 mt-1 block">
+                {opportunity.award || "100% Kontrakt qoplami"}
               </span>
             </div>
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <span className="text-slate-500 font-medium block">Qabul tugash muddati:</span>
-              <span className="text-base font-bold text-red-600">
-                {new Date(opportunity.deadline).toLocaleDateString("uz-UZ")}
+
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">
+                Kvota va Qabul
+              </span>
+              <span className="text-sm font-bold text-slate-900 mt-1 block">
+                {opportunity.quota} ta o&apos;rin ({opportunity.applications.length} ariza kelgan)
+              </span>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">
+                Muddati (Deadline)
+              </span>
+              <span className="text-sm font-bold text-red-600 mt-1 block">
+                {new Date(opportunity.deadline).toLocaleDateString("uz-UZ", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </span>
             </div>
           </div>
-        </div>
 
-        {/* Tavsif */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">
-            Tanlov haqida ma&apos;lumot
-          </h3>
-          <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-            {opportunity.description}
-          </p>
-        </div>
-
-        {/* Talablar */}
-        {opportunity.requirements && (
-          <div className="p-5 bg-tiu-50/60 rounded-2xl border border-tiu-100 space-y-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-tiu-900">
-              Qatnashish Talablari va Mezonlar:
-            </h4>
-            <p className="text-xs sm:text-sm text-tiu-950 leading-relaxed whitespace-pre-line">
-              {opportunity.requirements}
+          {/* Tanlov haqida ma'lumot */}
+          <div className="space-y-3">
+            <h3 className="text-xs font-black uppercase tracking-wider text-slate-400">
+              Tanlov Haqida To&apos;liq Ma&apos;lumot
+            </h3>
+            <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+              {opportunity.description}
             </p>
           </div>
-        )}
 
-        {/* Ariza topshirish bloki */}
-        <div className="pt-6 border-t border-slate-200">
-          <ApplyClientSection
-            opportunityId={opportunity.id}
-            isLoggedIn={!!currentUser}
-            isStudent={currentUser?.role === "STUDENT"}
-            existingApplication={userApplication}
-          />
+          {/* Shartlar va Mezonlar */}
+          {opportunity.requirements && (
+            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Ishtirok Etish Shartlari va Talablar:</span>
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                {opportunity.requirements}
+              </p>
+            </div>
+          )}
+
+          {/* Bog'lanish va Mas'ullar */}
+          {opportunity.contactInfo && (
+            <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 flex items-start space-x-3 text-xs">
+              <PhoneCall className="w-4 h-4 text-blue-700 flex-shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold text-blue-900 block">Bog&apos;lanish va Konsultatsiya:</span>
+                <span className="text-blue-950 mt-0.5 block">{opportunity.contactInfo}</span>
+              </div>
+            </div>
+          )}
+
+          {/* Ariza Topshirish / Qatnashish Bloki */}
+          <div className="pt-4 border-t border-slate-100">
+            <ApplyClientSection
+              opportunityId={opportunity.id}
+              isLoggedIn={!!currentUser}
+              isStudent={currentUser?.role === "STUDENT"}
+              existingApplication={userApplication}
+            />
+          </div>
         </div>
       </div>
+
+      {/* 2. Izohlar va Savollar Bloki (Q&A) */}
+      <OpportunityInteractiveQA
+        opportunityId={opportunity.id}
+        initialComments={opportunity.comments as any}
+        initialLikes={opportunity.likesCount}
+      />
     </div>
   );
 }

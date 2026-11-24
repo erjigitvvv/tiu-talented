@@ -1,7 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { Newspaper, Calendar, ArrowRight, X, Sparkles, Filter } from "lucide-react";
+import {
+  Newspaper,
+  Calendar,
+  ArrowRight,
+  X,
+  Sparkles,
+  Filter,
+  Heart,
+  MessageSquare,
+  Send,
+  Share2,
+} from "lucide-react";
+
+interface CommentItem {
+  id: string;
+  authorName: string;
+  authorAvatar?: string | null;
+  content: string;
+  createdAt: string | Date;
+}
 
 interface NewsItem {
   id: string;
@@ -13,6 +32,8 @@ interface NewsItem {
   imageUrl?: string | null;
   eventDate?: string | Date | null;
   createdAt: string | Date;
+  likesCount: number;
+  comments: CommentItem[];
   author?: {
     profile?: {
       fullName: string;
@@ -21,14 +42,20 @@ interface NewsItem {
 }
 
 interface NewsClientProps {
-  newsList: NewsItem[];
+  initialNewsList: NewsItem[];
 }
 
 const CATEGORIES = ["Hammasi", "Yangilik", "E'lon", "Tadbir"];
 
-export default function NewsClient({ newsList }: NewsClientProps) {
+export default function NewsClient({ initialNewsList }: NewsClientProps) {
+  const [newsList, setNewsList] = useState<NewsItem[]>(initialNewsList);
   const [activeCategory, setActiveCategory] = useState("Hammasi");
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+
+  // Likes and comments state
+  const [likedMap, setLikedMap] = useState<{ [id: string]: boolean }>({});
+  const [commentText, setCommentText] = useState("");
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
   const getTypeLabel = (type: string) => {
     switch (type) {
@@ -39,6 +66,54 @@ export default function NewsClient({ newsList }: NewsClientProps) {
       case "NEWS":
       default:
         return "Yangilik";
+    }
+  };
+
+  const handleLike = async (newsId: string) => {
+    if (likedMap[newsId]) return;
+    setLikedMap((prev) => ({ ...prev, [newsId]: true }));
+    setNewsList((prev) =>
+      prev.map((n) => (n.id === newsId ? { ...n, likesCount: n.likesCount + 1 } : n))
+    );
+    if (selectedNews?.id === newsId) {
+      setSelectedNews((prev) => (prev ? { ...prev, likesCount: prev.likesCount + 1 } : null));
+    }
+
+    try {
+      await fetch(`/api/news/${newsId}/like`, { method: "POST" });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleAddComment = async (newsId: string) => {
+    if (!commentText.trim()) return;
+    setIsSubmittingComment(true);
+
+    try {
+      const res = await fetch(`/api/news/${newsId}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: commentText }),
+      });
+      const data = await res.json();
+      if (data.comment) {
+        setNewsList((prev) =>
+          prev.map((n) =>
+            n.id === newsId ? { ...n, comments: [data.comment, ...n.comments] } : n
+          )
+        );
+        if (selectedNews?.id === newsId) {
+          setSelectedNews((prev) =>
+            prev ? { ...prev, comments: [data.comment, ...prev.comments] } : null
+          );
+        }
+        setCommentText("");
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSubmittingComment(false);
     }
   };
 
@@ -122,12 +197,19 @@ export default function NewsClient({ newsList }: NewsClientProps) {
                 </div>
 
                 <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-tiu-900 group-hover:bg-tiu-50/50 transition-colors">
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    {news.author?.profile?.fullName || "Iqtidorlilar bo'limi"}
-                  </span>
+                  <div className="flex items-center space-x-3 text-slate-400">
+                    <span className="flex items-center space-x-1">
+                      <Heart className="w-3.5 h-3.5 text-red-500" />
+                      <span>{news.likesCount}</span>
+                    </span>
+                    <span className="flex items-center space-x-1">
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>{news.comments?.length || 0}</span>
+                    </span>
+                  </div>
+
                   <span className="flex items-center space-x-1 text-tiu-800 group-hover:translate-x-1 transition-transform">
-                    <span>Batafsil o&apos;qish</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>O&apos;qish &rarr;</span>
                   </span>
                 </div>
               </div>
@@ -136,16 +218,17 @@ export default function NewsClient({ newsList }: NewsClientProps) {
         </div>
       )}
 
-      {/* Batafsil Yangilik Modal Oynasi */}
+      {/* Batafsil Yangilik Modal Oynasi: Rasm, Sarlavha, Sana, Matn, Like va Comment */}
       {selectedNews && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+            {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-slate-100 pb-4">
               <div>
                 <span className="px-2.5 py-1 rounded-md text-[10px] font-black uppercase bg-tiu-50 text-tiu-800 border border-tiu-200">
                   {getTypeLabel(selectedNews.type)}
                 </span>
-                <h3 className="text-xl font-black text-slate-900 mt-2">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-2 leading-snug">
                   {selectedNews.title}
                 </h3>
                 <div className="flex items-center space-x-2 text-[11px] text-slate-400 font-medium mt-1">
@@ -156,7 +239,7 @@ export default function NewsClient({ newsList }: NewsClientProps) {
                     )}
                   </span>
                   <span>•</span>
-                  <span>{selectedNews.author?.profile?.fullName || "TIU Bo'limi"}</span>
+                  <span>{selectedNews.author?.profile?.fullName || "Iqtidorlilar bo'limi"}</span>
                 </div>
               </div>
 
@@ -168,8 +251,9 @@ export default function NewsClient({ newsList }: NewsClientProps) {
               </button>
             </div>
 
+            {/* Rasm */}
             {selectedNews.imageUrl && (
-              <div className="h-64 w-full rounded-2xl overflow-hidden bg-slate-100">
+              <div className="h-64 sm:h-72 w-full rounded-2xl overflow-hidden bg-slate-100">
                 <img
                   src={selectedNews.imageUrl}
                   alt={selectedNews.title}
@@ -178,6 +262,7 @@ export default function NewsClient({ newsList }: NewsClientProps) {
               </div>
             )}
 
+            {/* Matn */}
             <div className="space-y-4 text-sm text-slate-700 leading-relaxed whitespace-pre-line">
               <p className="font-semibold text-slate-900 text-base">
                 {selectedNews.summary}
@@ -185,7 +270,78 @@ export default function NewsClient({ newsList }: NewsClientProps) {
               <p>{selectedNews.content}</p>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex justify-end">
+            {/* Interaktiv Like va Comment Bo'limi */}
+            <div className="pt-4 border-t border-slate-100 space-y-4">
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => handleLike(selectedNews.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl border transition-all text-xs font-bold ${
+                    likedMap[selectedNews.id]
+                      ? "bg-red-50 text-red-600 border-red-200"
+                      : "bg-slate-50 text-slate-700 hover:text-red-500 border-slate-200"
+                  }`}
+                >
+                  <Heart
+                    className={`w-4 h-4 ${
+                      likedMap[selectedNews.id] ? "fill-red-600 text-red-600" : ""
+                    }`}
+                  />
+                  <span>Yoqdi ({selectedNews.likesCount})</span>
+                </button>
+
+                <div className="text-xs text-slate-400 font-semibold">
+                  {selectedNews.comments?.length || 0} ta izoh
+                </div>
+              </div>
+
+              {/* Yangi izoh qoldirish */}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleAddComment(selectedNews.id);
+                  }}
+                  placeholder="Yangilik bo'yicha fikr qoldiring..."
+                  className="flex-grow p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-tiu-800"
+                />
+                <button
+                  onClick={() => handleAddComment(selectedNews.id)}
+                  disabled={isSubmittingComment}
+                  className="p-2.5 bg-tiu-900 text-white rounded-xl hover:bg-tiu-950 shadow-xs"
+                  title="Yuborish"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Izohlar ro'yxati */}
+              <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                {(!selectedNews.comments || selectedNews.comments.length === 0) ? (
+                  <p className="text-[11px] text-slate-400 italic">
+                    Hozircha izohlar yo&apos;q.
+                  </p>
+                ) : (
+                  selectedNews.comments.map((c) => (
+                    <div
+                      key={c.id}
+                      className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900">{c.authorName}</span>
+                        <span className="text-[10px] text-slate-400">
+                          {new Date(c.createdAt).toLocaleDateString("uz-UZ")}
+                        </span>
+                      </div>
+                      <p className="text-slate-600 text-[11px]">{c.content}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-slate-100 flex justify-end">
               <button
                 onClick={() => setSelectedNews(null)}
                 className="px-6 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-950 transition-colors"
