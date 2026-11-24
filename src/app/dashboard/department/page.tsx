@@ -1,11 +1,29 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { ShieldCheck, Award, FileText, Users, ArrowRight, Clock, CheckCircle2 } from "lucide-react";
+import {
+  ShieldCheck,
+  Award,
+  FileText,
+  Users,
+  ArrowRight,
+  Clock,
+  Camera,
+  CheckCircle2,
+  UserCheck,
+  Sparkles,
+} from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function DepartmentDashboardPage() {
-  const [pendingAchievements, opportunities, applications, totalStudents] = await Promise.all([
+  const [
+    pendingAchievements,
+    opportunities,
+    applications,
+    totalStudents,
+    teamsCount,
+    eventsCount,
+  ] = await Promise.all([
     prisma.achievement.findMany({
       where: { status: "PENDING" },
       include: { user: { include: { profile: true } } },
@@ -23,6 +41,8 @@ export default async function DepartmentDashboardPage() {
       },
     }),
     prisma.user.count({ where: { role: "STUDENT" } }),
+    prisma.team.count(),
+    prisma.newsEvent.count(),
   ]);
 
   return (
@@ -36,78 +56,121 @@ export default async function DepartmentDashboardPage() {
           Iqtidorli Talabalar Bilan Ishlash Markazi
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">
-          Yutuqlarni tasdiqlash, ballar biriktirish, yangi tanlovlarni boshqarish va kelgan arizalarni saralash paneli
+          Iqtidorli talabalar reyestri, talabalar jamoalari katalogi, tanlov/grantlar va e&apos;lonlar boshqaruv ekotizimi
         </p>
       </div>
 
-      {/* KPI Kartalari */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* KPI Kartalari (Barcha asosiy bo'limlar bo'yicha) */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* 1. Iqtidorli talabalar */}
         <Link
-          href="/dashboard/department/verifications"
-          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-400 transition-all group"
+          href="/dashboard/department/talents"
+          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-tiu-500 transition-all group"
         >
-          <div className="text-xs text-amber-600 font-bold uppercase tracking-wider flex items-center justify-between">
-            <span>Kutilayotgan Yutuqlar</span>
-            <Clock className="w-4 h-4" />
+          <div className="text-xs text-tiu-700 font-bold uppercase tracking-wider flex items-center justify-between">
+            <span>Iqtidorli Talabalar</span>
+            <UserCheck className="w-4 h-4" />
           </div>
           <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
-            {pendingAchievements.length} ta
+            {totalStudents} nafar
           </div>
-          <div className="text-[11px] text-amber-700 font-semibold mt-1 group-hover:underline">
-            Tekshirish navbatiga o&apos;tish &rarr;
+          <div className="text-[11px] text-tiu-800 font-semibold mt-1 group-hover:underline">
+            Reyestrni ochish &rarr;
           </div>
         </Link>
 
+        {/* 2. Jamoalar katalogi */}
+        <Link
+          href="/dashboard/department/teams"
+          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-500 transition-all group"
+        >
+          <div className="text-xs text-blue-600 font-bold uppercase tracking-wider flex items-center justify-between">
+            <span>Jamoalar Katalogi</span>
+            <Users className="w-4 h-4" />
+          </div>
+          <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
+            {teamsCount} ta jamoa
+          </div>
+          <div className="text-[11px] text-blue-700 font-semibold mt-1 group-hover:underline">
+            Tarkib va a&apos;zolarni boshqarish &rarr;
+          </div>
+        </Link>
+
+        {/* 3. Grantlar va Tanlovlar */}
         <Link
           href="/dashboard/department/opportunities"
-          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-tiu-400 transition-all group"
+          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-500 transition-all group"
         >
-          <div className="text-xs text-tiu-700 font-bold uppercase tracking-wider flex items-center justify-between">
-            <span>Tanlov va Grantlar</span>
+          <div className="text-xs text-amber-600 font-bold uppercase tracking-wider flex items-center justify-between">
+            <span>Grantlar & Tanlovlar</span>
             <Award className="w-4 h-4" />
           </div>
           <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
-            {opportunities.length} ta
+            {opportunities.length} ta faol
           </div>
-          <div className="text-[11px] text-tiu-800 font-semibold mt-1 group-hover:underline">
-            Boshqarish &rarr;
+          <div className="text-[11px] text-amber-700 font-semibold mt-1 group-hover:underline">
+            Yangi e&apos;lon qilish &rarr;
           </div>
         </Link>
 
+        {/* 4. Kelgan arizalar */}
         <Link
           href="/dashboard/department/applications"
-          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-400 transition-all group"
+          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-purple-500 transition-all group"
         >
-          <div className="text-xs text-blue-600 font-bold uppercase tracking-wider flex items-center justify-between">
+          <div className="text-xs text-purple-600 font-bold uppercase tracking-wider flex items-center justify-between">
             <span>Kelgan Arizalar</span>
             <FileText className="w-4 h-4" />
           </div>
           <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
             {applications.length} ta
           </div>
-          <div className="text-[11px] text-blue-700 font-semibold mt-1 group-hover:underline">
-            Baholash &rarr;
+          <div className="text-[11px] text-purple-700 font-semibold mt-1 group-hover:underline">
+            Baholash va g&apos;oliblar &rarr;
           </div>
         </Link>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-          <div className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center justify-between">
-            <span>Ro&apos;yxatdagi Talabalar</span>
-            <Users className="w-4 h-4" />
+        {/* 5. E'lonlar va lavhalar */}
+        <Link
+          href="/dashboard/department/events"
+          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-pink-500 transition-all group"
+        >
+          <div className="text-xs text-pink-600 font-bold uppercase tracking-wider flex items-center justify-between">
+            <span>E&apos;lonlar & Lavhalar</span>
+            <Camera className="w-4 h-4" />
           </div>
           <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
-            {totalStudents} nafar
+            {eventsCount} ta fotolavha
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">Platforma a&apos;zolari</div>
-        </div>
+          <div className="text-[11px] text-pink-700 font-semibold mt-1 group-hover:underline">
+            Yangilik qo&apos;shish &rarr;
+          </div>
+        </Link>
+
+        {/* 6. Kutilayotgan yutuqlar verifikatsiyasi */}
+        <Link
+          href="/dashboard/department/verifications"
+          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-500 transition-all group"
+        >
+          <div className="text-xs text-emerald-600 font-bold uppercase tracking-wider flex items-center justify-between">
+            <span>Kutilayotgan Yutuqlar</span>
+            <Clock className="w-4 h-4" />
+          </div>
+          <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
+            {pendingAchievements.length} ta
+          </div>
+          <div className="text-[11px] text-emerald-700 font-semibold mt-1 group-hover:underline">
+            Tasdiqlash navbati &rarr;
+          </div>
+        </Link>
       </div>
 
-      {/* Kutilayotgan Yutuqlar Vidjeti */}
+      {/* Tezkor Ko'rish: Kutilayotgan Yutuqlar Navbati */}
       <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <h3 className="font-bold text-slate-900 text-base flex items-center space-x-2">
             <Clock className="w-4 h-4 text-amber-500" />
-            <span>Tekshiruvni Kutayotgan Talabalar Yutuqlari</span>
+            <span>Kutilayotgan Yutuqlar Verifikatsiyasi</span>
           </h3>
           <Link
             href="/dashboard/department/verifications"
@@ -119,13 +182,13 @@ export default async function DepartmentDashboardPage() {
         </div>
 
         {pendingAchievements.length === 0 ? (
-          <div className="py-8 text-center text-xs text-slate-400">
+          <div className="py-6 text-center text-xs text-slate-400">
             Ajoyib! Barcha yutuqlar ko&apos;rib chiqilgan. Navbat bo&apos;sh.
           </div>
         ) : (
           <div className="divide-y divide-slate-100">
             {pendingAchievements.slice(0, 3).map((ach) => (
-              <div key={ach.id} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div key={ach.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className="font-bold text-slate-900 text-sm">
@@ -139,7 +202,7 @@ export default async function DepartmentDashboardPage() {
                     {ach.title}
                   </h4>
                   <div className="text-[11px] text-slate-400 mt-0.5">
-                    Toifasi: {ach.category} • Yuklangan: {new Date(ach.createdAt).toLocaleDateString("uz-UZ")}
+                    Toifasi: {ach.category} • Yuklangan sana: {new Date(ach.createdAt).toLocaleDateString("uz-UZ")}
                   </div>
                 </div>
 

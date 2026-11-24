@@ -21,6 +21,8 @@ model User {
   applications Application[]
   reviews      AchievementReview[]
   posts        NewsEvent[]
+  ledTeams     Team[]        @relation("TeamLeader")
+  teamMembers  TeamMember[]
 }
 
 model Profile {
@@ -117,4 +119,36 @@ model NewsEvent {
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Team {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  slug        String        @unique
+  description String
+  category    String        // "Startap", "Ilmiy tadqiqot", "Hakaton jamoasi", "Robototexnika", "Kiberxavfsizlik"
+  faculty     String?
+  avatarUrl   String?
+  projectUrl  String?
+  status      String        @default("RECRUITING") // "RECRUITING" | "ACTIVE" | "COMPLETED"
+  neededRoles String?       // Masalan: "Frontend Dasturchi, UI/UX Dizayner, Data Analyst"
+  leaderId    String
+  leader      User          @relation("TeamLeader", fields: [leaderId], references: [id])
+  members     TeamMember[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   @default("MEMBER") // "LEADER" | "MEMBER" | "DEVELOPER" | "DESIGNER" | "RESEARCHER"
+  status    String   @default("ACCEPTED") // "PENDING" | "ACCEPTED" | "REJECTED"
+  joinNote  String?
+  joinedAt  DateTime @default(now())
+
+  @@unique([teamId, userId])
 }

@@ -3,11 +3,12 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import {
   LayoutDashboard,
-  ShieldCheck,
+  Users,
+  UserCheck,
   Award,
   FileCheck2,
   Camera,
-  Users,
+  ShieldCheck,
   Sparkles,
 } from "lucide-react";
 
@@ -29,11 +30,13 @@ export default async function DepartmentDashboardLayout({
   }
 
   const navItems = [
-    { name: "Bo'lim Boshqaruvi", href: "/dashboard/department", icon: LayoutDashboard },
-    { name: "Verifikatsiya Navbati", href: "/dashboard/department/verifications", icon: ShieldCheck },
-    { name: "Tanlovlar & Grantlar", href: "/dashboard/department/opportunities", icon: Award },
+    { name: "Bosh Sahifa", href: "/dashboard/department", icon: LayoutDashboard },
+    { name: "Iqtidorli Talabalar", href: "/dashboard/department/talents", icon: UserCheck },
+    { name: "Jamoalar Katalogi", href: "/dashboard/department/teams", icon: Users },
+    { name: "Grantlar & Tanlovlar", href: "/dashboard/department/opportunities", icon: Award },
     { name: "Kelgan Arizalar", href: "/dashboard/department/applications", icon: FileCheck2 },
-    { name: "Tadbirdan Lavhalar", href: "/dashboard/department/events", icon: Camera },
+    { name: "E'lonlar & Lavhalar", href: "/dashboard/department/events", icon: Camera },
+    { name: "Yutuqlar Verifikatsiyasi", href: "/dashboard/department/verifications", icon: ShieldCheck },
   ];
 
   return (

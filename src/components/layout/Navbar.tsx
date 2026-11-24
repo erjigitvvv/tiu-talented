@@ -43,6 +43,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Asosiy", href: "/" },
     { name: "Iqtidorlar", href: "/talents" },
+    { name: "Jamoalar", href: "/teams" },
     { name: "Tanlovlar & Grantlar", href: "/opportunities" },
     { name: "Tadbirdan lavhalar", href: "/events" },
     { name: "Reyting", href: "/leaderboard" },
