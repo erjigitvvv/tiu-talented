@@ -1,0 +1,120 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  studentId    String?       @unique // Masalan: "TIU20230491"
+  passwordHash String
+  role         String        @default("STUDENT") // "STUDENT" | "DEPT_ADMIN" | "SUPER_ADMIN"
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  profile      Profile?
+  achievements Achievement[]
+  applications Application[]
+  reviews      AchievementReview[]
+  posts        NewsEvent[]
+}
+
+model Profile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName    String
+  faculty     String   // Masalan: "Axborot Texnologiyalari", "Xalqaro Iqtisodiyot", "Biznes va Boshqaruv"
+  groupName   String   // Masalan: "IT-21-04"
+  courseYear  Int      @default(1)
+  gpa         Float    @default(0.0)
+  phone       String?
+  bio         String?
+  avatarUrl   String?
+  skills      String?  // Masalan: "Python, React, Data Science, Public Speaking"
+  totalPoints Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Achievement {
+  id            String              @id @default(uuid())
+  userId        String
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String
+  category      String              // "IT & Startap", "Ilmiy maqola & Tadqiqot", "Olimpiada & Tanlov", "Sport & Madaniyat", "Ijtimoiy & Yetakchilik"
+  description   String
+  proofUrl      String              // Sertifikat, drive link yoki diplom hujjati
+  dateAchieved  DateTime            @default(now())
+  status        String              @default("PENDING") // "PENDING" | "APPROVED" | "REJECTED"
+  points        Int                 @default(0)
+  adminFeedback String?
+  reviewedAt    DateTime?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  reviews       AchievementReview[]
+}
+
+model AchievementReview {
+  id            String      @id @default(uuid())
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  reviewerId    String
+  reviewer      User        @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  action        String      // "APPROVED" | "REJECTED"
+  pointsAwarded Int         @default(0)
+  comment       String?
+  createdAt     DateTime    @default(now())
+}
+
+model Opportunity {
+  id           String        @id @default(uuid())
+  title        String
+  type         String        // "GRANT", "SCHOLARSHIP", "COMPETITION", "HACKATHON"
+  description  String
+  requirements String?
+  deadline     DateTime
+  quota        Int           @default(1)
+  status       String        @default("OPEN") // "OPEN" | "CLOSED"
+  award        String?       // "10,000,000 UZS", "Xalqaro Stajirovka", "100% Kontrakt qoplash"
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  applications Application[]
+}
+
+model Application {
+  id            String      @id @default(uuid())
+  opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coverLetter   String
+  portfolioUrl  String?
+  status        String      @default("SUBMITTED") // "SUBMITTED" | "UNDER_REVIEW" | "ACCEPTED" | "REJECTED"
+  adminNotes    String?
+  appliedAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([opportunityId, userId])
+}
+
+model NewsEvent {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  summary     String
+  content     String
+  type        String   @default("NEWS") // "NEWS" | "EVENT_HIGHLIGHT"
+  imageUrl    String?
+  eventDate   DateTime?
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
