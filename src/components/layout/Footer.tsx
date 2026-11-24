@@ -45,6 +45,11 @@ export default function Footer() {
                   Tanlovlar va Grantlar
                 </Link>
               </li>
+              <li>
+                <Link href="/news" className="hover:text-white transition-colors">
+                  Yangiliklar
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -140,6 +140,7 @@ model Team {
   leaderId    String
   leader      User          @relation("TeamLeader", fields: [leaderId], references: [id])
   members     TeamMember[]
+  achievements TeamAchievement[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
@@ -156,4 +157,31 @@ model TeamMember {
   joinedAt  DateTime @default(now())
 
   @@unique([teamId, userId])
+}
+
+model TeamAchievement {
+  id           String                   @id @default(uuid())
+  teamId       String
+  team         Team                     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  title        String
+  rank         String                   // "1-o'rin", "Gran-pri", "Respublika g'olibi"
+  dateAchieved DateTime                 @default(now())
+  imageUrl     String?
+  description  String?
+  viewsCount   Int                      @default(0)
+  likesCount   Int                      @default(0)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+
+  comments     TeamAchievementComment[]
+}
+
+model TeamAchievementComment {
+  id            String          @id @default(uuid())
+  achievementId String
+  achievement   TeamAchievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  authorName    String
+  authorAvatar  String?
+  content       String
+  createdAt     DateTime        @default(now())
 }
