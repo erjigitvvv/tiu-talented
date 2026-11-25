@@ -48,6 +48,7 @@ export default function Navbar() {
     { name: "Jamoalar", href: "/teams" },
     { name: "Iqtidorlilar", href: "/talents" },
     { name: "Tanlovlar va Grantlar", href: "/opportunities" },
+    { name: "Olimlar Chati", href: "/chat" },
     { name: "Yangiliklar", href: "/news" },
   ];
 

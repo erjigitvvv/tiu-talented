@@ -16,11 +16,33 @@
   - Yutuqlar yuklash (dalil hujjatlari/sertifikatlar bilan).
   - Ochiq tanlov va grantlarga ariza topshirish.
   - Reytingdagi o'rnini va to'plagan ballarini kuzatish.
+- **💬 Olimlar Chati (TIU Telegram Messenger):**
+  - Universitet professorlari va ilmiy rahbarlari bilan bevosita muloqot tizimi.
+  - 3 ta jild: *1. Yurisprudensiya*, *2. Biznes & Inovatsion*, *3. TG-Bot*.
+  - Input ichidagi **▲ (tepaga qaragan strelka)** toifa popoveri (`GRANT`, `CONFERENCE`, `RESEARCH`, `STARTUP`, `DEADLINE`, `NEWS`).
+  - 📎 Fayl, rasm va so'rovnomalar (Polls) biriktirish.
+  - Telegram Bot bilan ikki tomonlama real vaqtli sinxronizatsiya.
 - **🌐 Ommaviy Portal:**
   - Jonli statistika va "Tadbirdan lavhalar" fotogalereyasi.
   - Iqtidorlar katalogi (Fakultet va ko'nikmalar bo'yicha filter).
   - Ommaviy reyting (Leaderboard).
   - Faol grantlar va tanlovlar e'lonlar taxtasi.
+
+## 🎨 Figma Dizayn Tizimi va Loyiha Hujjatlari
+
+- **Figma Loyihasi:** [TIU Talents - Student Auth, Onboarding & Cabinet Design System](https://www.figma.com/design/UUkoZFQX04CXuMYlzaPcjw)
+  - 1-Ekran: Talaba Login (Google OAuth + Talaba ID)
+  - 2-Ekran: Talaba Registratsiya (Telefon, parollar)
+  - 3-Ekran: Onboarding (Guruh, ta'lim shakli)
+  - 4-Ekran: Kabinet Ekskursiyasi (Demonstration Tour)
+  - 5-Ekran: Talaba Kabineti va Olimlar Chati (1440x900)
+- **Hujjatlar (`docs/`):**
+  - `docs/01_PRD_and_Architecture.md`: Mahsulot talablari va arxitektura
+  - `docs/02_System_Architecture_and_Chat_Spec.md`: RBAC rollar matritsasi va Olimlar Chati spetsifikatsiyasi
+  - `docs/03_Student_Cabinet_and_Auth_Spec.md`: Talaba kabineti va login oqimi
+  - `docs/04_Student_Info_Algorithm_and_Logic.md`: Talaba ma'lumotlari modeli va 5 ta algoritmi
+  - `docs/05_Full_Logic_and_Algorithms.md`: Reyting, moderatsiya va ball hisoblash algoritmlari
+  - `docs/Figma_Design_System.md`: Figma ekranlari tavsifi
 
 ---
 
