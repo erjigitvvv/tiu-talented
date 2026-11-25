@@ -1,17 +1,7 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
-import {
-  LayoutDashboard,
-  Users,
-  UserCheck,
-  Award,
-  FileCheck2,
-  Camera,
-  ShieldCheck,
-  Sparkles,
-  Building2,
-} from "lucide-react";
+import { Building2 } from "lucide-react";
+import DepartmentSidebarNav from "./DepartmentSidebarNav";
 
 export const dynamic = "force-dynamic";
 
@@ -30,23 +20,13 @@ export default async function DepartmentDashboardLayout({
     redirect("/dashboard/student");
   }
 
-  const navItems = [
-    { name: "Bosh Sahifa", href: "/dashboard/department", icon: LayoutDashboard },
-    { name: "Iqtidorli Talabalar", href: "/dashboard/department/talents", icon: UserCheck },
-    { name: "Jamoalar Katalogi", href: "/dashboard/department/teams", icon: Users },
-    { name: "Grantlar & Tanlovlar", href: "/dashboard/department/opportunities", icon: Award },
-    { name: "Kelgan Arizalar", href: "/dashboard/department/applications", icon: FileCheck2 },
-    { name: "E'lonlar & Lavhalar", href: "/dashboard/department/events", icon: Camera },
-    { name: "Yutuqlar Verifikatsiyasi", href: "/dashboard/department/verifications", icon: ShieldCheck },
-  ];
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex flex-col md:flex-row gap-8">
         {/* Yon Panel */}
         <aside className="w-full md:w-64 flex-shrink-0 space-y-6">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm text-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-tiu-950 to-tiu-800 text-white flex items-center justify-center font-bold text-2xl mx-auto shadow-sm">
+          <div className="glass-neu-card p-5 rounded-3xl text-center">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-tiu-950 to-tiu-800 text-white flex items-center justify-center font-bold text-2xl mx-auto shadow-md border border-white/20">
               <Building2 className="w-8 h-8 text-amber-400" />
             </div>
             <h3 className="font-bold text-slate-900 text-sm mt-3 line-clamp-1">
@@ -55,26 +35,12 @@ export default async function DepartmentDashboardLayout({
             <p className="text-[11px] text-tiu-700 font-semibold mt-0.5">
               Iqtidorli talabalar bilan ishlash bo&apos;limi
             </p>
-            <div className="mt-2.5 px-2.5 py-1 bg-tiu-50 border border-tiu-200 text-tiu-900 rounded-lg text-[10px] font-extrabold uppercase">
+            <div className="neu-pill mt-2.5 px-3 py-1 text-tiu-900 rounded-lg text-[10px] font-extrabold uppercase inline-block">
               Boshqaruvchi
             </div>
           </div>
 
-          <nav className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm space-y-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-tiu-900 hover:bg-tiu-50/70 transition-colors"
-                >
-                  <Icon className="w-4 h-4 text-tiu-700" />
-                  <span>{item.name}</span>
-                </Link>
-              );
-            })}
-          </nav>
+          <DepartmentSidebarNav />
         </aside>
 
         {/* Asosiy Kontent */}

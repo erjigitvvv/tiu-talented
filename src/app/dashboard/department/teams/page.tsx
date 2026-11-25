@@ -98,7 +98,7 @@ export default function DepartmentTeamsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center space-x-2">
             <Users className="w-6 h-6 text-tiu-700" />
@@ -110,7 +110,7 @@ export default function DepartmentTeamsPage() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="px-5 py-3 rounded-xl bg-tiu-800 hover:bg-tiu-950 text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center justify-center space-x-2 self-start sm:self-auto"
+          className="neu-btn-primary px-5 py-3 rounded-xl text-white font-bold text-xs sm:text-sm flex items-center justify-center space-x-2 self-start sm:self-auto"
         >
           <PlusCircle className="w-4 h-4" />
           <span>Yangi Jamoa Ro&apos;yxatdan O&apos;tkazish</span>
@@ -118,7 +118,7 @@ export default function DepartmentTeamsPage() {
       </div>
 
       {msg && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs sm:text-sm text-emerald-800 font-semibold flex items-center space-x-2">
+        <div className="p-4 bg-emerald-50/90 border border-emerald-200/90 rounded-2xl text-xs sm:text-sm text-emerald-800 font-semibold flex items-center space-x-2 shadow-xs">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
           <span>{msg}</span>
         </div>
@@ -127,7 +127,7 @@ export default function DepartmentTeamsPage() {
       {loading ? (
         <div className="p-12 text-center text-xs text-slate-400">Jamoalar yuklanmoqda...</div>
       ) : teams.length === 0 ? (
-        <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center text-xs text-slate-500">
+        <div className="glass-panel p-12 rounded-3xl text-center text-xs text-slate-500">
           Hozircha ro&apos;yxatdan o&apos;tgan jamoalar mavjud emas.
         </div>
       ) : (
@@ -139,12 +139,12 @@ export default function DepartmentTeamsPage() {
             return (
               <div
                 key={team.id}
-                className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 space-y-6"
+                className="glass-neu-card rounded-3xl p-6 sm:p-8 space-y-6"
               >
                 {/* Jamoa Asosiy Qismi */}
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-slate-100 pb-5">
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-slate-200/60 pb-5">
                   <div className="flex items-start space-x-4">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-tiu-950 to-tiu-700 text-white flex items-center justify-center font-bold text-xl overflow-hidden shadow-sm flex-shrink-0">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-tiu-950 to-tiu-700 text-white flex items-center justify-center font-bold text-xl overflow-hidden shadow-md flex-shrink-0 border border-white/20">
                       {team.avatarUrl ? (
                         <img src={team.avatarUrl} alt="" className="w-full h-full object-cover" />
                       ) : (
@@ -153,7 +153,7 @@ export default function DepartmentTeamsPage() {
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center space-x-2">
-                        <span className="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-blue-50 text-blue-800 border border-blue-200">
+                        <span className="neu-pill px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase text-blue-900">
                           {team.category}
                         </span>
                         <span className="text-xs text-slate-400">
@@ -169,7 +169,7 @@ export default function DepartmentTeamsPage() {
                     <Link
                       href={`/teams/${team.id}`}
                       target="_blank"
-                      className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs inline-flex items-center space-x-1.5 transition-colors"
+                      className="neu-btn-white px-4 py-2 rounded-xl text-slate-800 font-bold text-xs inline-flex items-center space-x-1.5"
                     >
                       <span>Ommaviy sahifa</span>
                       <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
@@ -179,7 +179,7 @@ export default function DepartmentTeamsPage() {
 
                 {/* Qidirilayotgan mutaxassislar */}
                 {team.neededRoles && (
-                  <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-xs text-amber-950 flex items-center space-x-2">
+                  <div className="p-3.5 bg-amber-50/70 border border-amber-200/70 rounded-xl text-xs text-amber-950 flex items-center space-x-2 shadow-xs">
                     <UserPlus className="w-4 h-4 text-amber-600 flex-shrink-0" />
                     <div>
                       <strong>Jamoaga kerakli kadrlar:</strong> {team.neededRoles}
@@ -189,15 +189,15 @@ export default function DepartmentTeamsPage() {
 
                 {/* Kutilayotgan A'zolik So'rovlari (Pending Join Requests) */}
                 {pendingMembers.length > 0 && (
-                  <div className="p-4 bg-blue-50/60 border border-blue-200 rounded-2xl space-y-3">
+                  <div className="p-4 bg-blue-50/50 border border-blue-200/60 rounded-2xl space-y-3 shadow-xs">
                     <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 flex items-center space-x-1.5">
-                      <span>⏳ Yangi A&apos;zolik So&apos;rovlari ({pendingMembers.length} ta kutilmoqda):</span>
+                      <span>Yangi A&apos;zolik So&apos;rovlari ({pendingMembers.length} ta kutilmoqda):</span>
                     </h4>
                     <div className="space-y-2">
                       {pendingMembers.map((req: any) => (
                         <div
                           key={req.id}
-                          className="p-3 bg-white rounded-xl border border-blue-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                          className="p-3.5 bg-white/90 rounded-xl border border-blue-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs"
                         >
                           <div>
                             <div className="font-bold text-slate-900">
@@ -211,14 +211,14 @@ export default function DepartmentTeamsPage() {
                           <div className="flex items-center space-x-2 flex-shrink-0">
                             <button
                               onClick={() => handleMemberStatus(team.id, req.id, "ACCEPTED")}
-                              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs inline-flex items-center space-x-1"
+                              className="neu-btn-primary px-3 py-1.5 rounded-lg text-white font-bold text-xs inline-flex items-center space-x-1"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>Qabul qilish</span>
                             </button>
                             <button
                               onClick={() => handleMemberStatus(team.id, req.id, "REJECTED")}
-                              className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 font-bold text-xs inline-flex items-center space-x-1"
+                              className="neu-btn-white px-3 py-1.5 rounded-lg text-red-600 font-bold text-xs inline-flex items-center space-x-1"
                             >
                               <XCircle className="w-3.5 h-3.5" />
                               <span>Rad etish</span>
@@ -239,10 +239,10 @@ export default function DepartmentTeamsPage() {
                     {acceptedMembers.map((member: any) => (
                       <div
                         key={member.id}
-                        className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs"
+                        className="neu-sunken p-3 rounded-xl flex items-center justify-between text-xs"
                       >
                         <div className="flex items-center space-x-2.5">
-                          <div className="w-8 h-8 rounded-lg bg-tiu-800 text-white flex items-center justify-center font-bold text-xs overflow-hidden">
+                          <div className="w-8 h-8 rounded-lg bg-tiu-800 text-white flex items-center justify-center font-bold text-xs overflow-hidden shadow-xs">
                             {member.user?.profile?.avatarUrl ? (
                               <img src={member.user?.profile?.avatarUrl} alt="" className="w-full h-full object-cover" />
                             ) : (
@@ -284,9 +284,9 @@ export default function DepartmentTeamsPage() {
 
       {/* Yangi Jamoa Yaratish Modali */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-panel rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
               <h3 className="font-bold text-slate-900 text-lg">Yangi Iqtidorlar Jamoasini Yaratish</h3>
               <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg">
                 <X className="w-5 h-5" />
@@ -294,7 +294,7 @@ export default function DepartmentTeamsPage() {
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200 flex items-center space-x-2">
+              <div className="p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200 flex items-center space-x-2 shadow-xs">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -311,7 +311,7 @@ export default function DepartmentTeamsPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Masalan: RoboTech TIU"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                  className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                 />
               </div>
 
@@ -323,7 +323,7 @@ export default function DepartmentTeamsPage() {
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                    className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30 font-semibold"
                   >
                     <option value="Hakaton jamoasi">Hakaton jamoasi</option>
                     <option value="Startap">Startap</option>
@@ -340,7 +340,7 @@ export default function DepartmentTeamsPage() {
                   <select
                     value={formData.faculty}
                     onChange={(e) => setFormData({ ...formData, faculty: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                    className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30 font-semibold"
                   >
                     {FACULTIES.map((fac) => (
                       <option key={fac} value={fac}>
@@ -361,7 +361,7 @@ export default function DepartmentTeamsPage() {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Jamoa nima ustida ishlaydi, qanday musobaqalarda qatnashadi..."
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                  className="neu-sunken w-full p-3.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                 />
               </div>
 
@@ -374,7 +374,7 @@ export default function DepartmentTeamsPage() {
                   value={formData.neededRoles}
                   onChange={(e) => setFormData({ ...formData, neededRoles: e.target.value })}
                   placeholder="Frontend Developer, Data Analyst..."
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                  className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                 />
               </div>
 
@@ -387,7 +387,7 @@ export default function DepartmentTeamsPage() {
                   value={formData.avatarUrl}
                   onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })}
                   placeholder="https://images.unsplash.com/... yoki rasm linki"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                  className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                 />
               </div>
 
@@ -395,14 +395,14 @@ export default function DepartmentTeamsPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-grow py-3 px-4 rounded-xl bg-tiu-800 hover:bg-tiu-950 text-white font-bold text-xs shadow-sm transition-colors disabled:opacity-50"
+                  className="neu-btn-primary flex-grow py-3 px-4 rounded-xl text-white font-bold text-xs sm:text-sm disabled:opacity-50"
                 >
                   {submitting ? "Yaratilmoqda..." : "Jamoani Saqlash"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="py-3 px-4 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-100"
+                  className="neu-btn-white py-3 px-4 rounded-xl text-slate-600 font-semibold text-xs"
                 >
                   Bekor qilish
                 </button>

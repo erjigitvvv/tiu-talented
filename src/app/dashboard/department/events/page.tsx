@@ -75,7 +75,7 @@ export default function DepartmentEventsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center space-x-2">
             <Camera className="w-6 h-6 text-tiu-700" />
@@ -87,7 +87,7 @@ export default function DepartmentEventsPage() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="px-5 py-3 rounded-xl bg-tiu-800 hover:bg-tiu-950 text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center justify-center space-x-2 self-start sm:self-auto"
+          className="neu-btn-primary px-5 py-3 rounded-xl text-white font-bold text-xs sm:text-sm flex items-center justify-center space-x-2 self-start sm:self-auto"
         >
           <PlusCircle className="w-4 h-4" />
           <span>Yangi Lavha Joylash</span>
@@ -95,7 +95,7 @@ export default function DepartmentEventsPage() {
       </div>
 
       {msg && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs sm:text-sm text-emerald-800 font-semibold flex items-center space-x-2">
+        <div className="p-4 bg-emerald-50/90 border border-emerald-200/90 rounded-2xl text-xs sm:text-sm text-emerald-800 font-semibold flex items-center space-x-2 shadow-xs">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
           <span>{msg}</span>
         </div>
@@ -104,7 +104,7 @@ export default function DepartmentEventsPage() {
       {loading ? (
         <div className="p-12 text-center text-xs text-slate-400">Yuklanmoqda...</div>
       ) : events.length === 0 ? (
-        <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center text-xs text-slate-500">
+        <div className="glass-panel p-12 rounded-3xl text-center text-xs text-slate-500">
           Hozircha hech qanday lavha yoki yangilik kiritilmagan.
         </div>
       ) : (
@@ -112,7 +112,7 @@ export default function DepartmentEventsPage() {
           {events.map((ev) => (
             <div
               key={ev.id}
-              className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex gap-4 items-start"
+              className="glass-neu-card p-5 rounded-2xl flex gap-4 items-start"
             >
               {ev.imageUrl && (
                 <div className="w-24 h-24 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0">
@@ -146,9 +146,9 @@ export default function DepartmentEventsPage() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-panel rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
               <h3 className="font-bold text-slate-900 text-base">Yangi Lavha / Yangilik Qo&apos;shish</h3>
               <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg">
                 <X className="w-5 h-5" />
@@ -156,7 +156,7 @@ export default function DepartmentEventsPage() {
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200 flex items-center space-x-2">
+              <div className="p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200 flex items-center space-x-2 shadow-xs">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -173,7 +173,7 @@ export default function DepartmentEventsPage() {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="TIU TechFest 2026 g'oliblari taqdirlandi"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                  className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                 />
               </div>
 
@@ -185,7 +185,7 @@ export default function DepartmentEventsPage() {
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                    className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30 font-semibold"
                   >
                     <option value="EVENT_HIGHLIGHT">Tadbirdan fotolavha</option>
                     <option value="NEWS">Rasmiy yangilik</option>
@@ -201,7 +201,7 @@ export default function DepartmentEventsPage() {
                     required
                     value={formData.eventDate}
                     onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                    className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                   />
                 </div>
               </div>
@@ -215,7 +215,7 @@ export default function DepartmentEventsPage() {
                   value={formData.imageUrl}
                   onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
                   placeholder="https://images.unsplash.com/... yoki rasm linki"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                  className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                 />
               </div>
 
@@ -228,7 +228,7 @@ export default function DepartmentEventsPage() {
                   value={formData.summary}
                   onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
                   placeholder="Universitetda 50 dan ortiq yosh innovatorlar ishtirok etdi..."
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                  className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                 />
               </div>
 
@@ -242,7 +242,7 @@ export default function DepartmentEventsPage() {
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                   placeholder="Tadbir tafsilotlari, taqdirlangan talabalar..."
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                  className="neu-sunken w-full p-3.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                 />
               </div>
 
@@ -250,14 +250,14 @@ export default function DepartmentEventsPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-grow py-2.5 px-4 rounded-xl bg-tiu-800 hover:bg-tiu-950 text-white font-bold text-xs shadow-sm transition-colors disabled:opacity-50"
+                  className="neu-btn-primary flex-grow py-3 px-4 rounded-xl text-white font-bold text-xs sm:text-sm disabled:opacity-50"
                 >
                   {submitting ? "Chop etilmoqda..." : "Chop etish"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="py-2.5 px-4 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-100"
+                  className="neu-btn-white py-3 px-4 rounded-xl text-slate-600 font-semibold text-xs"
                 >
                   Bekor qilish
                 </button>

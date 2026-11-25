@@ -50,9 +50,9 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
+      <div className="max-w-md w-full space-y-6 glass-panel p-8 sm:p-10 rounded-3xl">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-tiu-900 to-tiu-700 text-white shadow-md shadow-tiu-900/20 mb-3">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-tiu-900 to-tiu-700 text-white shadow-md shadow-tiu-900/20 mb-3 ring-1 ring-white/60">
             <GraduationCap className="w-7 h-7 text-amber-400" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -64,7 +64,7 @@ export default function RegisterPage() {
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs flex items-start space-x-2.5">
+          <div className="bg-red-50/90 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs flex items-start space-x-2.5">
             <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-500" />
             <span>{error}</span>
           </div>
@@ -78,7 +78,7 @@ export default function RegisterPage() {
                 Ism *
               </label>
               <div className="relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                 <input
                   type="text"
                   name="firstName"
@@ -86,7 +86,7 @@ export default function RegisterPage() {
                   value={formData.firstName}
                   onChange={handleChange}
                   placeholder="Jasur"
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600 focus:bg-white"
+                  className="neu-sunken w-full pl-9 pr-3 py-2.5 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600 focus:bg-white"
                 />
               </div>
             </div>
@@ -102,7 +102,7 @@ export default function RegisterPage() {
                 value={formData.lastName}
                 onChange={handleChange}
                 placeholder="Aliyev"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600 focus:bg-white"
+                className="neu-sunken w-full px-3 py-2.5 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600 focus:bg-white"
               />
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function RegisterPage() {
               Telefon Raqam *
             </label>
             <div className="relative">
-              <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
               <input
                 type="tel"
                 name="phone"
@@ -121,7 +121,7 @@ export default function RegisterPage() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+998 90 123 45 67"
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600 focus:bg-white"
+                className="neu-sunken w-full pl-9 pr-3 py-2.5 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600 focus:bg-white"
               />
             </div>
             <span className="text-[11px] text-slate-400 mt-1 block">
@@ -135,7 +135,7 @@ export default function RegisterPage() {
               Parol *
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
               <input
                 type="password"
                 name="password"
@@ -144,12 +144,12 @@ export default function RegisterPage() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600 focus:bg-white"
+                className="neu-sunken w-full pl-9 pr-3 py-2.5 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600 focus:bg-white"
               />
             </div>
           </div>
 
-          <div className="p-3 bg-tiu-50/70 border border-tiu-200/80 rounded-xl text-xs text-tiu-950 flex items-start space-x-2">
+          <div className="p-3 bg-tiu-50/70 border border-tiu-200/80 rounded-2xl text-xs text-tiu-950 flex items-start space-x-2">
             <Sparkles className="w-4 h-4 text-tiu-700 flex-shrink-0 mt-0.5" />
             <span>
               <strong>Dekanat</strong>, <strong>Yo&apos;nalish</strong> va <strong>Guruh</strong> ma&apos;lumotlarini ro&apos;yxatdan o&apos;tgach, shaxsiy kabinetingizda biriktirasiz.
@@ -159,14 +159,14 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 rounded-xl text-white font-bold text-sm bg-gradient-to-r from-tiu-800 to-tiu-950 hover:from-tiu-700 hover:to-tiu-900 shadow-md shadow-tiu-900/20 hover:shadow-lg transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+            className="neu-btn-primary w-full py-3.5 px-4 rounded-2xl text-white font-black text-sm flex items-center justify-center space-x-2 disabled:opacity-50"
           >
             <span>{loading ? "Ro'yxatdan o'tkazilmoqda..." : "Davom etish va Kabinetga o'tish"}</span>
             {!loading && <ArrowRight className="w-4 h-4" />}
           </button>
         </form>
 
-        <div className="text-center text-xs text-slate-600 pt-2 border-t border-slate-100">
+        <div className="text-center text-xs text-slate-600 pt-2 border-t border-slate-200/60">
           Hisobingiz bormi?{" "}
           <Link href="/login" className="font-bold text-tiu-800 hover:text-tiu-950 underline ml-1">
             Tizimga kirish

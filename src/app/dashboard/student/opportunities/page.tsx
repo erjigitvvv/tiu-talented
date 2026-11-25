@@ -23,7 +23,7 @@ export default async function StudentOpportunitiesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl">
         <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center space-x-2">
           <Award className="w-6 h-6 text-amber-500" />
           <span>E&apos;lonlar va Tanlovlar</span>
@@ -41,11 +41,11 @@ export default async function StudentOpportunitiesPage() {
           return (
             <div
               key={opp.id}
-              className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between space-y-4 hover:border-tiu-300 transition-all"
+              className="glass-neu-card p-6 rounded-2xl flex flex-col justify-between space-y-4 hover:border-tiu-300 transition-all"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200 uppercase">
+                  <span className="neu-pill px-2.5 py-0.5 rounded-md text-[10px] font-extrabold text-amber-800 uppercase">
                     {opp.type}
                   </span>
                   <span className="text-xs text-slate-400">
@@ -59,27 +59,27 @@ export default async function StudentOpportunitiesPage() {
                 </p>
 
                 {opp.award && (
-                  <div className="text-xs font-semibold text-emerald-700 bg-emerald-50/60 p-2 rounded-lg border border-emerald-100 flex items-center space-x-1.5">
+                  <div className="text-xs font-semibold text-emerald-700 bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200/60 flex items-center space-x-1.5 shadow-xs">
                     <Gift className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Mukofot: {opp.award}</span>
                   </div>
                 )}
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+              <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs">
                 <span className="text-slate-400">
                   Muddat: {new Date(opp.deadline).toLocaleDateString("uz-UZ")}
                 </span>
 
                 {isApplied ? (
-                  <span className="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 font-bold flex items-center space-x-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span className="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 font-bold flex items-center space-x-1 shadow-xs border border-emerald-200/60">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Ariza topshirilgan</span>
                   </span>
                 ) : (
                   <Link
                     href={`/opportunities/${opp.id}`}
-                    className="px-4 py-2 rounded-xl bg-tiu-800 hover:bg-tiu-950 text-white font-bold transition-colors"
+                    className="neu-btn-primary px-4 py-2 rounded-xl text-white font-bold"
                   >
                     Ariza topshirish &rarr;
                   </Link>

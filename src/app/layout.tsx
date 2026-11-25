@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="uz">
-      <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-tiu-100 selection:text-tiu-900">
+      <body className="flex flex-col min-h-screen text-slate-900 antialiased selection:bg-tiu-100 selection:text-tiu-900">
         <Navbar />
         <main className="flex-grow">{children}</main>
         <Footer />

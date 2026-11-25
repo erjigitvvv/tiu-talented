@@ -43,14 +43,14 @@ export default async function StudentGroupPage() {
   return (
     <div className="space-y-8">
       {/* Guruh Bosh Kartochkasi */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-xs space-y-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-5">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 rounded-2xl bg-tiu-900 text-white flex items-center justify-center font-black text-2xl shadow-md">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-tiu-900 to-tiu-950 text-white flex items-center justify-center font-black text-2xl shadow-md border border-white/20">
               <Users className="w-8 h-8 text-amber-400" />
             </div>
             <div>
-              <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase bg-blue-50 text-blue-800 border border-blue-200">
+              <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase bg-blue-50 text-blue-800 border border-blue-200 shadow-xs">
                 Akademik Guruh
               </div>
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
@@ -63,7 +63,7 @@ export default async function StudentGroupPage() {
           </div>
 
           <div className="flex items-center space-x-2">
-            <span className="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700">
+            <span className="neu-pill px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700">
               Jami talabalar: <strong className="text-tiu-900">{classmates.length} nafar</strong>
             </span>
           </div>
@@ -71,8 +71,8 @@ export default async function StudentGroupPage() {
 
         {/* Guruh Statistikasi */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center space-x-3.5">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
+          <div className="neu-sunken p-4 rounded-2xl flex items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0 shadow-xs">
               <Star className="w-5 h-5 fill-amber-500 text-amber-500" />
             </div>
             <div>
@@ -85,8 +85,8 @@ export default async function StudentGroupPage() {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center space-x-3.5">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0">
+          <div className="neu-sunken p-4 rounded-2xl flex items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 shadow-xs">
               <Trophy className="w-5 h-5 text-blue-700" />
             </div>
             <div>
@@ -99,8 +99,8 @@ export default async function StudentGroupPage() {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center space-x-3.5">
-            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+          <div className="neu-sunken p-4 rounded-2xl flex items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 shadow-xs">
               <UserCheck className="w-5 h-5 text-emerald-700" />
             </div>
             <div>
@@ -126,14 +126,14 @@ export default async function StudentGroupPage() {
           {classmates.map((student, idx) => (
             <div
               key={student.id}
-              className={`bg-white p-5 rounded-2xl border transition-all flex items-center justify-between group ${
+              className={`glass-neu-card p-5 rounded-2xl flex items-center justify-between group ${
                 student.id === currentUser.id
-                  ? "border-tiu-600 bg-tiu-50/20 shadow-xs"
-                  : "border-slate-200/90 hover:border-tiu-300 shadow-xs"
+                  ? "border-tiu-600/70 bg-tiu-50/40"
+                  : ""
               }`}
             >
               <div className="flex items-center space-x-3.5">
-                <div className="w-12 h-12 rounded-xl bg-tiu-900 text-white flex items-center justify-center font-bold text-sm overflow-hidden flex-shrink-0">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-tiu-900 to-tiu-950 text-white flex items-center justify-center font-bold text-sm overflow-hidden flex-shrink-0 shadow-xs border border-white/20">
                   {student.profile?.avatarUrl ? (
                     <img
                       src={student.profile.avatarUrl}
@@ -166,7 +166,7 @@ export default async function StudentGroupPage() {
 
               <Link
                 href={`/talents/${student.id}`}
-                className="text-xs font-bold text-tiu-800 hover:underline flex-shrink-0"
+                className="neu-btn-white px-3 py-1.5 rounded-xl text-xs font-bold text-tiu-900 flex-shrink-0"
               >
                 Portfolio &rarr;
               </Link>

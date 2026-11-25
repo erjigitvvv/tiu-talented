@@ -110,7 +110,7 @@ export default function StudentProfilePage() {
   const availableSpecialties = SPECIALTIES[formData.dekanat] || [];
 
   return (
-    <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
+    <div className="glass-panel p-6 sm:p-10 rounded-3xl space-y-6">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center space-x-2">
           <User className="w-6 h-6 text-tiu-700" />
@@ -122,14 +122,14 @@ export default function StudentProfilePage() {
       </div>
 
       {success && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs sm:text-sm text-emerald-800 font-semibold flex items-center space-x-2">
+        <div className="p-4 bg-emerald-50/90 border border-emerald-200/90 rounded-2xl text-xs sm:text-sm text-emerald-800 font-semibold flex items-center space-x-2 shadow-xs">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
           <span>{success}</span>
         </div>
       )}
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-2xl text-xs sm:text-sm text-red-700 font-semibold flex items-center space-x-2">
+        <div className="p-4 bg-red-50/90 border border-red-200/90 rounded-2xl text-xs sm:text-sm text-red-700 font-semibold flex items-center space-x-2 shadow-xs">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           <span>{error}</span>
         </div>
@@ -138,7 +138,7 @@ export default function StudentProfilePage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 1. Shaxsiy ma'lumotlar */}
         <div className="space-y-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 pb-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200/60 pb-2">
             1. Shaxsiy Ma&apos;lumotlar
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -153,7 +153,7 @@ export default function StudentProfilePage() {
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Jasur Aliyev"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
               />
             </div>
 
@@ -168,7 +168,7 @@ export default function StudentProfilePage() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+998 90 123 45 67"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
               />
             </div>
 
@@ -182,7 +182,7 @@ export default function StudentProfilePage() {
                 value={formData.telegram}
                 onChange={handleChange}
                 placeholder="@username"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
               />
             </div>
 
@@ -196,7 +196,7 @@ export default function StudentProfilePage() {
                 value={formData.instagram}
                 onChange={handleChange}
                 placeholder="@username"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
               />
             </div>
           </div>
@@ -204,7 +204,7 @@ export default function StudentProfilePage() {
 
         {/* 2. Akademik ma'lumotlar: Dekanat, Yo'nalish, Guruh, Kurs */}
         <div className="space-y-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 pb-2 flex items-center space-x-1.5">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200/60 pb-2 flex items-center space-x-1.5">
             <Building2 className="w-4 h-4 text-tiu-700" />
             <span>2. Universitet Akademik Tuzilmasi</span>
           </h3>
@@ -219,7 +219,7 @@ export default function StudentProfilePage() {
                 name="dekanat"
                 value={formData.dekanat}
                 onChange={handleDekanatChange}
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-tiu-600"
+                className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
               >
                 {DEKANATLAR.map((d) => (
                   <option key={d} value={d}>
@@ -238,7 +238,7 @@ export default function StudentProfilePage() {
                 name="specialty"
                 value={formData.specialty}
                 onChange={handleChange}
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-tiu-600"
+                className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
               >
                 {availableSpecialties.map((spec) => (
                   <option key={spec} value={spec}>
@@ -261,7 +261,7 @@ export default function StudentProfilePage() {
                 value={formData.groupName}
                 onChange={handleChange}
                 placeholder="Masalan: IT-21-02"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
               />
             </div>
 
@@ -273,7 +273,7 @@ export default function StudentProfilePage() {
                 name="courseYear"
                 value={formData.courseYear}
                 onChange={handleChange}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
               >
                 <option value="1">1-kurs</option>
                 <option value="2">2-kurs</option>
@@ -294,7 +294,7 @@ export default function StudentProfilePage() {
                 name="gpa"
                 value={formData.gpa}
                 onChange={handleChange}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
               />
             </div>
           </div>
@@ -302,7 +302,7 @@ export default function StudentProfilePage() {
 
         {/* 3. Portfolio va Ko'nikmalar */}
         <div className="space-y-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 pb-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200/60 pb-2">
             3. Portfolio va Ko&apos;nikmalar
           </h3>
 
@@ -316,7 +316,7 @@ export default function StudentProfilePage() {
               value={formData.skills}
               onChange={handleChange}
               placeholder="Python, React, Data Analysis, IELTS 7.5, UI/UX"
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+              className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
             />
           </div>
 
@@ -330,7 +330,7 @@ export default function StudentProfilePage() {
               value={formData.avatarUrl}
               onChange={handleChange}
               placeholder="https://images.unsplash.com/... yoki rasm linki"
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+              className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
             />
           </div>
 
@@ -344,7 +344,7 @@ export default function StudentProfilePage() {
               value={formData.bio}
               onChange={handleChange}
               placeholder="Qiziqishlaringiz, loyihalaringiz va maqsadlaringiz haqida..."
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+              className="neu-sunken w-full p-3.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
             />
           </div>
         </div>
@@ -352,7 +352,7 @@ export default function StudentProfilePage() {
         <button
           type="submit"
           disabled={saving}
-          className="py-3 px-6 rounded-xl bg-tiu-800 hover:bg-tiu-950 text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center space-x-2 disabled:opacity-50"
+          className="neu-btn-primary py-3 px-6 rounded-xl text-white font-bold text-xs sm:text-sm flex items-center space-x-2 disabled:opacity-50"
         >
           <Save className="w-4 h-4" />
           <span>{saving ? "Saqlanmoqda..." : "Profilni saqlash"}</span>

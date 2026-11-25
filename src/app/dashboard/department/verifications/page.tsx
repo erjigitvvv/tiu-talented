@@ -89,7 +89,7 @@ export default function DepartmentVerificationsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl">
         <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center space-x-2">
           <ShieldCheck className="w-6 h-6 text-emerald-600" />
           <span>Yutuqlarni Verifikatsiya Qilish Navbati</span>
@@ -100,7 +100,7 @@ export default function DepartmentVerificationsPage() {
       </div>
 
       {msg && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs sm:text-sm text-emerald-800 font-semibold flex items-center space-x-2">
+        <div className="p-4 bg-emerald-50/90 border border-emerald-200/90 rounded-2xl text-xs sm:text-sm text-emerald-800 font-semibold flex items-center space-x-2 shadow-xs">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
           <span>{msg}</span>
         </div>
@@ -109,8 +109,8 @@ export default function DepartmentVerificationsPage() {
       {loading ? (
         <div className="p-12 text-center text-xs text-slate-400">Navbat yuklanmoqda...</div>
       ) : achievements.length === 0 ? (
-        <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center space-y-3">
-          <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+        <div className="glass-panel p-12 rounded-3xl text-center space-y-3">
+          <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto shadow-xs">
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <h3 className="font-bold text-slate-800 text-base">Hozircha tekshiruv navbati bo&apos;sh!</h3>
@@ -123,7 +123,7 @@ export default function DepartmentVerificationsPage() {
           {achievements.map((ach) => (
             <div
               key={ach.id}
-              className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4"
+              className="glass-neu-card p-6 rounded-2xl space-y-4"
             >
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                 <div className="space-y-2">
@@ -134,7 +134,7 @@ export default function DepartmentVerificationsPage() {
                     <span className="text-xs text-tiu-700 font-medium">
                       • {ach.user?.profile?.faculty} ({ach.user?.profile?.groupName})
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-tiu-100 text-tiu-800 text-[10px] font-bold">
+                    <span className="neu-pill px-2.5 py-0.5 rounded text-tiu-900 text-[10px] font-bold">
                       {ach.category}
                     </span>
                   </div>
@@ -156,7 +156,7 @@ export default function DepartmentVerificationsPage() {
                       href={ach.proofUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors border border-slate-200"
+                      className="neu-btn-white inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-slate-800 font-bold text-xs"
                     >
                       <FileText className="w-4 h-4 text-tiu-700" />
                       <span>Hujjat/Sertifikatni ochish</span>
@@ -169,17 +169,17 @@ export default function DepartmentVerificationsPage() {
               </div>
 
               {/* Moderatsiya tugmalari */}
-              <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-3">
+              <div className="pt-3 border-t border-slate-200/60 flex flex-wrap items-center gap-3">
                 <button
                   onClick={() => openApproveModal(ach)}
-                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-colors flex items-center space-x-1.5"
+                  className="neu-btn-primary px-4 py-2 rounded-xl text-white font-bold text-xs flex items-center space-x-1.5"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Tasdiqlash va Ball berish</span>
                 </button>
                 <button
                   onClick={() => openRejectModal(ach)}
-                  className="px-4 py-2 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 font-bold text-xs transition-colors flex items-center space-x-1.5"
+                  className="neu-btn-white px-4 py-2 rounded-xl text-red-600 font-bold text-xs flex items-center space-x-1.5"
                 >
                   <XCircle className="w-4 h-4" />
                   <span>Rad etish</span>
@@ -192,9 +192,9 @@ export default function DepartmentVerificationsPage() {
 
       {/* Qaror Qabul Qilish Modali */}
       {modalMode && selectedAch && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-slate-100">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-panel rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200/60 pb-3">
               <h3 className="font-bold text-slate-900 text-base inline-flex items-center space-x-1.5">
                 {modalMode === "APPROVE" ? (
                   <>
@@ -213,7 +213,7 @@ export default function DepartmentVerificationsPage() {
               </button>
             </div>
 
-            <div className="p-3 bg-slate-50 rounded-xl text-xs space-y-1">
+            <div className="neu-sunken p-3.5 rounded-xl text-xs space-y-1">
               <div className="font-bold text-slate-800">{selectedAch.title}</div>
               <div className="text-slate-500">Talaba: {selectedAch.user?.profile?.fullName}</div>
             </div>
@@ -232,7 +232,7 @@ export default function DepartmentVerificationsPage() {
                       max={200}
                       value={points}
                       onChange={(e) => setPoints(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-bold focus:ring-2 focus:ring-tiu-600"
+                      className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                     />
                     <span className="text-xs font-bold text-slate-500">ball</span>
                   </div>
@@ -242,10 +242,10 @@ export default function DepartmentVerificationsPage() {
                         key={pt}
                         type="button"
                         onClick={() => setPoints(pt)}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
+                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
                           points === pt
-                            ? "bg-tiu-800 text-white"
-                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                            ? "neu-btn-primary text-white"
+                            : "neu-btn-white text-slate-600"
                         }`}
                       >
                         +{pt} ball
@@ -265,7 +265,7 @@ export default function DepartmentVerificationsPage() {
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   placeholder={modalMode === "APPROVE" ? "Ajoyib natija!..." : "Sertifikatda sana yoki muhr ko'rinmagan..."}
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-tiu-600"
+                  className="neu-sunken w-full p-3.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
                 />
               </div>
 
@@ -273,10 +273,8 @@ export default function DepartmentVerificationsPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className={`flex-grow py-3 px-4 rounded-xl text-white font-bold text-xs sm:text-sm transition-colors shadow-sm disabled:opacity-50 ${
-                    modalMode === "APPROVE"
-                      ? "bg-emerald-600 hover:bg-emerald-700"
-                      : "bg-red-600 hover:bg-red-700"
+                  className={`neu-btn-primary flex-grow py-3 px-4 rounded-xl text-white font-bold text-xs sm:text-sm disabled:opacity-50 ${
+                    modalMode === "REJECT" ? "!from-red-600 !to-rose-700" : ""
                   }`}
                 >
                   {submitting ? "Saqlanmoqda..." : "Tasdiqlash"}
@@ -284,7 +282,7 @@ export default function DepartmentVerificationsPage() {
                 <button
                   type="button"
                   onClick={() => setModalMode(null)}
-                  className="py-3 px-4 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-100"
+                  className="neu-btn-white py-3 px-4 rounded-xl text-slate-600 font-semibold text-xs"
                 >
                   Bekor qilish
                 </button>

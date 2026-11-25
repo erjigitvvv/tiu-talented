@@ -4,18 +4,16 @@
 
 :root {
   --foreground-rgb: 15, 23, 42;
-  --background-start-rgb: 248, 250, 252;
-  --background-end-rgb: 255, 255, 255;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(14, 141, 232, 0.035) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(217, 119, 6, 0.03) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(14, 141, 232, 0.02) 0px, transparent 50%);
+  background-attachment: fixed;
   min-height: 100vh;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
@@ -34,6 +32,100 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* Glassmorphism + Neumorphism Fusion Utility Classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 10px 30px -5px rgba(15, 23, 42, 0.035),
+    -6px -6px 20px rgba(255, 255, 255, 0.9);
+}
+
+.glass-neu-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    6px 6px 16px rgba(15, 23, 42, 0.035),
+    -6px -6px 16px rgba(255, 255, 255, 0.95),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-neu-card:hover {
+  box-shadow: 
+    10px 14px 30px rgba(15, 23, 42, 0.06),
+    -8px -8px 24px rgba(255, 255, 255, 1),
+    inset 0 1px 2px rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+}
+
+.neu-sunken {
+  background: rgba(248, 250, 252, 0.7);
+  box-shadow: 
+    inset 2px 2px 5px rgba(15, 23, 42, 0.04),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+}
+
+.neu-btn-primary {
+  background: linear-gradient(135deg, #072849 0%, #0358a0 100%);
+  color: #ffffff;
+  box-shadow: 
+    4px 4px 12px rgba(7, 40, 73, 0.25),
+    -2px -2px 8px rgba(255, 255, 255, 0.6);
+  transition: all 0.25s ease;
+}
+
+.neu-btn-primary:hover {
+  box-shadow: 
+    6px 6px 18px rgba(7, 40, 73, 0.32),
+    -3px -3px 10px rgba(255, 255, 255, 0.8);
+  transform: translateY(-1px);
+}
+
+.neu-btn-primary:active {
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 0, 0, 0.3);
+  transform: translateY(0);
+}
+
+.neu-btn-white {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    3px 3px 8px rgba(15, 23, 42, 0.04),
+    -3px -3px 8px rgba(255, 255, 255, 0.95);
+  transition: all 0.25s ease;
+}
+
+.neu-btn-white:hover {
+  box-shadow: 
+    5px 5px 14px rgba(15, 23, 42, 0.07),
+    -4px -4px 12px rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
+}
+
+.neu-btn-white:active {
+  box-shadow: 
+    inset 2px 2px 4px rgba(15, 23, 42, 0.06),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.8);
+  transform: translateY(0);
+}
+
+.neu-pill {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    2px 2px 6px rgba(15, 23, 42, 0.03),
+    -2px -2px 6px rgba(255, 255, 255, 0.9);
 }
 
 .gradient-tiu {

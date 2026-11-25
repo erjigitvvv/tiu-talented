@@ -105,19 +105,19 @@ export default function TalentsTableClient({
   return (
     <div className="space-y-6">
       {/* 1. Umumiy va Fakultetlar Kesimi Boshqaruvi */}
-      <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs space-y-4">
+      <div className="glass-panel p-5 rounded-3xl space-y-4">
         {/* Kesimni tanlash: Umumiy reyting vs Fakultetlar kesimi */}
-        <div className="flex items-center justify-between flex-wrap gap-3 border-b border-slate-100 pb-3">
+        <div className="flex items-center justify-between flex-wrap gap-3 border-b border-slate-200/60 pb-3">
           <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
             Ko&apos;rinish kesimi:
           </div>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedFaculty("ALL")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 selectedFaculty === "ALL"
-                  ? "bg-tiu-900 text-white shadow-xs"
-                  : "bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200"
+                  ? "neu-btn-primary"
+                  : "neu-btn-white text-slate-600 hover:text-tiu-950"
               }`}
             >
               Umumiy Reyting
@@ -126,10 +126,10 @@ export default function TalentsTableClient({
               <button
                 key={fac}
                 onClick={() => setSelectedFaculty(fac)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   selectedFaculty === fac
-                    ? "bg-tiu-900 text-white shadow-xs"
-                    : "bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200"
+                    ? "neu-btn-primary"
+                    : "neu-btn-white text-slate-600 hover:text-tiu-950"
                 }`}
               >
                 {fac.replace(" Fakulteti", "").replace(" Dekanati", "")}
@@ -146,13 +146,13 @@ export default function TalentsTableClient({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="F.I.SH, guruh, mutaxassislik yoki ko'nikma bo'yicha tezkor qidiruv..."
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-tiu-800 focus:bg-white transition-all"
+            className="neu-sunken w-full pl-10 pr-4 py-2.5 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-tiu-800 focus:bg-white transition-all"
           />
         </div>
       </div>
 
       {/* 2. JADVAL: FAQAT 3 TA O'RIN AJRALIB TURADI, QOLGANLARI ODDIY */}
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+      <div className="glass-neu-card rounded-3xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -280,7 +280,7 @@ export default function TalentsTableClient({
                             e.stopPropagation();
                             setSelectedStudent(student);
                           }}
-                          className="px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-tiu-900 bg-white hover:bg-tiu-900 hover:text-white text-tiu-900 font-bold text-xs transition-all shadow-xs"
+                          className="neu-btn-white px-3.5 py-1.5 rounded-xl text-tiu-900 font-bold text-xs transition-all"
                         >
                           Portfolio
                         </button>
@@ -296,8 +296,8 @@ export default function TalentsTableClient({
 
       {/* 3. TO'LIQ TALABA PORTFOLIO MODALI (TABLAR BILAN) */}
       {selectedStudent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="glass-panel rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-white/80 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
             {/* Modal Header Profile */}
             <div className="flex items-start justify-between border-b border-slate-100 pb-5">
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">

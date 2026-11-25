@@ -56,7 +56,7 @@ export default async function OpportunitiesPage({ searchParams }: OpportunitiesP
             Toshkent Xalqaro Universiteti talabalari uchun rektor grantlari, xalqaro stajirovkalar, hakatonlar va maxsus stipendiyalar dasturlari
           </p>
         </div>
-        <div className="text-xs font-bold px-3.5 py-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 self-start md:self-auto">
+        <div className="neu-pill text-xs font-bold px-4 py-2 text-slate-700 self-start md:self-auto">
           Faol tanlovlar: <strong className="text-tiu-900">{opportunities.length} ta</strong>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default async function OpportunitiesPage({ searchParams }: OpportunitiesP
 
       {/* Tanlovlar kartochkalari ro'yxati */}
       {opportunities.length === 0 ? (
-        <div className="bg-white p-14 rounded-3xl border border-slate-200 text-center space-y-3">
+        <div className="glass-panel p-14 rounded-3xl text-center space-y-3">
           <p className="text-base font-bold text-slate-700">Tanlovlar topilmadi</p>
           <p className="text-xs text-slate-500">
             Qidiruv so&apos;zini o&apos;zgartirib ko&apos;ring yoki toifani barchasiga o&apos;tkazing.
@@ -90,7 +90,7 @@ export default async function OpportunitiesPage({ searchParams }: OpportunitiesP
               <Link
                 key={opp.id}
                 href={`/opportunities/${opp.id}`}
-                className="group bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between"
+                className="group glass-neu-card rounded-3xl overflow-hidden flex flex-col justify-between"
               >
                 <div>
                   {/* Tanlov Rasmi */}

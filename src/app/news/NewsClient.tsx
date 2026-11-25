@@ -128,15 +128,15 @@ export default function NewsClient({ initialNewsList }: NewsClientProps) {
   return (
     <div className="space-y-8">
       {/* Kategoriya filtri */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2.5">
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeCategory === cat
-                ? "bg-tiu-900 text-white shadow-xs"
-                : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
+                ? "neu-btn-primary"
+                : "neu-btn-white text-slate-600 hover:text-tiu-950"
             }`}
           >
             {cat}
@@ -146,7 +146,7 @@ export default function NewsClient({ initialNewsList }: NewsClientProps) {
 
       {/* Yangiliklar Kartochkalari */}
       {filteredNews.length === 0 ? (
-        <div className="bg-white p-14 rounded-3xl border border-slate-200 text-center text-xs text-slate-500">
+        <div className="glass-panel p-14 rounded-3xl text-center text-xs text-slate-500">
           Ushbu ruknda hozircha yangiliklar mavjud emas.
         </div>
       ) : (
@@ -161,7 +161,7 @@ export default function NewsClient({ initialNewsList }: NewsClientProps) {
               <div
                 key={news.id}
                 onClick={() => setSelectedNews(news)}
-                className="group bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                className="group glass-neu-card rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer"
               >
                 <div>
                   <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
@@ -220,8 +220,8 @@ export default function NewsClient({ initialNewsList }: NewsClientProps) {
 
       {/* Batafsil Yangilik Modal Oynasi: Rasm, Sarlavha, Sana, Matn, Like va Comment */}
       {selectedNews && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="glass-panel rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-white/80 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-slate-100 pb-4">
               <div>

@@ -73,7 +73,7 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
       </Link>
 
       {/* Tanlov Asosiy Kartochkasi */}
-      <div className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm space-y-6">
+      <div className="glass-panel rounded-3xl overflow-hidden space-y-6">
         {/* 1. Tanlov Rasmi */}
         <div className="relative h-64 sm:h-80 w-full bg-slate-100 overflow-hidden">
           <img
@@ -104,7 +104,7 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
         <div className="p-6 sm:p-10 space-y-8">
           {/* Kvota va Qabul muddati ko'rsatkichlari */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200">
+            <div className="neu-sunken p-4 rounded-2xl">
               <span className="text-[10px] font-bold uppercase text-amber-800 tracking-wider block">
                 Mukofot / Imkoniyat
               </span>
@@ -113,7 +113,7 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
               </span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div className="neu-sunken p-4 rounded-2xl">
               <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">
                 Kvota va Qabul
               </span>
@@ -122,7 +122,7 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
               </span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div className="neu-sunken p-4 rounded-2xl">
               <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">
                 Muddati (Deadline)
               </span>

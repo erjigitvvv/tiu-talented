@@ -36,8 +36,8 @@ export default async function StudentDashboardLayout({
       <div className="flex flex-col md:flex-row gap-8">
         {/* Yon Panel (Sidebar) */}
         <aside className="w-full md:w-64 flex-shrink-0 space-y-6">
-          <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-xs text-center">
-            <div className="w-20 h-20 rounded-2xl bg-tiu-900 text-white flex items-center justify-center font-bold text-2xl mx-auto overflow-hidden shadow-sm">
+          <div className="glass-neu-card p-6 rounded-3xl text-center space-y-3">
+            <div className="w-20 h-20 rounded-2xl bg-tiu-900 text-white flex items-center justify-center font-bold text-2xl mx-auto overflow-hidden shadow-sm ring-2 ring-white/80">
               {user.profile?.avatarUrl ? (
                 <img
                   src={user.profile.avatarUrl}
@@ -48,7 +48,7 @@ export default async function StudentDashboardLayout({
                 user.profile?.fullName?.charAt(0) || "T"
               )}
             </div>
-            <h3 className="font-extrabold text-slate-900 text-base mt-3 line-clamp-1">
+            <h3 className="font-extrabold text-slate-900 text-base mt-2 line-clamp-1">
               {user.profile?.fullName}
             </h3>
             <p className="text-xs text-tiu-700 font-bold mt-0.5">
@@ -59,7 +59,7 @@ export default async function StudentDashboardLayout({
                 {user.profile.specialty}
               </p>
             )}
-            <div className="mt-3 py-1.5 px-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-xs font-black inline-flex items-center space-x-1.5">
+            <div className="neu-pill mt-2 py-1.5 px-3 bg-amber-50/90 border border-amber-200/80 text-amber-900 text-xs font-black inline-flex items-center space-x-1.5">
               <Trophy className="w-3.5 h-3.5 text-amber-600" />
               <span>{user.profile?.totalPoints || 0} ball to&apos;plangan</span>
             </div>
@@ -68,12 +68,12 @@ export default async function StudentDashboardLayout({
           {/* Submenu va navigatsiya qismlari */}
           <StudentSidebarNav />
 
-          <div className="p-4 bg-slate-900 text-white rounded-2xl space-y-2">
+          <div className="neu-btn-primary p-5 rounded-3xl space-y-2 text-white">
             <div className="flex items-center space-x-1.5 text-xs text-amber-400 font-bold">
               <Sparkles className="w-3.5 h-3.5" />
               <span>TIU Jamoalar</span>
             </div>
-            <p className="text-xs text-slate-300">
+            <p className="text-xs text-slate-200 leading-relaxed">
               Loyiha jamoangiz bormi yoki yangi jamoaga qo&apos;shilmoqchimisiz?
             </p>
             <Link

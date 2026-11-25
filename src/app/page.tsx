@@ -153,7 +153,7 @@ export default async function HomePage() {
         {/* Glassmorphism Asosiy Hero Kartochkasi (Faqat sarlavha va qisqacha tanishtirish) */}
         <div className="relative z-10 max-w-4xl mx-auto w-full text-center space-y-6 animate-in fade-in duration-500">
           
-          <div className="bg-white/80 backdrop-blur-2xl rounded-3xl p-8 sm:p-14 border border-white/70 shadow-2xl space-y-6">
+          <div className="glass-panel rounded-3xl p-8 sm:p-14 space-y-6 animate-in fade-in duration-500">
             <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-tiu-50/90 border border-tiu-200/90 shadow-2xs">
               <Sparkles className="w-4 h-4 text-amber-500" />
               <span className="text-xs sm:text-sm font-black tracking-wide text-tiu-950">
@@ -223,7 +223,7 @@ export default async function HomePage() {
               <Link
                 key={team.id}
                 href={`/teams/${team.id}`}
-                className="group bg-white/80 backdrop-blur-2xl rounded-3xl border border-white/80 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between space-y-5"
+                className="group glass-neu-card rounded-3xl p-6 flex flex-col justify-between space-y-5 cursor-pointer"
               >
                 <div className="space-y-4">
                   {/* 16:9 Banner yoki Jamoa Rasmi */}
@@ -370,7 +370,7 @@ export default async function HomePage() {
           {topGroups.map((group, index) => (
             <div
               key={group.groupName}
-              className="bg-white/80 backdrop-blur-2xl rounded-3xl border border-white/70 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between space-y-5 group"
+              className="glass-neu-card rounded-3xl p-6 flex flex-col justify-between space-y-5 group"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -426,7 +426,7 @@ export default async function HomePage() {
 
               <Link
                 href={`/talents?q=${group.groupName}`}
-                className="w-full py-2.5 rounded-xl border border-slate-200 hover:border-tiu-900 bg-slate-50 hover:bg-tiu-900 text-slate-700 hover:text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition-all shadow-2xs"
+                className="neu-btn-white w-full py-2.5 rounded-xl text-slate-700 hover:text-tiu-950 font-bold text-xs flex items-center justify-center space-x-1.5 transition-all"
               >
                 <span>Guruh talabalari</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -488,7 +488,7 @@ export default async function HomePage() {
               <Link
                 key={opp.id}
                 href={`/opportunities/${opp.id}`}
-                className="group bg-white/80 backdrop-blur-2xl rounded-3xl border border-white/70 overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between"
+                className="group glass-neu-card rounded-3xl overflow-hidden flex flex-col justify-between"
               >
                 <div>
                   {/* Rasm */}

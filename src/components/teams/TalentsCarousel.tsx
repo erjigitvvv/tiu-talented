@@ -50,7 +50,7 @@ export default function TalentsCarousel({
   }
 
   return (
-    <div className="bg-white/80 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-white/60 shadow-[0_8px_32px_0_rgba(31,38,135,0.06)] space-y-8">
+    <div className="glass-panel rounded-3xl p-6 sm:p-10 space-y-8">
       {/* Sarlavha va Carousel boshqaruv tugmalari */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-6">
         <div>
@@ -66,18 +66,18 @@ export default function TalentsCarousel({
           </p>
         </div>
 
-        {/* Carousel Prev / Next tugmalari (Glassmorphic) */}
-        <div className="flex items-center space-x-2 self-end sm:self-auto">
+        {/* Carousel Prev / Next tugmalari (Neumorphic tactile) */}
+        <div className="flex items-center space-x-2.5 self-end sm:self-auto">
           <button
             onClick={handlePrev}
-            className="w-11 h-11 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-slate-100 hover:text-tiu-950 shadow-xs hover:scale-105 transition-all"
+            className="neu-btn-white w-11 h-11 rounded-2xl flex items-center justify-center text-slate-700 hover:text-tiu-950 transition-all"
             title="Oldingisi"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={handleNext}
-            className="w-11 h-11 rounded-2xl bg-tiu-900 border border-tiu-950 flex items-center justify-center text-white hover:bg-tiu-950 shadow-md hover:scale-105 transition-all"
+            className="neu-btn-primary w-11 h-11 rounded-2xl flex items-center justify-center text-white transition-all"
             title="Keyingisi"
           >
             <ChevronRight className="w-5 h-5" />
@@ -85,14 +85,14 @@ export default function TalentsCarousel({
         </div>
       </div>
 
-      {/* 3 talik Carousel Kartochkalari (Glassmorphism & Shadows) */}
+      {/* 3 talik Carousel Kartochkalari (Glassmorphism + Neumorphism) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300">
         {currentItems.map((talent, idx) => {
           const isTop3 = talent.rank <= 3;
           return (
             <div
               key={`${talent.id}-${idx}`}
-              className="bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/80 p-6 shadow-xs hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between space-y-6 group"
+              className="glass-neu-card rounded-3xl p-6 flex flex-col justify-between space-y-6 group"
             >
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
@@ -150,7 +150,7 @@ export default function TalentsCarousel({
 
               <Link
                 href={`/talents/${talent.id}`}
-                className="w-full py-2.5 rounded-xl border border-slate-200 hover:border-tiu-900 bg-slate-50 hover:bg-tiu-900 text-slate-700 hover:text-white font-bold text-xs flex items-center justify-center space-x-2 transition-all shadow-2xs"
+                className="neu-btn-white w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 text-slate-700 hover:text-tiu-950 transition-all"
               >
                 <span>Portfolioni ko&apos;rish</span>
                 <ArrowRight className="w-3.5 h-3.5" />

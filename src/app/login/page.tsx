@@ -50,9 +50,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 sm:p-10 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
+      <div className="max-w-md w-full space-y-8 glass-panel p-8 sm:p-10 rounded-3xl">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-tiu-900 to-tiu-700 text-white shadow-md shadow-tiu-900/20 mb-4">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-tiu-900 to-tiu-700 text-white shadow-md shadow-tiu-900/20 mb-4 ring-1 ring-white/60">
             <Sparkles className="w-7 h-7 text-amber-400" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -64,7 +64,7 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs sm:text-sm flex items-start space-x-2.5">
+          <div className="bg-red-50/90 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-xs sm:text-sm flex items-start space-x-2.5">
             <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-500" />
             <span>{error}</span>
           </div>
@@ -76,14 +76,14 @@ export default function LoginPage() {
               Login (Email, Telefon raqam yoki Talaba ID)
             </label>
             <div className="relative">
-              <User className="w-5 h-5 text-slate-400 absolute left-3.5 top-3" />
+              <User className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
               <input
                 type="text"
                 required
                 value={login}
                 onChange={(e) => setLogin(e.target.value)}
                 placeholder="misol@student.tiu.uz yoki +998901234567"
-                className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600 focus:bg-white transition-all"
+                className="neu-sunken w-full pl-11 pr-4 py-3 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600 focus:bg-white transition-all"
               />
             </div>
           </div>
@@ -95,14 +95,14 @@ export default function LoginPage() {
               </label>
             </div>
             <div className="relative">
-              <Lock className="w-5 h-5 text-slate-400 absolute left-3.5 top-3" />
+              <Lock className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600 focus:bg-white transition-all"
+                className="neu-sunken w-full pl-11 pr-4 py-3 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600 focus:bg-white transition-all"
               />
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 rounded-xl text-white font-bold text-sm bg-gradient-to-r from-tiu-800 to-tiu-950 hover:from-tiu-700 hover:to-tiu-900 shadow-md shadow-tiu-900/20 hover:shadow-lg transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+            className="neu-btn-primary w-full py-3.5 px-4 rounded-2xl text-white font-black text-sm flex items-center justify-center space-x-2 disabled:opacity-50"
           >
             <span>{loading ? "Kirilmoqda..." : "Kabinetga kirish"}</span>
             {!loading && <ArrowRight className="w-4 h-4" />}
@@ -118,7 +118,7 @@ export default function LoginPage() {
         </form>
 
         {/* Demo kirish tugmalari */}
-        <div className="pt-4 border-t border-slate-100">
+        <div className="pt-4 border-t border-slate-200/60">
           <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center mb-2.5">
             Tezkor test kirish (1-klikda to&apos;ldirish):
           </p>
@@ -126,7 +126,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => handleQuickLogin("jasur@student.tiu.uz", "student123")}
-              className="p-2 border border-slate-200 hover:border-tiu-400 rounded-lg text-left bg-slate-50 hover:bg-tiu-50/50 transition-colors"
+              className="neu-btn-white p-2.5 rounded-xl text-left transition-all"
             >
               <div className="font-bold text-slate-800 flex items-center space-x-1.5">
                 <GraduationCap className="w-4 h-4 text-tiu-700" />

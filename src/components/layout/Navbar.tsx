@@ -59,7 +59,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/75 backdrop-blur-xl border-b border-white/40 shadow-[0_4px_30px_rgba(0,0,0,0.03)] transition-all">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-2xl border-b border-white/80 shadow-[0_8px_30px_rgba(15,23,42,0.035),inset_0_-1px_0_rgba(255,255,255,0.9)] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           
@@ -118,7 +118,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-3">
               <Link
                 href="/"
-                className="inline-flex items-center space-x-2 text-xs font-bold text-slate-600 hover:text-tiu-900 px-4 py-2 rounded-xl bg-slate-100/70 hover:bg-slate-100 border border-slate-200/70 transition-all backdrop-blur-md"
+                className="neu-btn-white inline-flex items-center space-x-2 text-xs font-bold text-slate-700 hover:text-tiu-950 px-4 py-2 rounded-xl transition-all"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Asosiy sahifaga qaytish</span>
@@ -126,17 +126,17 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* O'ng tomon: Kirish / Profil Boshqaruvi (Glassmorphism uslubida) */}
+          {/* O'ng tomon: Kirish / Profil Boshqaruvi (Glassmorphism & Neumorphism) */}
           <div className="flex items-center space-x-3">
             {loading ? (
               <div className="w-24 h-10 bg-slate-100/80 animate-pulse rounded-2xl" />
             ) : user ? (
-              <div className="flex items-center space-x-2 bg-white/60 backdrop-blur-md p-1 pl-2 pr-1 rounded-2xl border border-slate-200/70 shadow-xs">
+              <div className="flex items-center space-x-2 bg-white/85 backdrop-blur-md p-1.5 pl-3 pr-2 rounded-2xl border border-white/90 shadow-[4px_4px_14px_rgba(15,23,42,0.04),-3px_-3px_10px_rgba(255,255,255,0.95)]">
                 <Link
                   href={getDashboardHref()}
                   className="flex items-center space-x-2.5 py-1 pr-2 rounded-xl text-slate-800 hover:text-tiu-900 transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-tiu-900 text-white flex items-center justify-center text-xs font-black uppercase overflow-hidden shadow-xs">
+                  <div className="w-8 h-8 rounded-xl bg-tiu-900 text-white flex items-center justify-center text-xs font-black uppercase overflow-hidden shadow-xs ring-1 ring-white/60">
                     {user.profile?.avatarUrl ? (
                       <img src={user.profile.avatarUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -164,7 +164,7 @@ export default function Navbar() {
               <div className="flex items-center space-x-2">
                 <Link
                   href="/login"
-                  className="px-6 py-2.5 text-xs font-extrabold text-white bg-slate-900 hover:bg-tiu-950 rounded-2xl shadow-md hover:shadow-lg transition-all"
+                  className="neu-btn-primary px-6 py-2.5 text-xs font-black rounded-2xl"
                 >
                   Kirish
                 </Link>
@@ -175,7 +175,7 @@ export default function Navbar() {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2.5 text-slate-700 hover:text-tiu-900 hover:bg-slate-100 rounded-2xl"
+                className="neu-btn-white p-2.5 text-slate-700 hover:text-tiu-900 rounded-2xl"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>

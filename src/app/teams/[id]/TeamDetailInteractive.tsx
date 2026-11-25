@@ -311,7 +311,7 @@ export default function TeamDetailInteractive({
   return (
     <div className="space-y-8">
       {/* 1. JAMOA ASOSIY BLOKI: 16x9 FORMAT BANNER (JAMOA A'ZOLARI UMUMIY RASMI), SARDOR PILL, TASHKILIY SANA VA YO'NALISHLAR */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
+      <div className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
         
         {/* 16x9 Widescreen Banner (Jamoa a'zolarining umumiy rasmi) */}
         <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden bg-slate-950 shadow-md">
@@ -395,8 +395,8 @@ export default function TeamDetailInteractive({
         {/* Jamoa Tashkiliy Sanasi va Yo'nalishlar Metriklari */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
           {/* Tashkiliy Sana */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center space-x-3.5">
-            <div className="p-2.5 rounded-xl bg-blue-100/70 text-blue-900">
+          <div className="neu-sunken p-4 rounded-2xl flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-blue-100/70 text-blue-900 shadow-2xs">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
@@ -408,8 +408,8 @@ export default function TeamDetailInteractive({
           </div>
 
           {/* Asosiy Yo'nalish / Qiziqish */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center space-x-3.5">
-            <div className="p-2.5 rounded-xl bg-amber-100/70 text-amber-900">
+          <div className="neu-sunken p-4 rounded-2xl flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-amber-100/70 text-amber-900 shadow-2xs">
               <Target className="w-5 h-5" />
             </div>
             <div>
@@ -421,8 +421,8 @@ export default function TeamDetailInteractive({
           </div>
 
           {/* Dekanat va Fakultet */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center space-x-3.5">
-            <div className="p-2.5 rounded-xl bg-emerald-100/70 text-emerald-900">
+          <div className="neu-sunken p-4 rounded-2xl flex items-center space-x-3.5">
+            <div className="p-2.5 rounded-xl bg-emerald-100/70 text-emerald-900 shadow-2xs">
               <Building2 className="w-5 h-5" />
             </div>
             <div>
@@ -467,7 +467,7 @@ export default function TeamDetailInteractive({
         )}
 
         {/* CARD BLOK ICHIDA SARDOR: VA SARDOR YUMALOQ PROFIL RASMI VA FIO */}
-        <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-50/90 via-amber-100/30 to-white border-2 border-amber-300/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+        <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-50/90 via-amber-100/30 to-white/90 border-2 border-amber-300/80 shadow-[4px_4px_16px_rgba(245,158,11,0.08),-4px_-4px_16px_rgba(255,255,255,0.9)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-3.5">
             <span className="text-xs sm:text-sm font-black text-amber-900 uppercase tracking-wider">
               Sardor:
@@ -508,7 +508,7 @@ export default function TeamDetailInteractive({
           <button
             type="button"
             onClick={() => setSelectedStudent(team.leader.profile || null)}
-            className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-tiu-900 text-white font-bold text-xs transition-all shadow-xs flex items-center justify-center space-x-1.5 self-start sm:self-auto flex-shrink-0"
+            className="neu-btn-primary px-4 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-1.5 self-start sm:self-auto flex-shrink-0"
           >
             <span>Sardor Portfoliosi</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -517,7 +517,7 @@ export default function TeamDetailInteractive({
       </div>
 
       {/* 2. TABLAR: 1-TAB: A'ZOLAR (CARD & JADVAL) | 2-TAB: YUTUQLAR (POST & LIKE & COMMENTS) | 3-TAB: XULOSALAR */}
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+      <div className="glass-panel rounded-3xl overflow-hidden">
         {/* Tab sarlavhalari */}
         <div className="flex border-b border-slate-200 bg-slate-50/70 overflow-x-auto">
           <button
@@ -1104,8 +1104,8 @@ export default function TeamDetailInteractive({
 
       {/* 3. TALABA PORTFOLIO MODALI (A'zolar yoki Sardor bosilganda chiqadi) */}
       {selectedStudent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="glass-panel rounded-3xl max-w-2xl w-full p-6 sm:p-8 border border-white/80 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-slate-100 pb-5">
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">

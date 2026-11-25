@@ -51,7 +51,7 @@ export default async function DepartmentTalentsPage({ searchParams }: Department
   return (
     <div className="space-y-6">
       {/* Sarlavha */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center space-x-2">
             <UserCheck className="w-6 h-6 text-tiu-700" />
@@ -61,21 +61,21 @@ export default async function DepartmentTalentsPage({ searchParams }: Department
             Barcha iqtidorli talabalar, ularning umumiy ballari, fakultetlari va a&apos;zo bo&apos;lgan jamoalari monitoringi
           </p>
         </div>
-        <div className="px-3.5 py-1.5 rounded-xl bg-tiu-50 border border-tiu-200 text-tiu-900 font-bold text-xs self-start md:self-auto">
+        <div className="neu-pill px-3.5 py-1.5 rounded-xl text-tiu-900 font-bold text-xs self-start md:self-auto">
           Jami: {students.length} nafar talaba
         </div>
       </div>
 
       {/* Qidiruv va Filter */}
-      <form method="GET" className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row gap-3">
+      <form method="GET" className="glass-panel p-4 rounded-2xl flex flex-col sm:flex-row gap-3">
         <div className="relative flex-grow">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
           <input
             type="text"
             name="q"
             defaultValue={q}
             placeholder="Talaba ismi, ko'nikmasi yoki guruhi..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600"
+            className="neu-sunken w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30"
           />
         </div>
 
@@ -83,7 +83,7 @@ export default async function DepartmentTalentsPage({ searchParams }: Department
           <select
             name="faculty"
             defaultValue={selectedFaculty}
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600"
+            className="neu-sunken w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-tiu-600/30 font-semibold"
           >
             <option value="">Barcha fakultetlar</option>
             {FACULTIES.map((fac) => (
@@ -96,17 +96,17 @@ export default async function DepartmentTalentsPage({ searchParams }: Department
 
         <button
           type="submit"
-          className="px-5 py-2 rounded-xl bg-tiu-800 hover:bg-tiu-900 text-white font-bold text-xs sm:text-sm transition-colors shadow-sm"
+          className="neu-btn-primary px-5 py-2.5 rounded-xl text-white font-bold text-xs sm:text-sm"
         >
           Saralash
         </button>
       </form>
 
       {/* Talabalar Jadvali */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+      <div className="glass-neu-card rounded-3xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase text-[11px] tracking-wider">
+            <thead className="bg-slate-50/70 border-b border-slate-200/60 text-slate-500 font-bold uppercase text-[11px] tracking-wider">
               <tr>
                 <th className="py-4 px-6">Talaba</th>
                 <th className="py-4 px-6">Fakultet / Guruh</th>
@@ -116,16 +116,16 @@ export default async function DepartmentTalentsPage({ searchParams }: Department
                 <th className="py-4 px-6 text-center">Harakat</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 font-medium">
+            <tbody className="divide-y divide-slate-100/80 font-medium">
               {students.map((st) => {
                 const approvedCount = st.achievements.filter((a) => a.status === "APPROVED").length;
                 const pendingCount = st.achievements.filter((a) => a.status === "PENDING").length;
 
                 return (
-                  <tr key={st.id} className="hover:bg-slate-50/70 transition-colors">
+                  <tr key={st.id} className="hover:bg-tiu-50/40 transition-colors">
                     <td className="py-4 px-6">
                       <div className="flex items-center space-x-3">
-                        <div className="w-9 h-9 rounded-full bg-tiu-800 text-white flex items-center justify-center font-bold text-xs overflow-hidden flex-shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-tiu-800 text-white flex items-center justify-center font-bold text-xs overflow-hidden flex-shrink-0 shadow-xs border border-white/40">
                           {st.profile?.avatarUrl ? (
                             <img src={st.profile.avatarUrl} alt="" className="w-full h-full object-cover" />
                           ) : (
@@ -150,12 +150,12 @@ export default async function DepartmentTalentsPage({ searchParams }: Department
 
                     <td className="py-4 px-6 text-center">
                       <div className="flex items-center justify-center gap-1.5">
-                        <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-bold inline-flex items-center space-x-1" title="Tasdiqlangan">
+                        <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-xs font-bold inline-flex items-center space-x-1 shadow-xs" title="Tasdiqlangan">
                           <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                           <span>{approvedCount}</span>
                         </span>
                         {pendingCount > 0 && (
-                          <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-bold inline-flex items-center space-x-1" title="Kutilmoqda">
+                          <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-xs font-bold inline-flex items-center space-x-1 shadow-xs" title="Kutilmoqda">
                             <Clock className="w-3 h-3 text-amber-600" />
                             <span>{pendingCount}</span>
                           </span>
@@ -174,7 +174,7 @@ export default async function DepartmentTalentsPage({ searchParams }: Department
                       <Link
                         href={`/talents/${st.id}`}
                         target="_blank"
-                        className="px-3 py-1.5 rounded-lg bg-tiu-50 hover:bg-tiu-100 text-tiu-800 font-bold text-xs inline-flex items-center space-x-1 transition-colors"
+                        className="neu-btn-white px-3 py-1.5 rounded-xl text-tiu-800 font-bold text-xs inline-flex items-center space-x-1"
                       >
                         <span>Portfolio</span>
                         <ExternalLink className="w-3 h-3" />

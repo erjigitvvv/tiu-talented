@@ -48,7 +48,7 @@ export default async function DepartmentDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Sarlavha */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl">
         <span className="text-xs font-bold text-tiu-700 uppercase tracking-wider block mb-1">
           Boshqaruv va Monitoring
         </span>
@@ -65,7 +65,7 @@ export default async function DepartmentDashboardPage() {
         {/* 1. Iqtidorli talabalar */}
         <Link
           href="/dashboard/department/talents"
-          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-tiu-500 transition-all group"
+          className="glass-neu-card p-5 rounded-2xl group block hover:border-tiu-400/80"
         >
           <div className="text-xs text-tiu-700 font-bold uppercase tracking-wider flex items-center justify-between">
             <span>Iqtidorli Talabalar</span>
@@ -82,7 +82,7 @@ export default async function DepartmentDashboardPage() {
         {/* 2. Jamoalar katalogi */}
         <Link
           href="/dashboard/department/teams"
-          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-500 transition-all group"
+          className="glass-neu-card p-5 rounded-2xl group block hover:border-blue-400/80"
         >
           <div className="text-xs text-blue-600 font-bold uppercase tracking-wider flex items-center justify-between">
             <span>Jamoalar Katalogi</span>
@@ -99,7 +99,7 @@ export default async function DepartmentDashboardPage() {
         {/* 3. Grantlar va Tanlovlar */}
         <Link
           href="/dashboard/department/opportunities"
-          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-500 transition-all group"
+          className="glass-neu-card p-5 rounded-2xl group block hover:border-amber-400/80"
         >
           <div className="text-xs text-amber-600 font-bold uppercase tracking-wider flex items-center justify-between">
             <span>Grantlar & Tanlovlar</span>
@@ -116,7 +116,7 @@ export default async function DepartmentDashboardPage() {
         {/* 4. Kelgan arizalar */}
         <Link
           href="/dashboard/department/applications"
-          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-purple-500 transition-all group"
+          className="glass-neu-card p-5 rounded-2xl group block hover:border-purple-400/80"
         >
           <div className="text-xs text-purple-600 font-bold uppercase tracking-wider flex items-center justify-between">
             <span>Kelgan Arizalar</span>
@@ -133,7 +133,7 @@ export default async function DepartmentDashboardPage() {
         {/* 5. E'lonlar va lavhalar */}
         <Link
           href="/dashboard/department/events"
-          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-pink-500 transition-all group"
+          className="glass-neu-card p-5 rounded-2xl group block hover:border-pink-400/80"
         >
           <div className="text-xs text-pink-600 font-bold uppercase tracking-wider flex items-center justify-between">
             <span>E&apos;lonlar & Lavhalar</span>
@@ -150,7 +150,7 @@ export default async function DepartmentDashboardPage() {
         {/* 6. Kutilayotgan yutuqlar verifikatsiyasi */}
         <Link
           href="/dashboard/department/verifications"
-          className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-500 transition-all group"
+          className="glass-neu-card p-5 rounded-2xl group block hover:border-emerald-400/80"
         >
           <div className="text-xs text-emerald-600 font-bold uppercase tracking-wider flex items-center justify-between">
             <span>Kutilayotgan Yutuqlar</span>
@@ -166,8 +166,8 @@ export default async function DepartmentDashboardPage() {
       </div>
 
       {/* Tezkor Ko'rish: Kutilayotgan Yutuqlar Navbati */}
-      <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+      <div className="glass-panel p-6 rounded-3xl space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-200/60 pb-4">
           <h3 className="font-bold text-slate-900 text-base flex items-center space-x-2">
             <Clock className="w-4 h-4 text-amber-500" />
             <span>Kutilayotgan Yutuqlar Verifikatsiyasi</span>
@@ -208,7 +208,7 @@ export default async function DepartmentDashboardPage() {
 
                 <Link
                   href="/dashboard/department/verifications"
-                  className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition-colors self-start sm:self-auto"
+                  className="neu-btn-primary px-4 py-2 rounded-xl text-white font-bold text-xs self-start sm:self-auto"
                 >
                   Tekshirish va Ball berish &rarr;
                 </Link>
